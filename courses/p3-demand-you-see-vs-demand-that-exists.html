@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 3 of 10. A taxi pickup is recorded only where a cab was present and allowed to stop, so recorded pickups measure supply meeting demand, never demand. Real New York City taxi records, October 2024: 88.0% of pickups on 69 of 262 zones, yellow share 99.0% in Manhattan vs 88.5% in Brooklyn, and the hail rule behind it. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Demand you see vs demand that exists - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 3 of 10. A pickup is a wish that met a cab. The waits that met nothing leave no row, and a zero reads like no demand.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p3-demand-you-see-vs-demand-that-exists.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Demand you see vs demand that exists - learn smart city with phoebe">
+<meta name="twitter:description" content="Recorded pickups measure where cabs met riders. Say that in the caption, and never print a true-demand number the data cannot hold.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 3 · Demand you see vs demand that exists - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 3 of 10</div>
+    <h1>Demand you see vs <span class="accent">demand that exists</span></h1>
+    <p class="sub">Wrenmouth, a constructed city transport office, wants to know where people want rides. Its analyst has real New York City taxi records, October 2024, from the Taxi and Limousine Commission, and they answer a different question: where a cab was present, a rider hailed it, and a meter was switched on. Tonight you learn to tell those two questions apart, see a hail rule leave its fingerprint on every borough, and write the one caption your table can honestly carry.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Analysts building demand maps from trip records</span>
+      <span class="chip audience">Planners who read those maps</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-16 · A pickup needs a cab</span>
+      <span class="a3" style="flex:4">16-28 · Who may stop where</span>
+      <span class="a4" style="flex:5">28-45 · Build-along: the borough table</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's planner asks where people want taxis</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed transport office in a fictional city; it practises on real New York City taxi records, October 2024, because they are public and honestly documented. Its planner asks a fair question: where do people want taxis? The analyst runs a group by and the answer comes back loud: Manhattan holds 88.0% of the month's 3,876,702 recorded pickups on 69 of the 262 zones. Staten Island holds 231. The numbers are right. The question they answer is not the one the planner asked.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Censored demand as a mechanism: a pickup is recorded only where a cab was present to be hailed, so a pickup count measures supply meeting demand, and a zone of unanswered waits reads exactly like a zone of no wishes. One rule you can see in the data: green cabs may not street-hail south of West 110th St and East 96th St, and the yellow share of pickups is 99.0% in Manhattan against 88.5% in Brooklyn. A borough table you can rebuild in pandas and check against the page's own engine. And the caption that table supports, which never contains the words "true demand".</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The warehouse habit, and why it misfires here<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In a sales warehouse, an order row is the event the business cares about: someone wanted the thing and bought it. A count of orders by region is a fair first look at demand by region, because the shop was open everywhere. A taxi row is not like that. The shop is a moving car, it is open only where it happens to be, and some cars are not allowed to open in some places at all.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The TLC data dictionary defines <span class="mono">PULocationID</span> as the "TLC Taxi Zone in which the taximeter was engaged". The row is written by the meter. A rider who waited and gave up never touched a meter, so there is no column, no null and no zero for them. They are simply not in the file.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where this sits in the sequence<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Practitioner session 1 built the ledger of 3,876,702 kept pickups; session 2 joined them to the 262 zones. Tonight reads the joined table for what it can and cannot say. Session 4 looks at the zones where the count is so small it is mostly noise, and session 5 places Wrenmouth's sensors knowing that the busiest zones are busiest partly because the cabs are already there.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers censored demand, the mechanism</span>
+      <h2>A pickup needs a cab</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Take two street corners with the same person on each, wanting the same ride. On one corner a cab passes, stops, and a meter is engaged: a row. On the other no cab passes: nothing. The file now says the first corner has demand and the second does not. That is censoring: the count you see is capped by the supply that happened to be there, and the part above the cap leaves no trace.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of two street corners. Corner A: a person wants a ride, a cab passes and stops, the meter is engaged, and a row is written with this pickup zone, highlighted in green. Corner B: the same person with the same wish, no cab passes, and no row is written; a zone full of such waits reads as zero. Recorded pickups are demand multiplied by a cab being present and allowed to stop, and only the product is in the file.">
+        <defs>
+          <filter id="ctyp3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp3aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp3aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp3aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp3aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp3aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp3aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp3aH" x="30" y="32">SAME WISH, TWO CORNERS: ONLY ONE OF THEM WRITES A ROW</text>
+
+        <g filter="url(#ctyp3aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="400" height="190" rx="10" transform="rotate(-0.4 230 145)" fill="#FFFFFF"/>
+          <rect x="450" y="50" width="400" height="190" rx="10" transform="rotate(0.4 650 145)" fill="#FAF0EE"/>
+          <!-- doodle: kerb lines, the street each corner sits on -->
+          <path d="M50 178 L410 178" stroke="#C98A82" stroke-width="2.5"/>
+          <path d="M470 178 L830 178" stroke="#C98A82" stroke-width="2.5"/>
+          <!-- corner A: rider and a cab -->
+          <circle cx="90" cy="128" r="9" fill="#FFFFFF"/>
+          <path d="M90 137 L90 166 M90 146 L104 136"/>
+          <rect x="220" y="140" width="96" height="30" rx="8" transform="rotate(-2 268 155)" fill="url(#ctyp3aHc)"/>
+          <path d="M214 156 L114 156" marker-end="url(#ctyp3aAr)"/>
+          <!-- corner B: rider, no cab -->
+          <circle cx="510" cy="128" r="9" fill="#FFFFFF"/>
+          <path d="M510 137 L510 166 M510 146 L524 136"/>
+          <rect x="660" y="140" width="96" height="30" rx="8" transform="rotate(2 708 155)" stroke="#CFC4C1" stroke-dasharray="5 5"/>
+          <!-- what each corner writes -->
+          <path d="M230 244 L230 262" marker-end="url(#ctyp3aAr)"/>
+          <rect x="30" y="266" width="400" height="56" rx="10" transform="rotate(0.3 230 294)" fill="#8CC27A"/>
+          <path d="M650 244 L650 262" stroke-dasharray="4 4" marker-end="url(#ctyp3aAr)"/>
+          <rect x="450" y="266" width="400" height="56" rx="10" transform="rotate(-0.3 650 294)" fill="#FFFFFF" stroke-dasharray="6 5"/>
+        </g>
+
+        <text class="ctyp3aL" x="46" y="76">Corner A: a cab passes and stops</text>
+        <text class="ctyp3aS" x="46" y="94">the rider hails, the meter is engaged</text>
+        <text class="ctyp3aS" x="112" y="124">wants a ride</text>
+        <text class="ctyp3aK" x="252" y="160">cab</text>
+        <text class="ctyp3aA" x="46" y="222">supply met demand</text>
+
+        <text class="ctyp3aL" x="466" y="76">Corner B: no cab passes</text>
+        <text class="ctyp3aS" x="466" y="94">the same wish, nobody to hail</text>
+        <text class="ctyp3aS" x="532" y="124">wants a ride</text>
+        <text class="ctyp3aS" x="684" y="160">no cab</text>
+        <text class="ctyp3aA" x="466" y="222">demand with no supply</text>
+
+        <text class="ctyp3aL" x="46" y="290">A row: PULocationID = zone where the meter engaged</text>
+        <text class="ctyp3aK" x="46" y="310">one of the 3,876,702 pickups you can count</text>
+        <text class="ctyp3aL" x="466" y="290">No row. A zone of waits like this reads as zero.</text>
+        <text class="ctyp3aS" x="466" y="310">censored: the count stops at what supply allowed</text>
+
+        <text class="ctyp3aN" x="30" y="346">Recorded pickups = a wish x a cab present and allowed to stop. Only the product is in the file.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is everything the file holds; the dashed box is the part of demand it can never show you.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What "censored" means, in one table<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A measurement is censored when you see it only up to a limit and everything past the limit collapses onto the limit. Here the limit is supply: a zone records at most as many pickups as there were cabs passing and willing to stop. Where supply is plentiful, the count may sit close to the wish. Where supply is thin, the count says "this many cabs met this many riders" and is silent about everyone else.</p>
+        <p>So read the borough table with two columns in your head that the file does not have. Manhattan: 3,411,386 pickups, 49,440.4 per zone. Brooklyn: 69,631, or 1,141.5 per zone. The Bronx: 13,318, or 309.7 per zone. Staten Island: 231 in the whole month, 11.6 per zone. Each figure is how often supply and demand met there. None of them is how much demand there was, and the gap between them could be large or small: the data cannot tell you which.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>In October 2024, two Manhattan zones and two Staten Island zones recorded zero pickups. A zero in a censored count has at least three readings: nobody wanted a ride, nobody could get one, or the zone is not a place people hail from at all. The homework asks you to look the four zones up. The file alone cannot choose between the readings; only something outside the file can.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The loop that makes busy zones look busier<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Drivers go where fares are. Planners place stands, lanes and sensors where trips are recorded. Both are reasonable, and both can feed the next month's counts back into the same places. If supply follows recorded pickups and recorded pickups follow supply, the busy zones stay busy in the data whatever the wish elsewhere was.</p>
+        <p>Treat that as a hypothesis this file cannot test, not as a finding. What you can say for certain is the direction of the risk: a plan built on recorded pickups alone will tend to reinforce where cabs already go. Practitioner session 5 and the bench in session 10 show Wrenmouth's version of it: placing sensors where trips are already recorded sees 88.9% of trips on 15.3% of zones and leaves three boroughs dark (constructed decision, real counts).</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Three ways a wish leaves no row<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>No cab came.</strong> The rider waited and walked, took a bus, or stayed home. This is the censoring in the figure.</p>
+        <p><strong>Another service answered.</strong> The TLC also publishes for-hire vehicle trip records, the app-dispatched kind. They are not used here, for size and scope, so a ride taken that way is invisible in these files even though it is recorded somewhere.</p>
+        <p><strong>The wish never formed.</strong> People who have learned that cabs do not come to their street stop trying. That demand is suppressed before it can even be censored, and no trip file of any kind will hold it.</p>
+        <p>Each one pushes the recorded count below the wish, and by different amounts in different places. That is why there is no correction factor to multiply by.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the TLC hail rule and the borough table</span>
+      <h2>A rule decides who may stop where</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Supply is not only a matter of where drivers choose to go. Some of it is written into rules. The TLC's green cabs are street-hail liveries that may not pick up street hails in Manhattan's core, so in that core only yellow cabs can answer a raised hand. The rule shows up in the data as a pattern in which fleet wrote each borough's rows.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn outline of Manhattan split by a slanted line at West 110th Street and East 96th Street. South of it, highlighted in green, is the Hail Exclusionary Zone where green cabs may not street-hail; north of it both fleets may. Beside it, yellow share of recorded pickups by borough on a 0 to 100 percent scale: Manhattan 99.0%, Brooklyn 88.5%, Queens 96.5%, Bronx 92.9%, Staten Island 98.7%. Green cabs wrote 56,147 rows in the month, yellow 3,833,771.">
+        <defs>
+          <filter id="ctyp3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp3bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp3bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp3bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp3bV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp3bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp3bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp3bH" x="30" y="32">ONE HAIL RULE, AND ITS FINGERPRINT ON EVERY BOROUGH</text>
+
+        <g filter="url(#ctyp3bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- doodle anchor: the Manhattan outline, split at the hail line -->
+          <path d="M100 60 L168 52 L210 172 L122 146 Z" fill="#FFFFFF"/>
+          <path d="M122 146 L210 172 L236 330 L172 352 L140 250 Z" fill="#8CC27A"/>
+          <path d="M112 146 L222 176" stroke-width="3"/>
+          <path d="M246 236 L226 236" marker-end="url(#ctyp3bAr)"/>
+          <!-- yellow share panel -->
+          <rect x="430" y="50" width="420" height="300" rx="10" transform="rotate(0.3 640 200)" fill="#FFFFFF"/>
+          <path d="M560 92 L560 286" stroke="#CFC4C1" stroke-width="1.5"/>
+          <path d="M780 92 L780 286" stroke="#CFC4C1" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <rect x="560" y="100" width="218" height="16" rx="3" transform="rotate(-0.4 669 108)" fill="url(#ctyp3bHc)"/>
+          <rect x="560" y="140" width="195" height="16" rx="3" transform="rotate(0.4 657 148)" fill="url(#ctyp3bHc)"/>
+          <rect x="560" y="180" width="212" height="16" rx="3" transform="rotate(-0.3 666 188)" fill="url(#ctyp3bHc)"/>
+          <rect x="560" y="220" width="204" height="16" rx="3" transform="rotate(0.3 662 228)" fill="url(#ctyp3bHc)"/>
+          <rect x="560" y="260" width="217" height="16" rx="3" transform="rotate(-0.3 668 268)" fill="url(#ctyp3bHc)"/>
+        </g>
+
+        <text class="ctyp3bL" x="250" y="96">Upper Manhattan</text>
+        <text class="ctyp3bS" x="250" y="114">yellow and green</text>
+        <text class="ctyp3bS" x="250" y="130">may both street-hail</text>
+        <text class="ctyp3bA" x="250" y="172">W 110th St and E 96th St</text>
+        <text class="ctyp3bL" x="250" y="232">Hail Exclusionary Zone</text>
+        <text class="ctyp3bS" x="250" y="250">green cabs may not</text>
+        <text class="ctyp3bS" x="250" y="266">street-hail here</text>
+
+        <text class="ctyp3bL" x="446" y="78">Yellow share of recorded pickups</text>
+        <text class="ctyp3bL" x="446" y="113">Manhattan</text>
+        <text class="ctyp3bV" x="790" y="115">99.0%</text>
+        <text class="ctyp3bL" x="446" y="153">Brooklyn</text>
+        <text class="ctyp3bV" x="790" y="155">88.5%</text>
+        <text class="ctyp3bL" x="446" y="193">Queens</text>
+        <text class="ctyp3bV" x="790" y="195">96.5%</text>
+        <text class="ctyp3bL" x="446" y="233">Bronx</text>
+        <text class="ctyp3bV" x="790" y="235">92.9%</text>
+        <text class="ctyp3bL" x="446" y="273">Staten Island</text>
+        <text class="ctyp3bV" x="790" y="275">98.7%</text>
+        <text class="ctyp3bA" x="552" y="304">0%</text>
+        <text class="ctyp3bA" x="762" y="304">100%</text>
+        <text class="ctyp3bS" x="446" y="328">Green cabs wrote 56,147 rows; yellow 3,833,771.</text>
+
+        <text class="ctyp3bN" x="30" y="382">Rule quoted from the TLC Green Cab page, which does not state its purpose. Shares: October 2024 pickups.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green core is where only one fleet can answer a hail, and Manhattan's 99.0% yellow share is that rule showing through.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The rule, in the TLC's words<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The TLC's Green Cab page says street-hail liveries "may not operate in the Hail Exclusionary Zone, south of West 110th St and East 96th St." The page does not say why the rule exists, so neither do we: the rule keeps green cabs out of the core, and that is where the statement stops.</p>
+        <p>What the rule does to the data is visible without knowing its purpose. In Manhattan, 99.0% of recorded pickups are yellow. In Brooklyn, where green cabs may street-hail, the yellow share falls to 88.5%. Queens is 96.5%, the Bronx 92.9%, Staten Island 98.7% on its 231 pickups. Across the whole month green cabs wrote 56,147 rows and yellow 3,833,771.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A share like 99.0% is not a fact about riders' taste in cab colour. It is a fact about which fleet was allowed to be there. Read any supply-side breakdown the same way before you read it as preference: first ask who was permitted, present and counted.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two airports hiding inside one borough<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Queens records 382,136 pickups, 9.9% of the city, on 69 zones. Two of those zones are JFK Airport, the single busiest zone in the month at 194,145 pickups, and LaGuardia Airport at 118,732. A per-zone average of 5,538.2 for Queens describes almost no zone in Queens: the airports pull it up, and most neighbourhood zones sit far below it.</p>
+        <p>Airports are also the clearest case of supply that is organised rather than wandering: cabs queue for arriving passengers. A high count there tells you the queue worked, which is a supply fact as much as a demand one. Session 5 treats the two airport zones as a stratum of their own for exactly this reason.</p>
+      </div>
+    </details>
+
+    <div class="wk" id="ctyp3-table">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The borough table computed in this page by the engine from real TLC pickups (October 2024, 262 zones, yellow and green). These are fixed counts, not settings: they match the prose exactly. Pick which column the bars draw.</span>
+      </div>
+      <div class="wk-body">
+        <div class="ctyp3-btns">
+          <button class="btn primary" id="ctyp3-v-share" type="button">Share of recorded pickups</button>
+          <button class="btn" id="ctyp3-v-zones" type="button">Share of the 262 zones</button>
+          <button class="btn" id="ctyp3-v-yellow" type="button">Yellow share</button>
+        </div>
+        <div id="ctyp3-out"></div>
+        <p class="sql-note" id="ctyp3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctyp3-self">...</div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why no page here prints a "true demand" number<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It is tempting to fix the censoring with arithmetic: take Manhattan's pickups per zone as "what demand looks like with plenty of cabs" and scale the other boroughs up to it. That assumes the wish per zone is the same everywhere and only supply differs, which is the very thing you do not know. The result would be a number with the confidence of a count and the evidence of a guess.</p>
+        <p>Demand that never met a cab is unmeasured in these files, so it is unmeasured on every page that uses them. Estimating it needs a different source: asking people, counting unanswered requests in a system that logs them, or watching kerbs. Name the source you would need, and leave the number blank until you have it.</p>
+        <p>Resident reports have the same shape. A study of New York City's 311 complaints models the probability of a problem separately from the probability of reporting it, and finds "some subpopulations reporting at lower rates than others" (Boxer et al. 2025). Fewer reports, like fewer pickups, can mean less need or less access.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Build the borough table, then write the caption it supports</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">Same folder as session 1: the October 2024 yellow and green files and the zone lookup, with your script kept somewhere else. You will rebuild the borough table with a service column, check it against the engine on this page, and finish with one sentence. Every number below came from running exactly this code with pandas 2.1.4.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn narrowing from wish to row. People who wanted a ride: unknown, in no file. Narrowed to: a cab was there and allowed to stop, set by fleets, routes and hail rules, yellow share 99.0% vs 88.5%. Narrowed to, highlighted in green: the meter engaged, a row, 3,876,702 pickups in 262 zones. Below: the sentence the table supports is where cabs met riders, by borough, October 2024; it does not support where people wanted rides.">
+        <defs>
+          <filter id="ctyp3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp3cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp3cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp3cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp3cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp3cV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp3cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp3cH" x="30" y="32">FROM WISH TO ROW: EACH STEP NARROWS THE ONE BEFORE</text>
+
+        <g filter="url(#ctyp3cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="240" height="100" rx="10" transform="rotate(-0.5 150 104)" fill="url(#ctyp3cHc)"/>
+          <path d="M272 104 L314 104" marker-end="url(#ctyp3cAr)"/>
+          <rect x="320" y="54" width="240" height="100" rx="10" transform="rotate(0.4 440 104)" fill="#FFFFFF"/>
+          <path d="M562 104 L604 104" marker-end="url(#ctyp3cAr)"/>
+          <rect x="610" y="54" width="240" height="100" rx="10" transform="rotate(-0.4 730 104)" fill="#8CC27A"/>
+          <rect x="30" y="180" width="820" height="72" rx="10" transform="rotate(0.15 440 216)" fill="#FAF0EE"/>
+          <!-- doodle: a lamp post at the kerb -->
+          <path d="M818 244 L818 196 L802 196" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="802" cy="201" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp3cL" x="46" y="80">Wanted a ride</text>
+        <text class="ctyp3cV" x="46" y="110">unknown</text>
+        <text class="ctyp3cK" x="46" y="134">in no file, never a number</text>
+
+        <text class="ctyp3cL" x="336" y="80">A cab there, allowed to stop</text>
+        <text class="ctyp3cS" x="336" y="106">fleets, routes, hail rules</text>
+        <text class="ctyp3cS" x="336" y="126">yellow share 99.0% vs 88.5%</text>
+
+        <text class="ctyp3cL" x="626" y="80">Meter engaged: a row</text>
+        <text class="ctyp3cV" x="626" y="110">3,876,702</text>
+        <text class="ctyp3cK" x="626" y="134">pickups in 262 zones</text>
+
+        <text class="ctyp3cL" x="46" y="208">Supported: where cabs met riders, by borough, October 2024.</text>
+        <text class="ctyp3cS" x="46" y="232">Not supported: where people wanted rides. That needs a source this file is not.</text>
+
+        <text class="ctyp3cN" x="30" y="290">Only the green box is written down. Your caption describes the green box, and nothing to its left.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the only thing your table counts; the caption you write in step 5 must not reach past it.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Stack yellow and green with a service column</h4>
+        <p>Read only the two columns you need, tag each row with its fleet, and filter the month exactly as in session 1. The service column is what lets you see the hail rule later.</p>
+        <div class="prompt-box good"><span class="label">python</span>import pandas as pd
+y = pd.read_parquet("yellow_tripdata_2024-10.parquet", columns=["tpep_pickup_datetime", "PULocationID"])
+g = pd.read_parquet("green_tripdata_2024-10.parquet", columns=["lpep_pickup_datetime", "PULocationID"])
+t = pd.concat([
+    y.set_axis(["t", "z"], axis=1).assign(svc="yellow"),
+    g.set_axis(["t", "z"], axis=1).assign(svc="green"),
+])
+t = t[(t.t &gt;= "2024-10-01") &amp; (t.t &lt; "2024-11-01")]</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Join the zones and group by borough</h4>
+        <p>An inner join on the 262 borough zones keeps 3876702 rows. The table should show Manhattan 3411386 pickups and a yellow share of 0.990, Brooklyn 69631 and 0.885, Staten Island 231 and 0.987.</p>
+        <div class="prompt-box good"><span class="label">python</span>zones = pd.read_csv("taxi_zone_lookup.csv")
+five = zones[zones.Borough.isin(["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"])]
+kept = t.merge(five[["LocationID", "Borough"]], left_on="z", right_on="LocationID")
+print(len(kept))
+by = kept.groupby("Borough").agg(pickups=("z", "size"), yellow=("svc", lambda s: (s == "yellow").mean()))
+by["zones"] = five.groupby("Borough").size()
+by["share"] = by.pickups / by.pickups.sum()
+by["per_zone"] = by.pickups / by.zones
+print(by.round(3))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the zones the count says little about</h4>
+        <p>Count pickups per zone, including zones with none, then count the thin and the empty ones per borough. Under 100: Manhattan 6, Brooklyn 2, Queens 11, Bronx 8, Staten Island 20. Zero: Manhattan 2, Staten Island 2.</p>
+        <div class="prompt-box good"><span class="label">python</span>pz = kept.groupby("z").size().reindex(five.LocationID, fill_value=0)
+boro = five.set_index("LocationID").Borough
+print((pz &lt; 100).groupby(boro).sum())
+print((pz == 0).groupby(boro).sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Check your table against the engine</h4>
+        <p>Open your browser's console on this page and run the line below. It returns the same five rows from the page's own aggregate, built from the same files. Two independent routes agreeing is the cheapest check you will ever run.</p>
+        <div class="prompt-box good"><span class="label">console</span>CTY.boroughSummary()</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the caption</h4>
+        <p>One sentence under the table, naming what it counts: "Recorded taxi pickups (yellow and green), October 2024, by borough: where a cab was present and hailed, not where rides were wanted." Then one line on the hail rule, so nobody reads the yellow share as preference. If the chart goes to Wrenmouth's planner without that sentence, the planner will read demand into it.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before you call a count "demand", name what had to be present for the row to exist. If supply had to be there, the count is supply meeting demand, and the caption says so. Never fill the gap with a multiplier; name the source that could fill it.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Bronx zones average 309.7 recorded pickups in October 2024; Manhattan zones average 49,440.4. A planner writes "the Bronx has little demand for taxis". What is wrong?</p>
+      <button class="qopt" type="button">A · Nothing: the counts come straight from the meters, so they are accurate</button>
+      <button class="qopt" type="button">B · A pickup is recorded only where a cab was present to be hailed, so the counts measure supply meeting demand; low counts can mean little demand or little supply, and the file cannot tell which</button>
+      <button class="qopt" type="button">C · The Bronx has fewer zones, so its average should be multiplied by 43</button>
+      <p class="qwhy">The counts may well be accurate, which is the trap in A: an accurate count of the wrong thing. C confuses a per-zone average with a total. The point is censoring: the row exists only where supply met the wish.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The yellow share of recorded pickups is 99.0% in Manhattan and 88.5% in Brooklyn. What is the best first explanation?</p>
+      <button class="qopt" type="button">A · Brooklyn riders prefer green cabs</button>
+      <button class="qopt" type="button">B · Green cab meters fail more often in Manhattan</button>
+      <button class="qopt" type="button">C · Green cabs may not street-hail south of West 110th St and East 96th St, so in Manhattan's core only yellow cabs can answer a hail; in Brooklyn both can</button>
+      <p class="qwhy">The TLC Green Cab page states the rule. A reads a supply rule as a preference; B invents a defect the data does not show. Ask who was permitted and present before you ask who was preferred.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Wrenmouth's planner (constructed) asks for "the true demand in Staten Island". The file shows 231 pickups for the month. What do you send back?</p>
+      <button class="qopt" type="button">A · The 231 recorded pickups, labelled as where cabs met riders, plus a note that demand which never met a cab is not in any trip file and naming the kind of source that could estimate it</button>
+      <button class="qopt" type="button">B · 231 scaled up by Manhattan's pickups per zone, as an estimate of demand with plenty of cabs</button>
+      <button class="qopt" type="button">C · Zero demand, since 231 is close to nothing in a city of 3,876,702 pickups</button>
+      <p class="qwhy">B assumes the wish per zone is the same everywhere, the very thing you do not know, and dresses a guess as a count. C reads a censored count as a measured absence. Report what the number measures and leave the unknown blank.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on the table you built.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Read the four zeros</h4>
+        <p>List the two Manhattan and two Staten Island zones with zero pickups by name from the lookup. For each, write which reading fits: no wish, no supply, or not a place people hail from. Note what outside source would settle it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Split a borough by fleet and zone</h4>
+        <p>Pick Brooklyn or the Bronx. Compute the yellow share per zone and sort it. Write two lines on where green pickups concentrate, describing it as where green cabs met riders, never as where riders prefer green.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Rewrite one caption you have seen</h4>
+        <p>Find any chart, yours or a public one, that calls recorded trips, visits or reports "demand". Rewrite its caption to name what had to be present for each record to exist.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Censored demand, the mechanism</span><span class="note">A pickup is recorded only where a cab was present to be hailed; recorded pickups measure supply meeting demand.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The hail rule</span><span class="note">TLC Green Cab page: street-hail liveries "may not operate in the Hail Exclusionary Zone, south of West 110th St and East 96th St." Read at source; purpose not stated.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where the recorded trips are</span><span class="note">Pickups, share, per zone and zones under 100 by borough; Manhattan 88.0% on 69 of 262 zones. Derived from the October 2024 TLC files, pandas 2.1.4.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Yellow share by borough</span><span class="note">Manhattan 99.0%, Brooklyn 88.5%, Queens 96.5%, Bronx 92.9%, Staten Island 98.7%. Derived; checked against the engine's borough summary.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Unequal reporting in 311 data</span><span class="note">Named as the same shape (Boxer et al. 2025, read at source, abstract). Leader session 2 and practitioner session 4.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Thin zones and placing sensors</span><span class="note">Zones under 100 named tonight. Practitioner sessions 4 and 5.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">A "true demand" estimate</span><span class="note">Not in the data and not attempted anywhere: demand that never met a cab is unmeasured.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">For-hire vehicle trip records</span><span class="note">Published by the TLC; not used here, for size and scope.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Missing readings in sensor feeds</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>A pickup.</strong> A wish that met a cab allowed to stop. The row is written by the meter.</div>
+      <div class="cheat-item"><strong>Censored.</strong> The count stops at what supply allowed; unanswered waits leave no row.</div>
+      <div class="cheat-item"><strong>A zero.</strong> No wish, no supply, or no place to hail. The file cannot choose.</div>
+      <div class="cheat-item"><strong>The skew.</strong> Manhattan: 88.0% of pickups on 69 of 262 zones. Staten Island: 231.</div>
+      <div class="cheat-item"><strong>The hail rule.</strong> No green street hails south of W 110th St and E 96th St.</div>
+      <div class="cheat-item"><strong>Its fingerprint.</strong> Yellow share 99.0% in Manhattan vs 88.5% in Brooklyn.</div>
+      <div class="cheat-item"><strong>Airports.</strong> JFK 194,145 and LaGuardia 118,732 sit inside Queens's average.</div>
+      <div class="cheat-item"><strong>The caption.</strong> "Where cabs met riders", never "demand". No multiplier for the gap.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 3 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p2-zones-joins-and-the-map.html">← Practitioner session 2 · Zones, joins and the map</a>
+        <a href="p4-where-the-data-is-thin.html">Practitioner session 4 · Where the data is thin →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var out = document.getElementById("ctyp3-out"), verdict = document.getElementById("ctyp3-verdict");
+  var self = document.getElementById("ctyp3-self");
+  var btns = { share: document.getElementById("ctyp3-v-share"), zones: document.getElementById("ctyp3-v-zones"), yellow: document.getElementById("ctyp3-v-yellow") };
+  var nZones = CTY.ZONES.length, view = "share";
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function pct(x) { return x > 0 && x < 0.001 ? fmt(x * 100, 3) + "%" : fmt(x * 100, 1) + "%"; }
+  function render() {
+    var S = CTY.boroughSummary();
+    var label = { share: "share of recorded pickups", zones: "share of the " + nZones + " zones", yellow: "yellow share" }[view];
+    var html = '<table class="sql-table"><thead><tr><th>Borough</th><th>Zones</th><th>Of 262 zones</th><th>Pickups</th><th>Of pickups</th><th>Yellow share</th><th>Per zone</th><th>Under 100</th><th>Bar: ' + label + "</th></tr></thead><tbody>";
+    S.forEach(function (r) {
+      var v = view === "share" ? r.share : view === "zones" ? r.zones / nZones : r.yellowShare;
+      html += "<tr><td>" + r.boro + "</td><td>" + r.zones + "</td><td>" + pct(r.zones / nZones) + "</td><td>" + fmt(r.trips, 0) + "</td><td>" + pct(r.share) + "</td><td>" + (r.yellowShare === null ? "-" : pct(r.yellowShare)) + "</td><td>" + fmt(r.perZone, 1) + "</td><td>" + r.under100 + '</td><td><span class="ctyp3-bar"><span style="width:' + Math.max(0.5, v * 100).toFixed(2) + '%"></span></span></td></tr>';
+    });
+    out.innerHTML = html + "</tbody></table>";
+    var m = S[0], si = S[4], bk = S[1];
+    var msg = view === "share"
+      ? "Manhattan holds " + pct(m.share) + " of recorded pickups and Staten Island " + pct(si.share) + ". That is where cabs met riders, not where rides were wanted."
+      : view === "zones"
+      ? "Manhattan is " + pct(m.zones / nZones) + " of the zones but " + pct(m.share) + " of the pickups. Compare the two bars before you call any borough empty."
+      : "Yellow share: Manhattan " + pct(m.yellowShare) + ", Brooklyn " + pct(bk.yellowShare) + ". The gap is the hail rule showing through: green cabs may not street-hail in Manhattan's core.";
+    verdict.textContent = msg;
+    Object.keys(btns).forEach(function (k) { btns[k].className = "btn" + (k === view ? " primary" : ""); });
+  }
+  Object.keys(btns).forEach(function (k) { btns[k].addEventListener("click", function () { view = k; render(); }); });
+  var st = CTY.selfTestResult || CTY.selfTest();
+  self.textContent = st.pass
+    ? "Real counts: TLC trip records, October 2024 (NYC public data set; aggregated, out-of-month and non-borough rows dropped). The engine's " + st.checks.length + " self-checks pass in this browser. No true-demand figure is computed here, because the data holds none."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #ctyp3-table table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #ctyp3-table .ctyp3-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 .3rem; }
+  #ctyp3-table #ctyp3-out { overflow-x: auto; }
+  #ctyp3-table .ctyp3-bar { display: block; width: 8rem; height: .7rem; background: var(--indigo-50); border: 1px solid var(--hairline); border-radius: 4px; }
+  #ctyp3-table .ctyp3-bar span { display: block; height: 100%; background: var(--indigo-mid); border-radius: 3px; }
+</style>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 7 of 10. Why a few points in place and time can single a person out, what k-anonymity promises and what it does not, and small-cell suppression on zone x hour pickup counts from real New York City taxi records: at k 5, 41.3% of cells withheld but 0.7% of trips, with Staten Island losing every cell. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Aggregation and privacy - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 7 of 10. Suppress small cells and the city barely notices; the thinnest boroughs vanish. At k 5 on zone x hour: 41.3% of cells, 0.7% of trips, 100% of Staten Island's cells.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p7-aggregation-and-privacy.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aggregation and privacy - learn smart city with phoebe">
+<meta name="twitter:description" content="Small-cell suppression costs the city almost nothing and the thinnest boroughs almost everything.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 7 · Aggregation and privacy - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 7 of 10</div>
+    <h1>Aggregation and <span class="accent">privacy</span></h1>
+    <p class="sub">Wrenmouth, a constructed city transport office, wants to publish how many taxi pickups happen in each zone in each hour of the week. The counts come from real New York City taxi records, October 2024, and no row in the table names a person. Tonight you find out why a table of counts can still point at someone, what k-anonymity promises and where it stops, and what happens when you withhold every small cell: the city barely notices, and the thinnest boroughs disappear from the release.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Analysts who publish city counts</span>
+      <span class="chip audience">Data engineers building open data releases</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-15 · Few points, one person</span>
+      <span class="a3" style="flex:4">15-28 · Small cells, thin boroughs</span>
+      <span class="a4" style="flex:5">28-45 · Build-along: suppress and release</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth wants to publish a count table</h2>
+    </div>
+    <p class="lede">Wrenmouth, a constructed city transport office, has a table it is proud of: pickups per taxi zone per hour of the week, built from real New York City taxi records, October 2024. 262 zones, 168 hours of the week, 3,876,702 pickups. Its director asks one question before release: "It is only counts. Is that private enough?" The honest answer is that counts are safer than rows, small counts are the weak spot, and every rule you pick to protect them moves the cost onto somebody.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Why four points in place and time are enough to single out most people in a mobility data set, and why coarsening buys less than it seems. Sweeney's definition of k-anonymity and the limit the paper itself states. Small-cell suppression on zone x hour counts, run live on real pickups: at k 5 it withholds 41.3% of cells but 0.7% of trips, and 100.0% of Staten Island's cells. How the grain you choose changes that story. And a pandas pass that builds the cells, suppresses them and writes a release note anyone can check.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Counts are safer than rows, not safe by definition<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A row-level trip file is a pile of points: a zone and a minute where a meter was switched on, another where it was switched off. Anyone who knows where and when you hailed a cab is holding one of those points. A count table melts the points into cells, and a cell of thousands hides everyone in it. A cell of one or two does not hide much: it says that somebody was there, then, and sometimes that is the whole secret.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The TLC's own files are published as rows, monthly, with pickup and dropoff zones and times. Session 8 covers what a republisher must state; tonight is about the step before that, deciding what grain is safe to put in a table at all.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What tonight does not cover<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Privacy law exists and it matters for any release; it is taught in its own sessions and nothing here is legal advice. Start with <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR, scope</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA</a>. Access models, masking and tokenisation of person records belong to <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b5-tokenization.html">learn data access control, session b5</a>, which also calls k-anonymity "not a guarantee". We agree, and tonight we stay on published counts.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers re-identification from location traces and k-anonymity</span>
+      <h2>Few points, one person</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Location data has a property warehouse data rarely has: almost everyone's trace is unique. Each point in place and time cuts the crowd you could be hiding in, and it takes very few cuts before the crowd is one. That is the mechanism k-anonymity was invented to resist, and the reason it was never enough on its own.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 334" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn mechanism of re-identification from location traces. Four boxes left to right, each one more known place and hour; the crowd that shares all the known points shrinks from many people to fewer to a handful to one person, highlighted in green. Four spatio-temporal points uniquely identify 95% of 1.5 million people in fifteen months of hourly mobility data. Coarser resolution helps little: uniqueness decays roughly as the 1/10 power of resolution.">
+        <defs>
+          <filter id="ctyp7aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp7aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp7aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp7aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp7aB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctyp7aV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp7aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp7aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp7aH" x="30" y="32">EACH KNOWN PLACE AND HOUR SHRINKS THE CROWD YOU HIDE IN</text>
+
+        <g filter="url(#ctyp7aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="190" height="150" rx="8" transform="rotate(-0.5 125 127)" fill="#FFFFFF"/>
+          <rect x="240" y="52" width="190" height="150" rx="8" transform="rotate(0.4 335 127)" fill="#FFFFFF"/>
+          <rect x="450" y="52" width="190" height="150" rx="8" transform="rotate(-0.4 545 127)" fill="#FFFFFF"/>
+          <rect x="660" y="52" width="190" height="150" rx="8" transform="rotate(0.5 755 127)" fill="#FAF0EE"/>
+          <rect x="45" y="112" width="160" height="78" rx="6" transform="rotate(1.5 125 151)" fill="url(#ctyp7aHc)"/>
+          <rect x="280" y="130" width="110" height="60" rx="6" transform="rotate(-2 335 160)" fill="url(#ctyp7aHc)"/>
+          <rect x="515" y="150" width="60" height="40" rx="6" transform="rotate(2.5 545 170)" fill="url(#ctyp7aHc)"/>
+          <rect x="743" y="166" width="24" height="24" rx="4" transform="rotate(-3 755 178)" fill="#8CC27A"/>
+          <path d="M222 127 L237 127" marker-end="url(#ctyp7aAr)"/>
+          <path d="M432 127 L447 127" marker-end="url(#ctyp7aAr)"/>
+          <path d="M642 127 L657 127" marker-end="url(#ctyp7aAr)"/>
+          <rect x="30" y="244" width="820" height="52" rx="10" transform="rotate(0.15 440 270)" fill="#FAF0EE"/>
+          <!-- doodle: a street grid corner -->
+          <path d="M760 14 L760 40 M760 26 L860 26 M800 14 L800 40" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp7aL" x="46" y="78">Point 1</text>
+        <text class="ctyp7aS" x="46" y="96">a place and an hour</text>
+        <text class="ctyp7aL" x="256" y="78">Point 2</text>
+        <text class="ctyp7aS" x="256" y="96">a second place and hour</text>
+        <text class="ctyp7aL" x="466" y="78">Point 3</text>
+        <text class="ctyp7aS" x="466" y="96">a third</text>
+        <text class="ctyp7aL" x="676" y="78">Point 4</text>
+        <text class="ctyp7aS" x="676" y="96">a fourth</text>
+
+        <text class="ctyp7aS" x="46" y="224">many people share it</text>
+        <text class="ctyp7aS" x="256" y="224">fewer share both</text>
+        <text class="ctyp7aS" x="466" y="224">a handful share all three</text>
+        <text class="ctyp7aB" x="676" y="224">one person: 95% of people</text>
+        <text class="ctyp7aV" x="676" y="186">95%</text>
+
+        <text class="ctyp7aL" x="46" y="266">Coarser places or hours help little: uniqueness falls roughly as the 1/10 power of resolution.</text>
+        <text class="ctyp7aA" x="46" y="284">so "we rounded the times" is not a privacy argument on its own</text>
+
+        <text class="ctyp7aN" x="30" y="320">de Montjoye et al. 2013: fifteen months, 1.5 million people, location hourly at antenna resolution.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green square is the point of the figure: four points, and for 95% of people the crowd is one.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Four points, and the 1/10 power<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A study of fifteen months of mobility data for 1.5 million people, with location recorded hourly at the resolution of the carrier's antennas, found that "four spatio-temporal points are enough to uniquely identify 95% of the individuals." Four is not many. A home zone in the evening, a work zone in the morning, one trip you mentioned to a colleague and one photo you posted would do.</p>
+        <p>The second finding is the one practitioners forget. Uniqueness "decays approximately as the 1/10 power of their resolution. Hence, even coarse datasets provide little anonymity." Halving the precision of places or times does not halve the risk; it barely dents it. Coarsening is still worth doing, it is just not an answer by itself.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>de Montjoye, Hidalgo, Verleysen and Blondel published this in Scientific Reports in 2013. The numbers above are the abstract's, and only the abstract's; the paper is about traces of people, not about any city's taxi release, and nothing here ties it to one.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What k-anonymity promises, in Sweeney's words<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Sweeney's 2002 paper defines it for releases of person records: a release provides k-anonymity if each person's information "cannot be distinguished from at least k-1 individuals whose information also appears in the release." With k 5, whoever you are in the table, at least four other rows look exactly like yours on the fields an attacker could link.</p>
+        <p>The same paper also "examines re-identification attacks that can be realized on releases that adhere to k-anonymity unless accompanying policies are respected." Read that twice: the definition comes with its own warning. k-anonymity is a property of one table; an attacker holds other tables, and the policies around the release are part of the protection.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 356" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of two protections. Left, person records under Sweeney's k-anonymity: six rows in two groups of three identical generalised rows, each group labelled k equals 3. Right, published counts under small-cell suppression: a grid of zone by hour cells, most published, four cells under k withheld and highlighted in green. Bottom: Sweeney protects a person's row; suppression protects a small published count; neither alone is a guarantee.">
+        <defs>
+          <filter id="ctyp7bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp7bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp7bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp7bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp7bK { font: 600 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp7bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp7bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp7bH" x="30" y="32">SAME IDEA, TWO OBJECTS: A PERSON'S ROW AND A PUBLISHED COUNT</text>
+
+        <g filter="url(#ctyp7bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="400" height="212" rx="10" transform="rotate(-0.3 230 158)" fill="#FFFFFF"/>
+          <rect x="450" y="52" width="400" height="212" rx="10" transform="rotate(0.3 650 158)" fill="#FFFFFF"/>
+          <rect x="46" y="92" width="260" height="20" rx="4" fill="url(#ctyp7bHc)"/>
+          <rect x="46" y="116" width="260" height="20" rx="4" fill="url(#ctyp7bHc)"/>
+          <rect x="46" y="140" width="260" height="20" rx="4" fill="url(#ctyp7bHc)"/>
+          <rect x="46" y="182" width="260" height="20" rx="4" fill="#FAF0EE"/>
+          <rect x="46" y="206" width="260" height="20" rx="4" fill="#FAF0EE"/>
+          <rect x="46" y="230" width="260" height="20" rx="4" fill="#FAF0EE"/>
+          <path d="M312 94 Q322 126 312 158 M312 184 Q322 216 312 248"/>
+          <rect x="476" y="88" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="560" y="88" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="644" y="88" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="728" y="88" width="80" height="44" rx="4" fill="#8CC27A"/>
+          <rect x="476" y="136" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="560" y="136" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="644" y="136" width="80" height="44" rx="4" fill="#8CC27A"/>
+          <rect x="728" y="136" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="476" y="184" width="80" height="44" rx="4" fill="#8CC27A"/>
+          <rect x="560" y="184" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="644" y="184" width="80" height="44" rx="4" fill="#FFFFFF"/>
+          <rect x="728" y="184" width="80" height="44" rx="4" fill="#8CC27A"/>
+          <rect x="30" y="280" width="820" height="40" rx="10" transform="rotate(0.15 440 300)" fill="#FAF0EE"/>
+          <!-- doodle: a zone outline -->
+          <path d="M818 98 L836 92 L842 112 L828 122 L816 114 Z" stroke="#C98A82" stroke-width="2"/>
+        </g>
+
+        <text class="ctyp7bL" x="46" y="78">Person records (Sweeney 2002)</text>
+        <text class="ctyp7bS" x="56" y="106">Queens · evening · band A</text>
+        <text class="ctyp7bS" x="56" y="130">Queens · evening · band A</text>
+        <text class="ctyp7bS" x="56" y="154">Queens · evening · band A</text>
+        <text class="ctyp7bS" x="56" y="196">Bronx · morning · band B</text>
+        <text class="ctyp7bS" x="56" y="220">Bronx · morning · band B</text>
+        <text class="ctyp7bS" x="56" y="244">Bronx · morning · band B</text>
+        <text class="ctyp7bA" x="330" y="130">k = 3</text>
+        <text class="ctyp7bA" x="330" y="220">k = 3</text>
+
+        <text class="ctyp7bL" x="466" y="78">Published counts (tonight)</text>
+        <text class="ctyp7bS" x="490" y="114">published</text>
+        <text class="ctyp7bS" x="574" y="114">published</text>
+        <text class="ctyp7bS" x="658" y="114">published</text>
+        <text class="ctyp7bK" x="742" y="114">withheld</text>
+        <text class="ctyp7bS" x="490" y="162">published</text>
+        <text class="ctyp7bS" x="574" y="162">published</text>
+        <text class="ctyp7bK" x="658" y="162">withheld</text>
+        <text class="ctyp7bS" x="742" y="162">published</text>
+        <text class="ctyp7bK" x="490" y="210">withheld</text>
+        <text class="ctyp7bS" x="574" y="210">published</text>
+        <text class="ctyp7bS" x="658" y="210">published</text>
+        <text class="ctyp7bK" x="742" y="210">withheld</text>
+        <text class="ctyp7bA" x="476" y="250">rows: zones · columns: hours of the week</text>
+
+        <text class="ctyp7bL" x="46" y="305">Sweeney protects a person's row; suppression withholds a published count under k.</text>
+
+        <text class="ctyp7bN" x="30" y="342">Neither alone is a guarantee: Sweeney names attacks that work unless accompanying policies are respected.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green cells are what suppression does: a count under k never leaves the building, whatever it would have said.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>From person records to published counts<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Wrenmouth is not releasing person records; it is releasing counts. Tonight's rule borrows the idea, not the definition: a cell with fewer than k pickups is withheld. That is small-cell suppression, a related practice for published counts. It is not Sweeney's k-anonymity applied to rows, and calling it k-anonymity in a release note overstates what it does.</p>
+        <p>The logic transfers well enough to be useful. A cell of 1 says one trip started in that zone in that hour of the week across the month; anyone who knows they were there now knows it was them, and anyone who knows a neighbour took a cab then has a strong hint. A cell of 300 says much less about any one rider. Choosing k is choosing the smallest crowd you are willing to publish.</p>
+        <p>Whether that is enough is a genuine disagreement. One position: for aggregate tables of a busy service, suppression with sensible policies is proportionate and keeps the data useful. The other: only a formal guarantee holds up against attackers with other data, so suppression is a habit, not a protection. Reasonable people hold both. Your job tonight is to know exactly what your rule withholds and who pays for it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers small-cell suppression on zone x hour cells and the areal unit problem</span>
+      <h2>Small cells, thin boroughs</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Take every October pickup in the five boroughs, count them per zone per hour of the week, and withhold every cell under k. City-wide, almost nothing is lost. Borough by borough, the picture inverts: the places with the fewest recorded trips are exactly the places whose cells are smallest, so they are the places the release goes quiet about.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 368" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bar chart of small-cell suppression at k 5 on zone by hour-of-week cells, October 2024 pickups. Share of cells withheld and share of trips withheld, highlighted in green. City: 41.3% of cells, 0.7% of trips. Manhattan 7.4% and 0.0%. Brooklyn 52.1% and 12.9%. Queens 53.3% and 2.3%. Bronx 80.0% and 49.0%. Staten Island 100.0% and 100.0%.">
+        <defs>
+          <filter id="ctyp7cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp7cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp7cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp7cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp7cD { font: 700 11px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp7cV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp7cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp7cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp7cH" x="30" y="28">WITHHOLD EVERY CELL UNDER 5: WHO LOSES WHAT</text>
+
+        <g filter="url(#ctyp7cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="40" width="22" height="12" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="230" y="40" width="22" height="12" rx="2" fill="#8CC27A"/>
+          <path d="M170 66 L170 316"/>
+          <!-- city -->
+          <rect x="170" y="74" width="165" height="13" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="170" y="90" width="3" height="13" rx="1" fill="#8CC27A"/>
+          <!-- Manhattan -->
+          <rect x="170" y="116" width="30" height="13" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="170" y="132" width="1" height="13" rx="1" fill="#8CC27A"/>
+          <!-- Brooklyn -->
+          <rect x="170" y="158" width="208" height="13" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="170" y="174" width="52" height="13" rx="2" fill="#8CC27A"/>
+          <!-- Queens -->
+          <rect x="170" y="200" width="213" height="13" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="170" y="216" width="9" height="13" rx="1" fill="#8CC27A"/>
+          <!-- Bronx -->
+          <rect x="170" y="242" width="320" height="13" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="170" y="258" width="196" height="13" rx="2" fill="#8CC27A"/>
+          <!-- Staten Island -->
+          <rect x="170" y="284" width="400" height="13" rx="2" fill="url(#ctyp7cHc)"/>
+          <rect x="170" y="300" width="400" height="13" rx="2" fill="#8CC27A"/>
+          <rect x="680" y="76" width="170" height="146" rx="10" transform="rotate(0.8 765 149)" fill="#FAF0EE"/>
+          <!-- doodle: a kerb -->
+          <path d="M760 22 L800 22 L800 34 L860 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp7cS" x="58" y="51">share of cells withheld</text>
+        <text class="ctyp7cS" x="258" y="51">share of trips withheld</text>
+
+        <text class="ctyp7cL" x="30" y="94">All 5 boroughs</text>
+        <text class="ctyp7cD" x="343" y="85">41.3%</text>
+        <text class="ctyp7cD" x="181" y="101">0.7%</text>
+        <text class="ctyp7cL" x="30" y="136">Manhattan</text>
+        <text class="ctyp7cD" x="208" y="127">7.4%</text>
+        <text class="ctyp7cD" x="181" y="143">0.0%</text>
+        <text class="ctyp7cL" x="30" y="178">Brooklyn</text>
+        <text class="ctyp7cD" x="386" y="169">52.1%</text>
+        <text class="ctyp7cD" x="230" y="185">12.9%</text>
+        <text class="ctyp7cL" x="30" y="220">Queens</text>
+        <text class="ctyp7cD" x="391" y="211">53.3%</text>
+        <text class="ctyp7cD" x="187" y="227">2.3%</text>
+        <text class="ctyp7cL" x="30" y="262">Bronx</text>
+        <text class="ctyp7cD" x="498" y="253">80.0%</text>
+        <text class="ctyp7cD" x="374" y="269">49.0%</text>
+        <text class="ctyp7cL" x="30" y="304">Staten Island</text>
+        <text class="ctyp7cD" x="578" y="295">100.0%</text>
+        <text class="ctyp7cD" x="578" y="311">100.0%</text>
+
+        <text class="ctyp7cL" x="696" y="100">City-wide, k 5</text>
+        <text class="ctyp7cV" x="696" y="132">41.3%</text>
+        <text class="ctyp7cS" x="696" y="150">of cells withheld</text>
+        <text class="ctyp7cV" x="696" y="186">0.7%</text>
+        <text class="ctyp7cS" x="696" y="204">of trips withheld</text>
+
+        <text class="ctyp7cA" x="30" y="336">Bar length = share, 0 to 100%. 30,898 non-empty zone x hour-of-week cells; 12,772 withheld.</text>
+        <text class="ctyp7cN" x="30" y="356">Real TLC pickups, October 2024, summed per hour of the week. The k 5 rule is Wrenmouth's (constructed).</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green bars are the cost: under 1% of trips city-wide, half the Bronx's trips and every Staten Island trip.</figcaption>
+    </figure>
+
+    <div class="wk" id="ctyp7-supp">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Small-cell suppression computed in this page from real TLC pickups (October 2024, 262 zones, counts per hour of the week). Constructed, and labelled so: Wrenmouth's release rule. At k 5 on zone x hour the table prints the canon figures.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="ctyp7-k">Smallest count you will publish (k)</label>
+        <select class="sql-code" id="ctyp7-k">
+          <option value="3">3</option>
+          <option value="5" selected>5, the canon</option>
+          <option value="10">10</option>
+        </select>
+        <label class="sql-label" for="ctyp7-time">Time grain</label>
+        <select class="sql-code" id="ctyp7-time">
+          <option value="hour" selected>Hour of the week (168), the canon</option>
+          <option value="daypart">Daypart: four 6-hour blocks a day (28)</option>
+          <option value="week">The whole month per place (1)</option>
+        </select>
+        <label class="sql-label" for="ctyp7-space">Place grain</label>
+        <select class="sql-code" id="ctyp7-space">
+          <option value="zone" selected>Taxi zone (262), the canon</option>
+          <option value="borough">Borough (5)</option>
+        </select>
+        <div class="ctyp7-btns">
+          <button class="btn" id="ctyp7-reset" type="button">Back to the canon settings</button>
+        </div>
+        <div id="ctyp7-out"></div>
+        <p class="sql-note" id="ctyp7-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctyp7-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the grid: cheap for the city, dear for the thin places<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At k 5 on zone x hour, 12,772 of 30,898 non-empty cells are withheld: 41.3% of cells, but only 0.7% of trips, because the withheld cells are small by definition. Raise k to 10 and it becomes 55.4% of cells and 1.4% of trips; lower it to 3 and it is 28.1% and 0.3%. On a city-wide total, the rule is almost invisible.</p>
+        <p>Now read it by borough. Manhattan loses 7.4% of its cells and 0.0% of its trips. Brooklyn loses 52.1% of cells and 12.9% of trips; Queens 53.3% and 2.3%; the Bronx 80.0% and 49.0%. Staten Island loses 100.0% of its cells and 100.0% of its trips: at this grain, the release says nothing at all about it.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Staten Island recorded 231 pickups in the whole of October 2024 across its 20 zones. Spread over 168 hours of the week, no cell reaches 5. The privacy rule did not choose to erase a borough; the thinness of the recorded data did, and the rule made it final. Practitioner session 4 showed where the data is thin; this is what thin data does to a release.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Grain is a choice: the areal unit problem<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Openshaw's 1984 monograph on the modifiable areal unit problem is reported here, not quoted: results computed on areal units change with the size and the boundaries of the units. You do not need his numbers to see it; ours show it. Same trips, same k 5, four groupings, four different stories about how much is withheld and from whom.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 338" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of the same October 2024 pickups grouped four ways, all at k 5. Zone by hour of the week: 30,898 cells, 41.3% withheld, Staten Island 100.0%. Zone by daypart: 6,498 cells, 18.4% withheld, Staten Island 95.1%. Zone by whole month: 258 cells, 3.9% withheld, Staten Island 33.3%. Borough by hour, highlighted in green: 778 cells, 13.0% withheld, Staten Island 95.3%.">
+        <defs>
+          <filter id="ctyp7dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp7dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp7dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp7dH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7dL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7dS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp7dK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp7dV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp7dA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp7dN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp7dH" x="30" y="32">SAME TRIPS, SAME k 5, FOUR GROUPINGS</text>
+
+        <g filter="url(#ctyp7dSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="190" height="186" rx="8" transform="rotate(-0.5 125 145)" fill="#FFFFFF"/>
+          <rect x="240" y="52" width="190" height="186" rx="8" transform="rotate(0.4 335 145)" fill="#FFFFFF"/>
+          <rect x="450" y="52" width="190" height="186" rx="8" transform="rotate(-0.4 545 145)" fill="#FFFFFF"/>
+          <rect x="660" y="52" width="190" height="186" rx="8" transform="rotate(0.5 755 145)" fill="#8CC27A"/>
+          <!-- grid doodles: finer grain, more lines -->
+          <rect x="46" y="110" width="158" height="54" rx="3" fill="url(#ctyp7dHc)"/>
+          <path d="M66 110 L66 164 M86 110 L86 164 M106 110 L106 164 M126 110 L126 164 M146 110 L146 164 M166 110 L166 164 M186 110 L186 164 M46 124 L204 124 M46 138 L204 138 M46 152 L204 152" stroke-width="1.2"/>
+          <rect x="256" y="110" width="158" height="54" rx="3" fill="#FAF0EE"/>
+          <path d="M296 110 L296 164 M336 110 L336 164 M376 110 L376 164 M256 137 L414 137" stroke-width="1.2"/>
+          <rect x="466" y="110" width="158" height="54" rx="3" fill="#FFFFFF"/>
+          <path d="M545 110 L545 164" stroke-width="1.2"/>
+          <rect x="676" y="110" width="158" height="54" rx="3" fill="#FFFFFF"/>
+          <path d="M676 120 L834 120 M676 131 L834 131 M676 142 L834 142 M676 153 L834 153 M716 110 L716 164 M756 110 L756 164 M796 110 L796 164" stroke-width="1.2"/>
+          <rect x="30" y="256" width="820" height="40" rx="10" transform="rotate(0.15 440 276)" fill="#FAF0EE"/>
+          <!-- doodle: a lamp post -->
+          <path d="M800 40 L800 16 L812 16" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="812" cy="20" r="3.5" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp7dL" x="46" y="78">Zone x hour</text>
+        <text class="ctyp7dS" x="46" y="96">30,898 cells</text>
+        <text class="ctyp7dL" x="256" y="78">Zone x daypart</text>
+        <text class="ctyp7dS" x="256" y="96">6,498 cells</text>
+        <text class="ctyp7dL" x="466" y="78">Zone x whole month</text>
+        <text class="ctyp7dS" x="466" y="96">258 cells</text>
+        <text class="ctyp7dL" x="676" y="78">Borough x hour</text>
+        <text class="ctyp7dK" x="676" y="96">778 cells</text>
+
+        <text class="ctyp7dV" x="46" y="192">41.3%</text>
+        <text class="ctyp7dS" x="46" y="210">of cells withheld</text>
+        <text class="ctyp7dA" x="46" y="228">Staten Island 100.0%</text>
+        <text class="ctyp7dV" x="256" y="192">18.4%</text>
+        <text class="ctyp7dS" x="256" y="210">of cells withheld</text>
+        <text class="ctyp7dA" x="256" y="228">Staten Island 95.1%</text>
+        <text class="ctyp7dV" x="466" y="192">3.9%</text>
+        <text class="ctyp7dS" x="466" y="210">of cells withheld</text>
+        <text class="ctyp7dA" x="466" y="228">Staten Island 33.3%</text>
+        <text class="ctyp7dV" x="676" y="192">13.0%</text>
+        <text class="ctyp7dK" x="676" y="210">of cells withheld</text>
+        <text class="ctyp7dL" x="676" y="228">Staten Island 95.3%</text>
+
+        <text class="ctyp7dL" x="46" y="281">Bigger cells withhold less in total; Staten Island stays mostly withheld at every grain but the month.</text>
+
+        <text class="ctyp7dN" x="30" y="324">Hour: one of 168 hours of the week. Daypart: four 6-hour blocks a day. Month: every hour summed per zone.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the surprise: merging zones into whole boroughs still leaves Staten Island 95.3% withheld, because its whole borough is smaller than one busy zone.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Withheld is not hidden: subtraction, and the stronger alternative<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Suppression has a classic leak. If Wrenmouth publishes each zone's monthly total alongside the zone x hour cells, a zone with exactly one withheld cell gives it away: total minus the published cells equals the withheld count. That is one of the "accompanying policies" Sweeney's warning is about. The fix is a rule, not cleverness: either withhold a second cell in that row so subtraction cannot isolate one, or do not publish totals that let it.</p>
+        <p>Differential privacy is the stronger alternative: it adds calibrated noise so that any one person's presence changes the published numbers only within a stated bound. It is named here and not taught; it trades exact counts for a guarantee, and the same disagreement applies about whether a city release needs it.</p>
+        <p>For checking intervals and uncertainty around noisy or small counts, <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, session b7</a> is the sibling to read.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Build the cells, suppress them, write the release note</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">Start from the <span class="mono">kept</span> frame and the <span class="mono">five</span> zone table from practitioner session 1: 3,876,702 in-month pickups in the 262 zones of the five boroughs, with a pickup time <span class="mono">t</span> and a zone <span class="mono">z</span>. The engine on this page built its cells from the same rows with the same hour-of-week rule, so your counts should match the canon to the cell. The figure is the ledger you are building.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn release ledger for k 5 on zone by hour-of-week cells. 30,898 non-empty cells built from 3,876,702 pickups. 12,772 cells withheld, 41.3% of cells and 0.7% of trips. 18,126 cells published, highlighted in green, travelling with a release note: k, grain, what was withheld, the per-borough cost.">
+        <defs>
+          <filter id="ctyp7eSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp7eHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp7eAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp7eH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7eL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp7eS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp7eK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp7eV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp7eN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp7eH" x="30" y="32">THE RELEASE LEDGER, k 5 ON ZONE x HOUR</text>
+
+        <g filter="url(#ctyp7eSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="230" height="84" rx="10" transform="rotate(-0.5 145 96)" fill="url(#ctyp7eHc)"/>
+          <path d="M262 96 L312 96" marker-end="url(#ctyp7eAr)"/>
+          <rect x="318" y="54" width="230" height="84" rx="10" transform="rotate(0.4 433 96)" fill="#FAF0EE"/>
+          <path d="M550 96 L600 96" marker-end="url(#ctyp7eAr)"/>
+          <rect x="606" y="54" width="244" height="84" rx="10" transform="rotate(-0.4 728 96)" fill="#8CC27A"/>
+          <path d="M728 140 L728 176" stroke-dasharray="4 4"/>
+          <rect x="560" y="180" width="290" height="68" rx="8" transform="rotate(0.6 705 214)" fill="#FFFFFF"/>
+          <!-- doodle: a zone outline -->
+          <path d="M60 196 L92 184 L118 200 L108 230 L72 232 Z" stroke="#C98A82" stroke-width="2"/>
+        </g>
+
+        <text class="ctyp7eL" x="46" y="80">Cells built</text>
+        <text class="ctyp7eV" x="46" y="106">30,898</text>
+        <text class="ctyp7eS" x="46" y="126">from 3,876,702 pickups</text>
+        <text class="ctyp7eL" x="334" y="80">Withheld, under 5</text>
+        <text class="ctyp7eV" x="334" y="106">12,772</text>
+        <text class="ctyp7eS" x="334" y="126">41.3% of cells, 0.7% of trips</text>
+        <text class="ctyp7eL" x="622" y="80">Published</text>
+        <text class="ctyp7eV" x="622" y="106">18,126</text>
+        <text class="ctyp7eK" x="622" y="126">cells, 30,898 minus 12,772</text>
+
+        <text class="ctyp7eL" x="576" y="204">Release note travels with it</text>
+        <text class="ctyp7eS" x="576" y="222">k, grain, cells and trips withheld,</text>
+        <text class="ctyp7eS" x="576" y="238">and the cost borough by borough</text>
+
+        <text class="ctyp7eS" x="140" y="212">a zone, an hour of the week,</text>
+        <text class="ctyp7eS" x="140" y="228">a count: no rider in any row</text>
+
+        <text class="ctyp7eN" x="30" y="282">A release with no note hides its own cost: the reader cannot see that a borough went quiet.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is what leaves the building, and it is only honest because the note under it says what did not.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Build zone x hour-of-week cells</h4>
+        <p>Hour of the week is the day (Monday 0) times 24 plus the hour. Grouping keeps only cells with at least one pickup, which is what "non-empty" means. You should see 30898.</p>
+        <div class="prompt-box good"><span class="label">python</span>kept = kept.assign(how=kept.t.dt.dayofweek * 24 + kept.t.dt.hour)
+cells = kept.groupby(["z", "how"]).size()
+print(len(cells), cells.sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Withhold every cell under k, and print what it cost</h4>
+        <p>Three numbers: cells withheld, share of cells, share of trips. At k 5 you should see 12772, 41.3 and 0.7. Try k 3 and k 10 and check them against the widget.</p>
+        <div class="prompt-box good"><span class="label">python</span>k = 5
+small = cells &lt; k
+print(small.sum(), round(small.mean() * 100, 1),
+      round(cells[small].sum() / cells.sum() * 100, 1))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Split the cost by borough</h4>
+        <p>This is the line most releases skip. You should see Manhattan 7.4, Brooklyn 52.1, Queens 53.3, Bronx 80.0 and Staten Island 100.0 for cells, and 0.0, 12.9, 2.3, 49.0 and 100.0 for trips.</p>
+        <div class="prompt-box good"><span class="label">python</span>boro = five.set_index("LocationID").Borough
+b = cells.rename("n").reset_index().assign(B=lambda d: d.z.map(boro))
+b["held"] = b.n &lt; k
+print(b.groupby("B").held.mean().mul(100).round(1))
+print(b[b.held].groupby("B").n.sum().div(b.groupby("B").n.sum()).mul(100).round(1))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Change the grain and watch the story move</h4>
+        <p>Daypart is the day times 4 plus the hour floor-divided by 6. At k 5 you should see 6498 cells with 18.4% withheld. Then group by borough instead of zone: 778 cells, 13.0% withheld, and Staten Island still 95.3%.</p>
+        <div class="prompt-box good"><span class="label">python</span>kept = kept.assign(dp=kept.t.dt.dayofweek * 4 + kept.t.dt.hour // 6,
+                   B=kept.z.map(boro))
+for keys in (["z", "dp"], ["B", "how"]):
+    c = kept.groupby(keys).size()
+    print(keys, len(c), round((c &lt; k).mean() * 100, 1))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Publish the cells and write the release note</h4>
+        <p>Keep the published cells only, and write a note beside the file: the source and month, k, the grain, cells and trips withheld city-wide and per borough, and whether any totals are also published (if they are, check that no row has exactly one withheld cell). Session 8 turns this note into a full publishing checklist.</p>
+        <div class="prompt-box good"><span class="label">python</span>out = b[~b.held][["z", "how", "n"]]
+out.to_csv("wrenmouth_pickups_zone_hour_k5.csv", index=False)
+print(len(out))</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Never report a suppression rule by its city-wide cost alone. Print what it withholds borough by borough, choose the grain on purpose, and ship the note with the table. "0.7% of trips withheld" and "Staten Island withheld entirely" are the same release; a reader deserves both sentences.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">At k 5 on zone x hour, Wrenmouth's release withholds 41.3% of cells but only 0.7% of trips. A manager says the rule is "basically free". What is the best reply?</p>
+      <button class="qopt" type="button">A · Agreed: 0.7% of trips is too small to change any decision</button>
+      <button class="qopt" type="button">B · It is expensive for Manhattan, which has the most cells</button>
+      <button class="qopt" type="button">C · Free for the city total, not for the thin places: the Bronx loses 80.0% of its cells and 49.0% of its trips, and Staten Island loses all of both</button>
+      <p class="qwhy">Withheld cells are small by definition, so they carry few trips city-wide; they are concentrated where recorded trips are thin. Manhattan loses 7.4% of cells and 0.0% of trips. Report the cost by borough.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A colleague writes: "We applied k-anonymity with k 5 to the count table, so the release is anonymous." What is wrong with the sentence?</p>
+      <button class="qopt" type="button">A · Withholding cells under 5 is small-cell suppression on counts, a related practice, not Sweeney's definition; and Sweeney's own paper describes attacks that work unless accompanying policies are respected, such as not publishing totals that let a withheld cell be recovered by subtraction</button>
+      <button class="qopt" type="button">B · Nothing, as long as k is 5 or more</button>
+      <button class="qopt" type="button">C · k should be 10; at k 10 the release is guaranteed anonymous</button>
+      <p class="qwhy">Neither suppression nor k-anonymity is a guarantee on its own. Raising k (C) withholds more (55.4% of cells at k 10) without changing what kind of protection it is.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Moving from zone x hour to borough x hour at k 5 drops withheld cells from 41.3% to 13.0%. What happened?</p>
+      <button class="qopt" type="button">A · Privacy improved equally for every borough</button>
+      <button class="qopt" type="button">B · The same trips were grouped into bigger units, so fewer cells fall under k; Staten Island is still 95.3% withheld, because its whole borough is thin. The result is a property of the grouping as much as the data</button>
+      <button class="qopt" type="button">C · The borough table uses different source records</button>
+      <p class="qwhy">This is the areal unit problem with our own numbers: results change with the size and boundaries of the units. Same rows, same k, a different story.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 8</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on the same cells.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Choose Wrenmouth's release grain, and defend it</h4>
+        <p>Pick one k and one grain in the widget. Write five lines for the director: the setting, cells and trips withheld city-wide, the worst-hit borough and its share, and what a reader of the release can no longer learn. Every number from the widget, with "your numbers will differ" if you leave the canon.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find a subtraction leak</h4>
+        <p>In your <span class="mono">b</span> frame, count zones with exactly one withheld cell. For each, the zone total minus its published cells reveals the withheld count. Decide which rule you would use: withhold a second cell, or publish no totals.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read two abstracts</h4>
+        <p>Read the abstracts of de Montjoye et al. 2013 and Sweeney 2002. Write one sentence on why a count table is not a trip file, and one on why it is still not automatically safe.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Re-identification from location traces</span><span class="note">de Montjoye, Y.-A., Hidalgo, C. A., Verleysen, M. and Blondel, V. D. (2013). Unique in the Crowd. Scientific Reports 3:1376. Four points identify 95%; the 1/10 power. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">k-anonymity and its stated limit</span><span class="note">Sweeney, L. (2002). k-anonymity: a model for protecting privacy. IJUFKS 10(5):557-570. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Small-cell suppression on zone x hour counts</span><span class="note">Real TLC yellow and green pickups, October 2024, 262 zones. k 3, 5 and 10; 30,898 cells; per-borough cost. Derived; the rule is constructed.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The areal unit problem, with our numbers</span><span class="note">Openshaw, S. (1984). The Modifiable Areal Unit Problem. CATMOG 38. Reported. Zone, daypart, month and borough groupings.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Differential privacy</span><span class="note">Named as the stronger alternative; not taught.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Publishing the release</span><span class="note">The release note is the start. Practitioner session 8.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Masking, tokenisation and k-anonymity of person records</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b5-tokenization.html">learn data access control, session b5</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Privacy law</span><span class="note">No legal advice here. See <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Four points.</strong> Enough to single out 95% of people in a mobility trace (2013 study).</div>
+      <div class="cheat-item"><strong>Coarsening.</strong> Uniqueness falls only as the 1/10 power of resolution. Helps little alone.</div>
+      <div class="cheat-item"><strong>k-anonymity.</strong> Each person indistinguishable from k-1 others. Not a guarantee by itself.</div>
+      <div class="cheat-item"><strong>Suppression.</strong> Withhold every count under k. A related practice for counts, not the definition.</div>
+      <div class="cheat-item"><strong>The canon.</strong> k 5, zone x hour: 41.3% of cells, 0.7% of trips withheld.</div>
+      <div class="cheat-item"><strong>Who pays.</strong> Bronx 80.0% of cells; Staten Island 100.0%. Manhattan 7.4%.</div>
+      <div class="cheat-item"><strong>Grain.</strong> Same trips, bigger units, fewer withheld cells. The story moves with the unit.</div>
+      <div class="cheat-item"><strong>Release note.</strong> k, grain, what was withheld, per borough. No totals that leak by subtraction.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 7 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p6-before-and-after.html">← Practitioner session 6 · Before and after</a>
+        <a href="p8-publishing-open-data.html">Practitioner session 8 · Publishing open data →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var kSel = document.getElementById("ctyp7-k"), tSel = document.getElementById("ctyp7-time");
+  var sSel = document.getElementById("ctyp7-space");
+  var out = document.getElementById("ctyp7-out"), verdict = document.getElementById("ctyp7-verdict");
+  var self = document.getElementById("ctyp7-self");
+  var tName = { hour: "hour of the week", daypart: "daypart", week: "whole month" };
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function pc(x) { return x === null ? "-" : fmt(x * 100, 1) + "%"; }
+  function opts() { return { k: Number(kSel.value), time: tSel.value, space: sSel.value }; }
+  function isCanon(o) { return o.k === 5 && o.time === "hour" && o.space === "zone"; }
+  function render() {
+    var o = opts(), r = CTY.suppress(o);
+    var html = '<div class="sql-tablewrap"><table class="sql-table"><thead><tr><th>Where</th><th>Cells</th><th>Withheld</th><th>Cells withheld</th><th>Trips withheld</th></tr></thead><tbody>';
+    html += '<tr class="ctyp7-city"><td><b>All 5 boroughs</b></td><td>' + fmt(r.cells, 0) + "</td><td>" + fmt(r.suppressed, 0) + "</td><td><b>" + pc(r.cellShare) + "</b></td><td><b>" + pc(r.tripShare) + "</b></td></tr>";
+    var worst = null;
+    r.byBoro.forEach(function (b) {
+      if (b.cellShare !== null && (worst === null || b.cellShare > worst.cellShare)) worst = b;
+      html += "<tr" + (b.cellShare !== null && b.cellShare >= 0.5 ? ' class="ctyp7-thin"' : "") + "><td>" + b.boro + "</td><td>" + fmt(b.cells, 0) + "</td><td>" + fmt(b.suppressed, 0) + "</td><td>" + pc(b.cellShare) + "</td><td>" + pc(b.tripShare) + "</td></tr>";
+    });
+    html += "</tbody></table></div>";
+    html += '<p class="sql-note">' + (isCanon(o) ? "The canon settings: these are the figures in the prose." : "Not the canon settings: your numbers will differ from the figures in the prose.") + " Shaded rows lose half their cells or more.</p>";
+    out.innerHTML = html;
+    verdict.textContent = "Wrenmouth (constructed), k " + o.k + " on " + o.space + " x " + tName[o.time] + ": " + pc(r.cellShare) + " of cells withheld but " + pc(r.tripShare) + " of trips city-wide. Worst hit: " + worst.boro + ", " + pc(worst.cellShare) + " of its cells and " + pc(worst.tripShare) + " of its trips. Both sentences belong in the release note.";
+  }
+  document.getElementById("ctyp7-reset").addEventListener("click", function () {
+    kSel.value = "5"; tSel.value = "hour"; sSel.value = "zone"; render();
+  });
+  [kSel, tSel, sSel].forEach(function (el) { el.addEventListener("change", render); });
+  var st = CTY.selfTestResult || CTY.selfTest();
+  self.textContent = st.pass
+    ? "Real counts: TLC trip records, October 2024 (NYC public data set; aggregated to zone x hour of week, out-of-month and non-borough rows dropped; no row-level trip in this page). Constructed: Wrenmouth and its release rule. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #ctyp7-supp .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #ctyp7-supp table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #ctyp7-supp .ctyp7-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0 .3rem; }
+  #ctyp7-supp tr.ctyp7-city td { background: var(--amber-50); }
+  #ctyp7-supp tr.ctyp7-thin td { background: var(--indigo-50); }
+</style>
+</body>
+</html>

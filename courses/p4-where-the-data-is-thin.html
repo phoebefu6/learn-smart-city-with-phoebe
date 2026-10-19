@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 4 of 10. Where real New York City taxi records run thin: 47 of 262 zones record under 100 pickups in October 2024, every one of Staten Island's 20 zones among them, 231 pickups in the whole borough. Why a thin cell is noise rather than a finding, and a pandas pass that flags thin zones instead of dropping them. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Where the data is thin - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 4 of 10. Staten Island recorded 231 taxi pickups in October 2024 across 20 zones. A count that small is mostly noise; flag it, do not rank it.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p4-where-the-data-is-thin.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Where the data is thin - learn smart city with phoebe">
+<meta name="twitter:description" content="Thin data says where the measurement is thin, not where the city is quiet.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 4 · Where the data is thin - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 4 of 10</div>
+    <h1>Where the data is <span class="accent">thin</span></h1>
+    <p class="sub">A city dataset is thick where the measuring happens and thin everywhere else. Tonight you find the thin places in real New York City taxi records, October 2024: zones with fewer than 100 pickups in a month, a whole borough with 231. Wrenmouth, a constructed city transport office, is about to place sensors using counts like these, so before session 5 it needs to know which counts can carry a decision and which are mostly noise.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Analysts who rank, map or compare city areas</span>
+      <span class="chip audience">Anyone who reports per-zone or per-hour counts</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:12">3-15 · Where the counts run out</span>
+      <span class="a3" style="flex:13">15-28 · A thin cell is noise</span>
+      <span class="a4" style="flex:17">28-45 · Build-along: flag the thin zones</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's analyst sorts the zones by pickups</h2>
+    </div>
+    <p class="lede">Wrenmouth, a constructed city transport office, has the 3,876,702 kept pickups from session 1 joined to 262 zones from session 2. Its analyst sorts the zone table and scrolls to the bottom. The top is all Manhattan and the two airports. The bottom is a long tail of zones with a few dozen pickups, a few with single digits, and four with none at all. Her warehouse habit says the bottom rows are small customers. Her city habit, after tonight, says the bottom rows are where the measuring stopped.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A per-borough map of where the October counts run out: zones under 100 pickups number Manhattan 6, Brooklyn 2, Queens 11, Bronx 8 and Staten Island 20, which is every zone it has. A rough rule for how much a count wobbles by chance, and why ranking thin cells by change puts noise at the top of the list. Two reasons a cell is thin, few events or few observers, and why the file cannot tell them apart. And a pandas pass that brings back the zero-pickup zones, flags every thin zone, and keeps them in the table with the flag beside them.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Thin is a property of the measurement<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A taxi pickup is recorded only where a cab was present to be hailed and switched its meter on. So a zone with few pickups is a zone where few meters were switched on. That might be a quiet place. It might be a place cabs rarely pass. The row count cannot say which, and every number on this page is a count of meters, not of people.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Staten Island holds 20 of New York City's 262 taxi zones, 7.6% of them. In October 2024 its zones recorded 231 yellow and green pickups between them, a 0.006% share of the month. Manhattan, with 69 zones, recorded 3,411,386. Both numbers come from the same files, the same meters and the same filter. One of them can carry a decision about a single zone; the other cannot.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where tonight's numbers come from<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every count below is derived from the TLC's October 2024 yellow and green trip records after session 1's ledger: 47 out-of-month rows and 13,169 pickups outside the five boroughs dropped, 3,876,702 kept. Zones and boroughs come from the TLC Taxi Zone Lookup, joined zones-first as in session 2 so that a zone with no pickups is still a row.</p>
+        <p>The TLC says the data "was not created by the TLC, and TLC makes no representations as to the accuracy of these data." A thin count inherits that sentence with less room for error: one mis-stamped row is invisible among 49,440 and visible among 11.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers pickups per zone by borough</span>
+      <h2>Where the counts run out</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Manhattan and Queens have the same number of zones and differ in pickups per zone by a factor of nine; Manhattan and Staten Island differ by a factor of more than four thousand. Draw each borough as its zones, colour the ones under 100 pickups for the month, and the thin data stops being a footnote and becomes a shape: a small slice of Manhattan, a large slice of Queens and the Bronx, all of Staten Island.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 318" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bars, one per borough, length equal to its number of taxi zones, with the zones under 100 pickups in October 2024 shown in green. Manhattan: 69 zones, 6 under 100, 49,440.4 pickups per zone. Queens: 69 zones, 11 under 100, 5,538.2 per zone. Brooklyn: 61 zones, 2 under 100, 1,141.5 per zone. Bronx: 43 zones, 8 under 100, 309.7 per zone. Staten Island: 20 zones, all 20 under 100, 11.6 per zone, 231 pickups in the month.">
+        <defs>
+          <filter id="ctyp4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp4aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp4aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp4aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp4aB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctyp4aV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp4aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp4aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp4aH" x="30" y="32">WHERE THE COUNTS RUN OUT: ZONES UNDER 100 PICKUPS, OCTOBER 2024</text>
+
+        <g filter="url(#ctyp4aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Manhattan 69: 6 thin -->
+          <rect x="170" y="72" width="42" height="26" rx="4" transform="rotate(0.3 191 85)" fill="#8CC27A"/>
+          <rect x="215" y="72" width="438" height="26" rx="4" transform="rotate(-0.2 434 85)" fill="url(#ctyp4aHc)"/>
+          <!-- Queens 69: 11 thin -->
+          <rect x="170" y="116" width="77" height="26" rx="4" transform="rotate(-0.3 208 129)" fill="#8CC27A"/>
+          <rect x="250" y="116" width="403" height="26" rx="4" transform="rotate(0.2 451 129)" fill="url(#ctyp4aHc)"/>
+          <!-- Brooklyn 61: 2 thin -->
+          <rect x="170" y="160" width="14" height="26" rx="3" transform="rotate(0.5 177 173)" fill="#8CC27A"/>
+          <rect x="187" y="160" width="410" height="26" rx="4" transform="rotate(-0.2 392 173)" fill="url(#ctyp4aHc)"/>
+          <!-- Bronx 43: 8 thin -->
+          <rect x="170" y="204" width="56" height="26" rx="4" transform="rotate(-0.4 198 217)" fill="#8CC27A"/>
+          <rect x="229" y="204" width="242" height="26" rx="4" transform="rotate(0.3 350 217)" fill="url(#ctyp4aHc)"/>
+          <!-- Staten Island 20: 20 thin -->
+          <rect x="170" y="248" width="140" height="26" rx="4" transform="rotate(0.4 240 261)" fill="#8CC27A"/>
+          <!-- doodle: a zone outline -->
+          <path d="M806 42 L818 18 L846 16 L858 32 L840 46 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp4aA" x="30" y="60">borough</text>
+        <text class="ctyp4aA" x="170" y="60">bar length = zones; green = zones under 100 pickups</text>
+        <text class="ctyp4aA" x="670" y="60">per zone</text>
+        <text class="ctyp4aA" x="780" y="60">under 100</text>
+
+        <text class="ctyp4aL" x="30" y="84">Manhattan</text>
+        <text class="ctyp4aS" x="30" y="99">69 zones</text>
+        <text class="ctyp4aV" x="670" y="91">49,440.4</text>
+        <text class="ctyp4aV" x="780" y="91">6 of 69</text>
+
+        <text class="ctyp4aL" x="30" y="128">Queens</text>
+        <text class="ctyp4aS" x="30" y="143">69 zones</text>
+        <text class="ctyp4aV" x="670" y="135">5,538.2</text>
+        <text class="ctyp4aV" x="780" y="135">11 of 69</text>
+
+        <text class="ctyp4aL" x="30" y="172">Brooklyn</text>
+        <text class="ctyp4aS" x="30" y="187">61 zones</text>
+        <text class="ctyp4aV" x="670" y="179">1,141.5</text>
+        <text class="ctyp4aV" x="780" y="179">2 of 61</text>
+
+        <text class="ctyp4aL" x="30" y="216">Bronx</text>
+        <text class="ctyp4aS" x="30" y="231">43 zones</text>
+        <text class="ctyp4aV" x="670" y="223">309.7</text>
+        <text class="ctyp4aV" x="780" y="223">8 of 43</text>
+
+        <text class="ctyp4aL" x="30" y="260">Staten Island</text>
+        <text class="ctyp4aS" x="30" y="275">20 zones</text>
+        <text class="ctyp4aB" x="326" y="266">all 20 zones thin: 231 pickups in the month</text>
+        <text class="ctyp4aV" x="670" y="267">11.6</text>
+        <text class="ctyp4aV" x="780" y="267">20 of 20</text>
+
+        <text class="ctyp4aN" x="30" y="300">October 2024 yellow + green pickups, 262 zones. Under 100: 6 + 2 + 11 + 8 + 20 = 47 of 262 zones.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green is where a single zone's monthly count is too small to rank, and in Staten Island it is the whole borough.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Same number of zones, very different counts<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Manhattan and Queens each have 69 zones. Manhattan's average 49,440.4 pickups per zone; Queens' average 5,538.2, and Queens includes JFK and LaGuardia, the first and one of the busiest zones in the whole month. Take the airports out of your head and the rest of Queens is thinner than its average suggests. Brooklyn's 61 zones average 1,141.5, the Bronx's 43 zones 309.7, Staten Island's 20 zones 11.6.</p>
+        <p>Count zones under 100 pickups for the month and the pattern sharpens: Manhattan 6 of 69, Brooklyn 2 of 61, Queens 11 of 69, Bronx 8 of 43, Staten Island 20 of 20. That is 47 of the 262 zones (a different 47 from session 1's out-of-month rows: a coincidence of the arithmetic, nothing more).</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The outer boroughs, everything but Manhattan, hold 193 of the 262 zones and 465,316 of the 3,876,702 pickups. Manhattan holds 88.0% of the month's pickups on 69 zones. Any per-zone statistic computed on this file is precise in a quarter of the city and fragile in most of the rest.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Zero is a row too<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Four zones recorded no pickup at all in October: two in Manhattan, two in Staten Island. A <span class="mono">groupby</span> on the pickup zone never shows them, because a group needs at least one row to exist. The zone table quietly shrinks from 262 to 258, and every average, rank and map built on it is about 258 zones while its title says the city.</p>
+        <p>Session 2's zones-first join is the cure: start from the 262 zones, attach counts, fill the gaps with 0. A zero you can see is a finding. A zero that fell out of the table is a hole in the denominator nobody will ever notice.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Few events or few observers: the file cannot tell<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A thin cell has two possible causes. Few events: few people wanted a cab there. Few observers: people wanted one, but no cab was there to be hailed, so no meter switched on and no row was written. The TLC's own rules show the second cause is real: green cabs "may not operate in the Hail Exclusionary Zone, south of West 110th St and East 96th St", so the rule keeps green cabs out of the core and the two fleets record different parts of the city. Session 3 teaches this as censored demand; tonight it is enough that thin pickups are not proof of thin need.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Resident reports have the same shape. Boxer, Hong, Kontokosta and Neill (2025) model New York City 311 complaints about heating and hot water and find "some subpopulations reporting at lower rates than others"; their model separates the probability of a problem from the probability of reporting it. A study of one US city's 311 data reports that lower-income and minority neighbourhoods were less likely to report street problems despite greater need (Kontokosta and Hong, 2021, reported). In both, a thin cell is partly a thin observer.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers why a thin cell is noise</span>
+      <h2>A thin cell is noise, not a finding</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Every slice you add to a table divides the same rows into more cells. A borough becomes zones, a zone becomes hours of the week, and somewhere along the way the counts in each cell become so small that the next month could easily look different with nothing in the city having changed. Thin cells do not lie on purpose; they just cannot hold still.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn slicing of Staten Island's October 2024 pickups. The borough: 231 pickups over 20 zones. Split by zone: 11.6 pickups per zone on average, two zones with none. Split by hour of week, highlighted in green: 168 slots per zone, and every non-empty Staten Island zone-hour cell holds fewer than 5 pickups. Below, the rough rule that a count of n wobbles by about one over the square root of n: under 1% at Manhattan's 49,440.4 per zone, about 10% at 100, about 29% at Staten Island's 11.6. City-wide, 262 zones times 168 hours gives 44,016 possible cells, of which 30,898 hold any pickup.">
+        <defs>
+          <filter id="ctyp4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp4bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp4bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp4bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp4bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp4bV { font: 800 20px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp4bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp4bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp4bH" x="30" y="32">SLICE A THIN BOROUGH FINER AND EVERY CELL GETS THINNER</text>
+
+        <g filter="url(#ctyp4bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="210" height="160" rx="10" transform="rotate(-0.5 135 132)" fill="#FAF0EE"/>
+          <path d="M244 132 L280 132" marker-end="url(#ctyp4bAr)"/>
+          <rect x="288" y="52" width="250" height="160" rx="10" transform="rotate(0.4 413 132)" fill="#FFFFFF"/>
+          <path d="M542 132 L578 132" marker-end="url(#ctyp4bAr)"/>
+          <rect x="586" y="52" width="264" height="160" rx="10" transform="rotate(-0.4 718 132)" fill="#8CC27A"/>
+
+          <!-- 20 zones, two empty (dashed) -->
+          <rect x="304" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="326" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="348" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="370" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="392" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="414" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="436" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="458" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="480" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="502" y="146" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="304" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="326" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="348" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="370" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="392" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="414" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="436" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="458" y="172" width="18" height="18" fill="url(#ctyp4bHc)"/>
+          <rect x="480" y="172" width="18" height="18" stroke-dasharray="3 3" fill="#FFFFFF"/>
+          <rect x="502" y="172" width="18" height="18" stroke-dasharray="3 3" fill="#FFFFFF"/>
+
+          <!-- 168 hour-of-week slots for one zone: 24 x 7 -->
+          <rect x="602" y="112" width="216" height="63" fill="#FFFFFF" stroke-width="1.6"/>
+          <path d="M611 112 V175 M620 112 V175 M629 112 V175 M638 112 V175 M647 112 V175 M656 112 V175 M665 112 V175 M674 112 V175 M683 112 V175 M692 112 V175 M701 112 V175 M710 112 V175 M719 112 V175 M728 112 V175 M737 112 V175 M746 112 V175 M755 112 V175 M764 112 V175 M773 112 V175 M782 112 V175 M791 112 V175 M800 112 V175 M809 112 V175" stroke="#CFC4C1" stroke-width="1"/>
+          <path d="M602 121 H818 M602 130 H818 M602 139 H818 M602 148 H818 M602 157 H818 M602 166 H818" stroke="#CFC4C1" stroke-width="1"/>
+
+          <rect x="30" y="252" width="820" height="86" rx="10" transform="rotate(0.15 440 295)" fill="#FAF0EE"/>
+          <!-- doodle: a kerb -->
+          <path d="M700 22 L760 22 L760 34 L860 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp4bL" x="46" y="78">Staten Island, month</text>
+        <text class="ctyp4bV" x="46" y="110">231</text>
+        <text class="ctyp4bS" x="46" y="132">pickups over 20 zones</text>
+        <text class="ctyp4bS" x="46" y="150">0.006% of the city's</text>
+        <text class="ctyp4bS" x="46" y="168">October pickups</text>
+
+        <text class="ctyp4bL" x="304" y="78">Split by zone</text>
+        <text class="ctyp4bV" x="304" y="110">11.6</text>
+        <text class="ctyp4bS" x="304" y="132">pickups per zone, on average</text>
+
+        <text class="ctyp4bL" x="602" y="78">Split by hour of week</text>
+        <text class="ctyp4bK" x="602" y="100">168 slots per zone, one zone drawn</text>
+        <text class="ctyp4bL" x="602" y="196">every cell: fewer than 5 pickups</text>
+
+        <text class="ctyp4bS" x="304" y="232">dashed: the 2 zones with no pickup</text>
+        <text class="ctyp4bS" x="602" y="232">non-empty cells, k 5 suppression table</text>
+
+        <text class="ctyp4bL" x="46" y="276">Rough rule for a count of n independent events: it wobbles by about 1 / square root of n.</text>
+        <text class="ctyp4bA" x="46" y="302">n = 49,440.4</text>
+        <text class="ctyp4bS" x="46" y="322">Manhattan zone average: under 1%</text>
+        <text class="ctyp4bA" x="316" y="302">n = 100</text>
+        <text class="ctyp4bS" x="316" y="322">the thin line tonight: about 10%</text>
+        <text class="ctyp4bA" x="586" y="302">n = 11.6</text>
+        <text class="ctyp4bS" x="586" y="322">Staten Island zone average: about 29%</text>
+
+        <text class="ctyp4bN" x="30" y="362">City-wide: 262 zones x 168 hours = 44,016 possible cells; only 30,898 hold any pickup at all.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green panel is the cell a dashboard would show you, and in Staten Island it never holds more than four pickups.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Slicing thins every cell<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Split the month by zone and hour of the week and the city has 262 x 168 = 44,016 possible cells. Only 30,898 hold any pickup at all. Ask how many of those hold fewer than 5 and the answer is 12,772 cells, 41.3% of the non-empty ones, yet they carry only 0.7% of the trips. Thin cells are many and light.</p>
+        <p>In Staten Island it is total: every non-empty zone-hour cell holds fewer than 5 pickups. In the Bronx, 80.0% of them do. These are the same numbers session 7 uses to decide what a publisher must withhold; tonight they answer a simpler question, which is how much of the table you could rank with a straight face.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How much a small count wobbles<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>For counts of independent events, a rough rule is that a count of n moves by about one over the square root of n from one period to the next, with nothing real changing. The working, from the October numbers: 1 / square root of 49,440.4 is under 1%; 1 / square root of 100 is 10%; 1 / square root of 11.6 is about 29%. Pickups are not perfectly independent (a busy evening lifts many at once), so treat the rule as a floor on the wobble, not a ceiling.</p>
+        <p>That is why 100 is a useful line for a monthly zone count, not a magic one. Above it, a month-on-month change of a few percent might mean something. Below it, a change of a quarter can be the meter's dice. The honest move is to report the count with the flag, or with an interval: <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, session b7</a> builds the interval properly.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Sort zones by percentage change between two months and the top and bottom of the list fill with thin zones, because their counts have the most room to move. Pick the worst of them for attention and re-measure, and they tend to look better with nothing done. Barnett, van der Pols and Dobson (2005) put it plainly: "unusually large or small measurements tend to be followed by measurements that are closer to the mean". Session 6 turns that into a warning about before-and-after claims.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Three honest moves for a thin cell<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Pool.</strong> Coarser units hold more rows. At a threshold of 5, zone x daypart withholds 18.4% of non-empty cells and borough x hour 13.0%, against 41.3% for zone x hour. Pooling helps almost everywhere, but not in Staten Island: 95.3% of its borough-hour cells are still under 5. Changing the unit changes the story, which session 2 named and session 7 measures.</p>
+        <p><strong>Flag, do not drop.</strong> Keep the thin zone in the table with its count and a flag. Dropping it shrinks the denominator, and session 10's break button shows what that does: an estimate that reads 0.0% error against the zones it kept and -11.1% against the city.</p>
+        <p><strong>Say why it is thin, if you can.</strong> Few events and few observers need different fixes: the first needs patience or pooling, the second needs a different instrument. Why readings go missing in sensor feeds you own is its own subject: <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a> covers the mechanics. Here the question is where the city is measured at all.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Find the thin zones in pandas, and flag them</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">Start from session 1's files in the same empty folder, with your script kept somewhere else. Each step prints a number you can check against this page. The figure is the pipeline you are building: count, bring back the zeros, flag, and summarise by borough, with nothing dropped after the session 1 ledger.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 292" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pipeline. A groupby on pickup zone returns 258 rows because zero-pickup zones vanish. Reindexing to the 262 five-borough zones brings back 4 zeros, Manhattan 2 and Staten Island 2. Flagging counts under 100 marks 47 zones, kept, never dropped. Highlighted in green, thin zones by borough: Manhattan 6, Brooklyn 2, Queens 11, Bronx 8, Staten Island 20 of 20.">
+        <defs>
+          <filter id="ctyp4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp4cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp4cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp4cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp4cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp4cV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp4cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp4cH" x="30" y="32">COUNT, BRING BACK THE ZEROS, FLAG, SUMMARISE</text>
+
+        <g filter="url(#ctyp4cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="190" height="110" rx="10" transform="rotate(-0.5 125 109)" fill="url(#ctyp4cHc)"/>
+          <path d="M222 109 L236 109" marker-end="url(#ctyp4cAr)"/>
+          <rect x="240" y="54" width="190" height="110" rx="10" transform="rotate(0.4 335 109)" fill="#FFFFFF"/>
+          <path d="M432 109 L446 109" marker-end="url(#ctyp4cAr)"/>
+          <rect x="450" y="54" width="190" height="110" rx="10" transform="rotate(-0.4 545 109)" fill="#FFFFFF"/>
+          <path d="M642 109 L656 109" marker-end="url(#ctyp4cAr)"/>
+          <rect x="660" y="54" width="190" height="110" rx="10" transform="rotate(0.5 755 109)" fill="#8CC27A"/>
+          <path d="M335 168 L335 186" stroke-dasharray="4 4" marker-end="url(#ctyp4cAr)"/>
+          <rect x="240" y="192" width="400" height="54" rx="8" transform="rotate(0.3 440 219)" fill="#FAF0EE"/>
+          <!-- doodle: a lamp post -->
+          <path d="M800 246 L800 202 L816 202" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="816" cy="207" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp4cL" x="46" y="80">groupby zone</text>
+        <text class="ctyp4cV" x="46" y="108">258 rows</text>
+        <text class="ctyp4cK" x="46" y="130">zero-pickup zones</text>
+        <text class="ctyp4cK" x="46" y="146">simply vanish</text>
+
+        <text class="ctyp4cL" x="256" y="80">reindex to 262</text>
+        <text class="ctyp4cV" x="256" y="108">262 rows</text>
+        <text class="ctyp4cS" x="256" y="130">fill_value=0</text>
+        <text class="ctyp4cS" x="256" y="146">4 zeros come back</text>
+
+        <text class="ctyp4cL" x="466" y="80">flag n &lt; 100</text>
+        <text class="ctyp4cV" x="466" y="108">47 flagged</text>
+        <text class="ctyp4cS" x="466" y="130">kept in the table,</text>
+        <text class="ctyp4cS" x="466" y="146">flag beside the count</text>
+
+        <text class="ctyp4cL" x="676" y="80">Thin zones by borough</text>
+        <text class="ctyp4cK" x="676" y="102">Manhattan 6, Brooklyn 2</text>
+        <text class="ctyp4cK" x="676" y="120">Queens 11, Bronx 8</text>
+        <text class="ctyp4cL" x="676" y="140">Staten Island 20 of 20</text>
+
+        <text class="ctyp4cL" x="256" y="214">Manhattan 2 and Staten Island 2: zero pickups</text>
+        <text class="ctyp4cS" x="256" y="234">a groupby never shows a zone that has no rows</text>
+
+        <text class="ctyp4cN" x="30" y="276">From the October 2024 build-along: 3,876,702 kept pickups, 262 five-borough zones.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the table Wrenmouth takes into session 5, and it only tells the truth because the four zeros and 47 flags are in it.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Rebuild the kept pickups and count by zone</h4>
+        <p>This repeats session 1's ledger in a few lines. You should see 3876702 pickups and only 258 zones in the counts, four short of the city.</p>
+        <div class="prompt-box good"><span class="label">python</span>import pandas as pd
+y = pd.read_parquet("yellow_tripdata_2024-10.parquet")
+g = pd.read_parquet("green_tripdata_2024-10.parquet")
+t = pd.concat([
+    y[["tpep_pickup_datetime", "PULocationID"]].set_axis(["t", "z"], axis=1),
+    g[["lpep_pickup_datetime", "PULocationID"]].set_axis(["t", "z"], axis=1),
+], ignore_index=True)
+zones = pd.read_csv("taxi_zone_lookup.csv")
+five = zones[zones.Borough.isin(["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"])].set_index("LocationID")
+t = t[(t.t &gt;= "2024-10-01") &amp; (t.t &lt; "2024-11-01") &amp; t.z.isin(five.index)]
+per = t.groupby("z").size()
+print(len(t), len(per))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring back the zeros</h4>
+        <p>Reindex to the 262 zones with a fill of 0. You should see 262 rows, 4 zeros, and the zeros split Manhattan 2, Staten Island 2.</p>
+        <div class="prompt-box good"><span class="label">python</span>per = per.reindex(five.index, fill_value=0)
+print(len(per), (per == 0).sum())
+print(five.Borough[per == 0].value_counts())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Flag the thin zones and summarise by borough</h4>
+        <p>A boolean column, not a filter. You should see Bronx 8, Brooklyn 2, Manhattan 6, Queens 11, Staten Island 20, and Staten Island's month total of 231.</p>
+        <div class="prompt-box good"><span class="label">python</span>table = five[["Borough", "Zone"]].assign(pickups=per, thin=per &lt; 100)
+print(table.groupby("Borough").thin.sum())
+print(table[table.Borough == "Staten Island"].pickups.sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Slice by hour of the week and count the cells</h4>
+        <p>Day of week times 24 plus hour gives 168 slots. You should see 30898 non-empty zone-hour cells out of 44016 possible, and 12772 of them under 5.</p>
+        <div class="prompt-box good"><span class="label">python</span>how = t.t.dt.dayofweek * 24 + t.t.dt.hour
+cells = t.groupby([t.z, how]).size()
+print(len(cells), 262 * 168, (cells &lt; 5).sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the flag into the output</h4>
+        <p>Save the 262-row table with the <span class="mono">thin</span> column and a one-line note: "Zones with fewer than 100 pickups in October 2024 are flagged; their counts are too small to rank or compare month to month." Anyone who ranks the table now has to ignore the flag on purpose.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Start every zone table from the full list of zones, never from the rows that happened to exist. Flag thin cells instead of dropping them, write the threshold next to the table, and never rank, map or compare a cell whose count could move by a quarter with nothing changing in the city.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A dashboard ranks zones by month-on-month percentage change in taxi pickups, and Staten Island zones fill the top and the bottom of the list. What is the most likely reason?</p>
+      <button class="qopt" type="button">A · Demand for cabs in Staten Island swings far more than anywhere else in the city</button>
+      <button class="qopt" type="button">B · Its zones average 11.6 pickups a month, so their counts move by a large share from month to month with nothing real changing</button>
+      <button class="qopt" type="button">C · The provider codes in Staten Island are less reliable</button>
+      <p class="qwhy">A count of n wobbles by roughly one over the square root of n; at 11.6 that is about 29%. Thin zones crowd both ends of any ranking by change. A reads noise as behaviour; C names a cause the data gives no evidence for.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Your <span class="mono">groupby</span> on pickup zone returns 258 rows, but there are 262 zones in the five boroughs. What happened?</p>
+      <button class="qopt" type="button">A · Four zones were dropped by the month filter in session 1</button>
+      <button class="qopt" type="button">B · Four zones share an id with Newark, Unknown or Outside of NYC</button>
+      <button class="qopt" type="button">C · Four zones recorded no pickups, and a groupby cannot show a group with no rows; reindex to the 262 zones with a fill of 0</button>
+      <p class="qwhy">Manhattan 2 and Staten Island 2 recorded zero pickups in October 2024. They are real zones with a real count of 0, and leaving them out shrinks every denominator built on the table.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">8 of the Bronx's 43 zones recorded under 100 pickups in the month. A colleague concludes those neighbourhoods need fewer cabs. What should you say?</p>
+      <button class="qopt" type="button">A · A pickup is recorded only where a cab was there to be hailed, so a thin count can mean few riders or few cabs passing; the file cannot tell which, so it cannot show need</button>
+      <button class="qopt" type="button">B · Agreed, as long as the zero-pickup zones are excluded first</button>
+      <button class="qopt" type="button">C · Agreed, because 100 pickups is the standard threshold for low demand</button>
+      <p class="qwhy">Recorded pickups measure supply meeting demand. Thin data marks where the measuring is thin; 311 reporting shows the same mechanism with residents as the observers. 100 is a working line for noise, not a measure of need.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on the same files.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Thin it further: the first week only</h4>
+        <p>Wrenmouth places its sensors in session 5 knowing only the first week, October 1 to 7. Rerun step 3 on that week alone and write down how many zones per borough fall under a threshold you choose, and which threshold you chose. Your numbers are your own; the point is to see how much thinner a week is than a month.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pool and recount</h4>
+        <p>Rerun step 4 with a coarser time unit (morning, midday, evening, night) and with borough instead of zone. Note which borough still has cells under 5 after pooling, and compare with the figures in the "three honest moves" card.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Two sentences on two probabilities</h4>
+        <p>Read the abstract of Boxer et al. (2025). Write two sentences mapping its probability of a problem and probability of reporting it onto taxi records: what plays the role of each?</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Pickups per zone by borough</span><span class="note">Zones under 100 pickups: Manhattan 6, Brooklyn 2, Queens 11, Bronx 8, Staten Island 20; Staten Island 231 pickups. Derived from the TLC October 2024 yellow and green files.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Zero-pickup zones</span><span class="note">Manhattan 2, Staten Island 2; a groupby returns 258 of 262. Derived.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why a thin cell is noise</span><span class="note">The one-over-square-root rule with working; 30,898 of 44,016 zone-hour cells non-empty, 12,772 under 5. Derived.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Reporting bias in resident data</span><span class="note">Boxer, K., Hong, B., Kontokosta, C. E. and Neill, D. B. (2025), The Annals of Applied Statistics 19:1691-1713. Read at source (abstract). Kontokosta and Hong (2021), Sustainable Cities and Society 64:102503. Reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Censored demand</span><span class="note">Named tonight through the Hail Exclusionary Zone (TLC Green Cab page). Practitioner session 3.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Regression to the mean</span><span class="note">Barnett, van der Pols and Dobson (2005), quoted once. Practitioner session 6.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Suppressing small cells</span><span class="note">The k 5 table used here as a thinness count. Practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Missing readings in sensor feeds</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Intervals for counts</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, session b7</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Thin.</strong> Where the measuring is thin, not where the city is quiet.</div>
+      <div class="cheat-item"><strong>Under 100.</strong> 47 of 262 zones: Manhattan 6, Brooklyn 2, Queens 11, Bronx 8, Staten Island 20.</div>
+      <div class="cheat-item"><strong>Staten Island.</strong> 20 zones, 231 pickups, 11.6 per zone. All thin.</div>
+      <div class="cheat-item"><strong>Zeros.</strong> A groupby gives 258; reindex to 262. Manhattan 2, Staten Island 2.</div>
+      <div class="cheat-item"><strong>Wobble.</strong> About 1 / square root of n: 10% at 100, about 29% at 11.6.</div>
+      <div class="cheat-item"><strong>Slicing.</strong> 44,016 zone-hour cells possible, 30,898 non-empty, 12,772 under 5.</div>
+      <div class="cheat-item"><strong>Two causes.</strong> Few events or few observers. The file cannot tell them apart.</div>
+      <div class="cheat-item"><strong>The move.</strong> Flag, pool or add an interval. Never drop, never rank a thin cell.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 4 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p3-demand-you-see-vs-demand-that-exists.html">← Practitioner session 3 · Demand you see vs demand that exists</a>
+        <a href="p5-placing-sensors-under-a-budget.html">Practitioner session 5 · Placing sensors under a budget →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

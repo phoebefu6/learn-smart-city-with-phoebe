@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 10 of 10. The whole sensor-placement ladder live in the page, on real New York City taxi pickups for October 2024: busiest zones, spread across boroughs, equity-weighted with a floor, and honest intervals checked over 400 draws. An anti-lever that raises trip coverage and wrecks the outer-borough estimate, and a break button that makes error vanish. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The sensor-placement bench - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 10 of 10. 40 sensors on the busiest zones see 88.9 percent of trips and miss the outer boroughs by +6,388.6 percent. Spread with a floor, the outer error is +22.0 percent.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p10-the-sensor-placement-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The sensor-placement bench - learn smart city with phoebe">
+<meta name="twitter:description" content="Every rung computed in your browser on real trip counts, with a lever that backfires and a button that hides the error.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 10 · The sensor-placement bench - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 10 of 10</div>
+    <h1>The sensor-placement <span class="accent">bench</span></h1>
+    <p class="sub">Wrenmouth, a constructed city transport office, has a budget for 40 counting sensors and 262 zones to cover. Nine sessions took the decision apart. This one runs the whole ladder in your browser on real New York City taxi pickups for October 2024: put sensors where trips already are, spread them across boroughs, weight them for equity with a floor, and then say honestly how uncertain the answer is. Then two traps. One raises the share of trips you see while the estimate for four boroughs falls apart. The other drops the unsensed zones from the denominator and makes the error vanish. The counts are real; the office, its budget and its rules are constructed and labelled so.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Hardest</span>
+      <span class="chip audience">Anyone who will place, fund or audit city sensors</span>
+      <span class="chip audience">Anyone who has to defend a city-wide estimate</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-20 · The ladder</span>
+      <span class="a3" style="flex:4">20-34 · The anti-lever and the break button</span>
+      <span class="a4" style="flex:3">34-45 · Write the claim and close</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this lands</h2>
+    </div>
+    <p class="lede">Wrenmouth's director wants one number for the city and one for the boroughs outside the centre, from 40 sensors. The truth is knowable here, which is the point of a bench: every zone's real October pickups are in the page, so each placement rule can be scored against the full count it is trying to estimate. The office knows only the first week's recorded pickups when it places the sensors; the sensors then count the whole month in their own zones.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Four rungs, each computed in the page. Busiest zones: 88.9 percent of trips seen, 15.3 percent of zones, three boroughs dark, a city estimate of +482.2 percent and an outer-borough estimate of +6,388.6 percent. Spread across boroughs: -25.6 and -67.8 percent. Equity-weighted with a floor: -17.7 and +22.0 percent, and over 400 fresh placements an average miss of 11.4 percent for the city and 6.3 percent for the outer boroughs. Honest intervals that promise 90 percent and cover the city about 82 percent of the time, and say so. Plus the lever that backfires and the button that lies.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the bench recomputes on every press<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Truth.</strong> The month's real pickups in each of the 262 zones: 3,876,702 in total, 465,316 of them outside Manhattan. <strong>Placement.</strong> One rule per rung, using only first-week counts. <strong>Estimate.</strong> Built from the measured zones alone: the busiest rule assumes every unmeasured zone looks like the average measured one; the spread and equity rules expand each borough's (or tier's) average by its number of zones. <strong>Score.</strong> Error against the truth, for the city, the outer boroughs and each borough.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The counts are TLC yellow and green taxi records for October 2024, aggregated to pickups per zone and hour of week. Taxi pickups are not all travel demand (practitioner session 3): the bench asks how well a placement recovers the recorded total, which is a fair test of the placement, not a census of need.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the four rungs</span>
+      <h2>The ladder, live</h2>
+      <span class="tag concept">17 min live</span>
+    </div>
+    <p class="lede">Same 40 sensors, four rules. The figure is where each rule puts them, borough by borough, and what it does to the two estimates the director asked for. Read it before pressing anything; then the widget recomputes it from the real counts.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn small multiples, one panel per rung, 40 sensors each, bars show sensors per borough: Manhattan, Brooklyn, Queens, Bronx, Staten Island. Rung 1 busiest zones: 38, 0, 2, 0, 0; city estimate error plus 482.2 percent, outer boroughs plus 6,388.6 percent. Rung 2 spread across boroughs: 11, 9, 11, 6, 3; city minus 25.6, outer minus 67.8. Rung 3 equity-weighted with a floor of 4: 11, 9, 10, 6, 4; city minus 17.7, outer plus 22.0. Rung 4, highlighted in green, same placement plus a 90 percent interval that covers the city in 81.8 percent of 400 draws.">
+        <defs>
+          <filter id="ctyp10aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp10aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp10aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp10aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp10aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp10aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp10aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp10aV { font: 800 11px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp10aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp10aH" x="30" y="30">40 SENSORS, FOUR RULES: SENSORS PER BOROUGH (M, BK, Q, BX, SI)</text>
+
+        <g filter="url(#ctyp10aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="44" width="196" height="250" rx="10" transform="rotate(-0.4 128 169)" fill="#FFFFFF"/>
+          <rect x="242" y="44" width="196" height="250" rx="10" transform="rotate(0.4 340 169)" fill="#FFFFFF"/>
+          <rect x="454" y="44" width="196" height="250" rx="10" transform="rotate(-0.3 552 169)" fill="#FAF0EE"/>
+          <rect x="666" y="44" width="196" height="250" rx="10" transform="rotate(0.3 764 169)" fill="#8CC27A"/>
+          <path d="M44 196 L212 196 M256 196 L424 196 M468 196 L636 196 M680 196 L848 196"/>
+          <rect x="50" y="101" width="22" height="95" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="114" y="191" width="22" height="5" rx="1" fill="url(#ctyp10aHc)"/>
+          <rect x="262" y="168" width="22" height="28" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="294" y="173" width="22" height="23" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="326" y="168" width="22" height="28" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="358" y="181" width="22" height="15" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="390" y="188" width="22" height="8" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="474" y="168" width="22" height="28" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="506" y="173" width="22" height="23" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="538" y="171" width="22" height="25" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="570" y="181" width="22" height="15" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="602" y="186" width="22" height="10" rx="2" fill="url(#ctyp10aHc)"/>
+          <rect x="686" y="168" width="22" height="28" rx="2" fill="#FFFFFF"/>
+          <rect x="718" y="173" width="22" height="23" rx="2" fill="#FFFFFF"/>
+          <rect x="750" y="171" width="22" height="25" rx="2" fill="#FFFFFF"/>
+          <rect x="782" y="181" width="22" height="15" rx="2" fill="#FFFFFF"/>
+          <rect x="814" y="186" width="22" height="10" rx="2" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp10aL" x="46" y="68">1 · Busiest zones</text>
+        <text class="ctyp10aS" x="46" y="86">naive, by first-week count</text>
+        <text class="ctyp10aL" x="258" y="68">2 · Spread</text>
+        <text class="ctyp10aS" x="258" y="86">greedy, by zones per sensor</text>
+        <text class="ctyp10aL" x="470" y="68">3 · Equity floor</text>
+        <text class="ctyp10aS" x="470" y="86">4 per borough, quiet half</text>
+        <text class="ctyp10aL" x="682" y="68">4 · + honest interval</text>
+        <text class="ctyp10aK" x="682" y="86">same placement as 3</text>
+
+        <text class="ctyp10aV" x="78" y="114">38</text>
+        <text class="ctyp10aV" x="93" y="190" text-anchor="middle">0</text>
+        <text class="ctyp10aV" x="125" y="186" text-anchor="middle">2</text>
+        <text class="ctyp10aV" x="157" y="190" text-anchor="middle">0</text>
+        <text class="ctyp10aV" x="189" y="190" text-anchor="middle">0</text>
+        <text class="ctyp10aV" x="273" y="163" text-anchor="middle">11</text>
+        <text class="ctyp10aV" x="305" y="168" text-anchor="middle">9</text>
+        <text class="ctyp10aV" x="337" y="163" text-anchor="middle">11</text>
+        <text class="ctyp10aV" x="369" y="176" text-anchor="middle">6</text>
+        <text class="ctyp10aV" x="401" y="183" text-anchor="middle">3</text>
+        <text class="ctyp10aV" x="485" y="163" text-anchor="middle">11</text>
+        <text class="ctyp10aV" x="517" y="168" text-anchor="middle">9</text>
+        <text class="ctyp10aV" x="549" y="166" text-anchor="middle">10</text>
+        <text class="ctyp10aV" x="581" y="176" text-anchor="middle">6</text>
+        <text class="ctyp10aV" x="613" y="181" text-anchor="middle">4</text>
+        <text class="ctyp10aV" x="697" y="163" text-anchor="middle">11</text>
+        <text class="ctyp10aV" x="729" y="168" text-anchor="middle">9</text>
+        <text class="ctyp10aV" x="761" y="166" text-anchor="middle">10</text>
+        <text class="ctyp10aV" x="793" y="176" text-anchor="middle">6</text>
+        <text class="ctyp10aV" x="825" y="181" text-anchor="middle">4</text>
+
+        <text class="ctyp10aL" x="46" y="226">city +482.2%</text>
+        <text class="ctyp10aS" x="46" y="246">outer +6,388.6%</text>
+        <text class="ctyp10aS" x="46" y="266">3 boroughs dark</text>
+        <text class="ctyp10aL" x="258" y="226">city -25.6%</text>
+        <text class="ctyp10aS" x="258" y="246">outer -67.8%</text>
+        <text class="ctyp10aS" x="258" y="266">none dark</text>
+        <text class="ctyp10aL" x="470" y="226">city -17.7%</text>
+        <text class="ctyp10aS" x="470" y="246">outer +22.0%</text>
+        <text class="ctyp10aS" x="470" y="266">airports taken whole</text>
+        <text class="ctyp10aL" x="682" y="226">city 90% interval</text>
+        <text class="ctyp10aK" x="682" y="246">misses on this draw</text>
+        <text class="ctyp10aK" x="682" y="266">covers 81.8% of 400</text>
+
+        <text class="ctyp10aN" x="30" y="324">Real counts: TLC yellow and green pickups, October 2024. Constructed: Wrenmouth, its 40-sensor budget, the rules.</text>
+        <text class="ctyp10aN" x="30" y="344">Canon settings: 262 zones, seed 1017, 90% intervals, floor 4. Errors are against the month's full count.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green panel is the only rung that tells you how wrong it might be, and then checks whether it told the truth.</figcaption>
+    </figure>
+
+    <div class="wk" id="ctyp10-bench">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The whole ladder computed in this page from real TLC pickups (October 2024, 262 zones). Constructed, and labelled so: Wrenmouth, the budget, the placement rules, the seeded random draws within boroughs. At the canon settings the table prints the canon figures.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="ctyp10-k">Sensor budget</label>
+        <select class="sql-code" id="ctyp10-k">
+          <option value="20">20 sensors</option>
+          <option value="40" selected>40 sensors, the canon</option>
+          <option value="80">80 sensors</option>
+        </select>
+        <label class="sql-label" for="ctyp10-floor">Equity floor per borough</label>
+        <select class="sql-code" id="ctyp10-floor">
+          <option value="2">2</option>
+          <option value="4" selected>4, the canon</option>
+          <option value="6">6</option>
+        </select>
+        <label class="sql-label" for="ctyp10-conf">Interval confidence</label>
+        <select class="sql-code" id="ctyp10-conf">
+          <option value="0.8">80%</option>
+          <option value="0.9" selected>90%, the canon</option>
+          <option value="0.95">95%</option>
+        </select>
+        <label class="sql-label" for="ctyp10-seed">Seed for the random draws</label>
+        <select class="sql-code" id="ctyp10-seed">
+          <option value="1017" selected>1017, the canon</option>
+          <option value="2">2</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <div class="ctyp10-btns">
+          <button class="btn primary" id="ctyp10-anti" type="button">Place sensors where trips are already recorded</button>
+          <button class="btn" id="ctyp10-break" type="button">Drop the unsensed zones from the denominator</button>
+          <button class="btn" id="ctyp10-reset" type="button">Back to the canon settings</button>
+        </div>
+        <div id="ctyp10-out"></div>
+        <div id="ctyp10-anti-out"></div>
+        <div id="ctyp10-map"></div>
+        <p class="sql-note" id="ctyp10-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctyp10-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The five runs worth doing first<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Leave everything alone.</strong> Busiest: 88.9 percent of trips, 15.3 percent of zones, city +482.2 percent, outer +6,388.6 percent, Brooklyn, the Bronx and Staten Island dark. Spread: -25.6 and -67.8. Equity floor: -17.7 and +22.0. The rung 4 interval for the city, 2,744,659 to 3,638,364, misses the true 3,876,702 on this draw.</li>
+          <li><strong>Read the 400-draw line.</strong> Spread misses the city by 21.3 percent on average and the outer boroughs by 92.1; equity by 11.4 and 6.3. Equity's 90 percent intervals cover the city 81.8 percent of the time and the outer boroughs 76.8. Spread's outer interval covers 29.5 percent: an interval is only as honest as the design under it.</li>
+          <li><strong>Set the seed to 2.</strong> Equity: city -12.8 percent, outer +3.3, and the interval covers. Quote seed-1017 numbers and say "your numbers move with the seed". The 400-draw averages barely move (11.0 and 6.3).</li>
+          <li><strong>Set the budget to 80.</strong> Busiest now sees 97.9 percent of trips and still misses the outer boroughs by +632.1 percent with two boroughs dark. Equity: -11.3 and -1.0, interval covers. More sensors in the wrong places buy coverage of trips, not of the city.</li>
+          <li><strong>Set the budget to 20.</strong> The floor of 4 uses the whole budget, one sensor per half of each borough, so the equity rung prints a point but no interval: one sensor in a stratum has no spread to measure. The bench says so rather than inventing one.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the airports are taken whole<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>JFK Airport is the busiest zone in the month (194,145 pickups) and LaGuardia has 118,732. Both sit in Queens among 67 ordinary zones. Draw Queens zones at random and an airport either lands in the sample, and gets multiplied up as if every Queens zone were an airport, or misses, and Queens looks empty. That is why an earlier version of this bench, without a take-all stratum, swung wildly on the outer boroughs.</p>
+        <p>A zone that is unlike every other zone is measured with certainty, not sampled. That is not the busiest rule sneaking back: it is two sensors on two known giants, chosen because they would wreck the estimate if sampled, with the rest of the budget spread by rule.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a 90 percent interval covers 82 percent<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The interval is the usual stratified one: each stratum's variance, shrunk by the share of it you measured (the finite population correction), added up, and a normal multiplier applied. The normal multiplier assumes the estimate's spread is roughly bell-shaped. Pickups per zone are anything but: in Manhattan a handful of zones carry enormous counts. With 11 sensors, a sample that misses the giants looks tight and low, so the interval is too narrow exactly when it is wrong.</p>
+        <p>The honest response is not to hide the 81.8 percent; it is to print it beside the 90. The interval arithmetic is the standard one taught in <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, builder session 7</a>; checking its coverage on your own data is the part people skip.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the anti-lever and the break button</span>
+      <h2>A lever that backfires, a button that lies</h2>
+      <span class="tag concept">14 min live</span>
+    </div>
+    <p class="lede">A bench that cannot print a worse number measures nothing. This one has two ways to look better while being worse. The anti-lever is the instinct every budget meeting has: put sensors where the activity is. The break button is the instinct every dashboard has: report error only where you can measure it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two panels. Left, in red, the anti-lever and the break: placing sensors where trips are already recorded raises trip coverage to 88.9 percent but leaves 2 sensors outside Manhattan and an outer-borough error of plus 6,388.6 percent; dropping the 222 unsensed zones from the denominator reports an error of 0.0 percent. Right, highlighted, the honest version: the equity rung sees 20.4 percent of trips, puts 29 sensors outside Manhattan for an outer error of plus 22.0 percent, and the busiest rule's real error once the whole city is the denominator is minus 11.1 percent, with 430,870 pickups uncounted.">
+        <defs>
+          <filter id="ctyp10bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp10bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp10bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp10bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp10bR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ctyp10bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp10bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp10bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp10bH" x="30" y="30">LOOKING BETTER AGAINST BEING BETTER</text>
+
+        <g filter="url(#ctyp10bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="46" width="400" height="214" rx="12" transform="rotate(-0.3 230 153)" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="450" y="46" width="400" height="214" rx="12" transform="rotate(0.3 650 153)" fill="#EEF6EA"/>
+          <path d="M46 154 L414 154" stroke-dasharray="4 4"/>
+          <path d="M466 154 L834 154" stroke-dasharray="4 4"/>
+          <rect x="770" y="196" width="60" height="44" rx="6" transform="rotate(2 800 218)" fill="#8CC27A"/>
+        </g>
+
+        <text class="ctyp10bR" x="48" y="74">✗ Anti-lever: where trips already are</text>
+        <text class="ctyp10bK" x="48" y="96">88.9% of trips seen, 15.3% of zones</text>
+        <text class="ctyp10bK" x="48" y="114">2 sensors outside Manhattan, 3 boroughs dark</text>
+        <text class="ctyp10bK" x="48" y="132">outer-borough estimate: +6,388.6%</text>
+        <text class="ctyp10bR" x="48" y="182">✗ Break: drop unsensed zones</text>
+        <text class="ctyp10bK" x="48" y="204">denominator = the 40 measured zones only</text>
+        <text class="ctyp10bK" x="48" y="222">reported error: 0.0%, by construction</text>
+        <text class="ctyp10bK" x="48" y="240">222 zones vanish from the question</text>
+
+        <text class="ctyp10bH" x="468" y="74">✓ Equity floor, same budget</text>
+        <text class="ctyp10bK" x="468" y="96">20.4% of trips seen, 15.3% of zones</text>
+        <text class="ctyp10bK" x="468" y="114">29 sensors outside Manhattan, none dark</text>
+        <text class="ctyp10bK" x="468" y="132">outer-borough estimate: +22.0%</text>
+        <text class="ctyp10bH" x="468" y="182">✓ Whole city as denominator</text>
+        <text class="ctyp10bK" x="468" y="204">busiest rule, real error: -11.1%</text>
+        <text class="ctyp10bK" x="468" y="222">430,870 pickups uncounted</text>
+        <text class="ctyp10bL" x="784" y="223">-11.1</text>
+
+        <text class="ctyp10bN" x="30" y="290">Canon run, 40 sensors, seed 1017. Trip coverage went up 68.5 points under the anti-lever; every estimate outside Manhattan got worse.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the left panel is what a slide would show; the green chip is the number the slide would leave out.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The anti-lever, read honestly<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press "Place sensors where trips are already recorded". The bench prints the busiest rule beside the equity rung. Trip coverage rises from 20.4 to 88.9 percent, a gain of 68.5 points that would headline any report. Underneath, sensors outside Manhattan fall from 29 to 2, both on airports, and the outer-borough estimate goes from +22.0 to +6,388.6 percent, because two airports multiplied by 193 zones is not Brooklyn.</p>
+        <p>The honest nuance: the busiest rule is not useless. If the only question were "how many trips start in the busiest zones", it answers exactly. It fails the question Wrenmouth asked, about the city, and it fails it worst for the places with least data already. Leader session 2 draws why.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The break button, and why it proves the bench works<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press "Drop the unsensed zones from the denominator". The bench compares the busiest rule's measured total with the truth of the measured zones only. Both are 3,445,832, so the error reads 0.0 percent. Nothing was estimated; the question was shrunk to fit the answer. Against the whole city the same total is 11.1 percent short, with 430,870 pickups in 222 zones simply gone.</p>
+        <p>This is the break button's job: if dropping the unsensed zones did not change the verdict, the bench would not be measuring coverage at all. Because it turns a large error into a perfect score, the bench is measuring exactly the thing a shrunk denominator hides. Any report whose error is computed only where sensors are should be read as this button pressed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Should a city place sensors for the best city-wide estimate, or for fairness between neighbourhoods, or where problems are reported? They pull apart. A floor per borough costs Manhattan precision (its error is -23.1 percent under the equity rung against -19.8 under spread on this draw) and buys every borough a usable estimate. A study of one US city's 311 complaints, by Kontokosta and Hong (2021, reported), argues that placing services by reports shifts them away from places that report less; others answer that reports carry real information about need. The bench shows the trade; it does not decide it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write the claim the bench supports</h2>
+      <span class="tag demo">11 min hands on</span>
+    </div>
+    <p class="lede">A placement is a claim about the city: "with these 40 sensors, our estimate of pickups is within so much, everywhere we report it". The figure is the last thing the claim must carry: whether its intervals deliver what they promise.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bars of measured interval coverage over 400 placements against a promised 90 percent line. Equity rung, city: 81.8 percent, highlighted in green. Equity rung, outer boroughs: 76.8 percent. Spread rung, outer boroughs: 29.5 percent.">
+        <defs>
+          <filter id="ctyp10cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp10cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp10cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp10cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp10cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp10cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp10cV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp10cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp10cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp10cH" x="30" y="32">HOW OFTEN A 90% INTERVAL CONTAINED THE TRUTH, 400 PLACEMENTS</text>
+
+        <g filter="url(#ctyp10cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M256 54 L256 214"/>
+          <rect x="260" y="62" width="393" height="30" rx="4" transform="rotate(-0.3 456 77)" fill="#8CC27A"/>
+          <rect x="260" y="114" width="368" height="30" rx="4" transform="rotate(0.3 444 129)" fill="#FAF0EE"/>
+          <rect x="260" y="166" width="142" height="30" rx="4" transform="rotate(-0.3 331 181)" fill="url(#ctyp10cHc)"/>
+          <path d="M692 48 L692 214" stroke="#A8564E" stroke-dasharray="6 4"/>
+        </g>
+
+        <text class="ctyp10cA" x="700" y="58">promised: 90%</text>
+
+        <text class="ctyp10cL" x="240" y="78" text-anchor="end">Equity rung, city</text>
+        <text class="ctyp10cS" x="240" y="94" text-anchor="end">what the director asked</text>
+        <text class="ctyp10cL" x="240" y="130" text-anchor="end">Equity rung, outer</text>
+        <text class="ctyp10cS" x="240" y="146" text-anchor="end">four boroughs together</text>
+        <text class="ctyp10cL" x="240" y="182" text-anchor="end">Spread rung, outer</text>
+        <text class="ctyp10cS" x="240" y="198" text-anchor="end">no tiers, no take-all</text>
+
+        <text class="ctyp10cV" x="600" y="84" text-anchor="end">81.8%</text>
+        <text class="ctyp10cV" x="634" y="136">76.8%</text>
+        <text class="ctyp10cV" x="414" y="188">29.5%</text>
+
+        <text class="ctyp10cN" x="30" y="246">Bars run from 0 at the axis to 100% at x = 740. Skewed counts make normal intervals too narrow;</text>
+        <text class="ctyp10cN" x="30" y="264">the design decides how much. Print the measured coverage beside the promised one.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green bar is the honest rung, and even it falls short of its promise; the claim says by how much.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the canon and copy the four rungs</h4>
+        <p>Leave the settings alone and copy the table: zones measured, trips seen, city error, outer error, dark boroughs. Mark which number a slide would most like to quote.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Press both traps and write one line each</h4>
+        <p>"The busiest placement sees 88.9 percent of trips and misses the outer boroughs by +6,388.6 percent." "Reporting error only where sensors are gives 0.0 percent; against the city it is -11.1."</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Change the seed, then the budget</h4>
+        <p>Run seeds 2, 7 and 42 and budgets 20 and 80. Note what moves (single-draw errors) and what holds (the order of the rungs, the 400-draw averages). Your numbers will differ from the prose on any setting but the canon.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the claim</h4>
+        <p>One paragraph, every number from the bench: the rule, the budget, the city and outer estimates with their intervals, the measured coverage of those intervals, which boroughs are thin, and the trade you chose between city precision and borough fairness. If a number is not printed by the widget, it is not in the claim.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Never sign off a sensor plan on trip coverage alone. Ask for zone coverage, the dark list, the estimate for the places with least data, the interval and how often that interval has actually been right. And never trust a bench you have not broken: if shrinking the denominator does not change the verdict, the bench was never measuring coverage.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Moving Wrenmouth's 40 sensors from the equity rung to the busiest zones raises trip coverage from 20.4 to 88.9 percent. What does the bench say about the move?</p>
+      <button class="qopt" type="button">A · It is better: more of the city's activity is measured</button>
+      <button class="qopt" type="button">B · It is worse for the question asked: sensors outside Manhattan fall from 29 to 2 and the outer-borough estimate goes from +22.0 to +6,388.6 percent, with three boroughs dark</button>
+      <button class="qopt" type="button">C · It makes no difference, since the city total is the same either way</button>
+      <p class="qwhy">Trip coverage is not city coverage. The busiest rule measures where the records already are and extrapolates two airports over 193 outer zones. The city estimates differ too: +482.2 against -17.7 percent, so C is wrong.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A dashboard reports a city-wide counting error of 0.0 percent, computed against the zones that have sensors. What should you ask?</p>
+      <button class="qopt" type="button">A · What the error is against the whole city: on the bench the same placement reads 0.0 percent on its own zones and -11.1 percent against all 262, with 430,870 pickups missing</button>
+      <button class="qopt" type="button">B · Nothing: 0.0 percent means the sensors are calibrated</button>
+      <button class="qopt" type="button">C · Whether the dashboard uses a 95 percent interval</button>
+      <p class="qwhy">Measuring error only where you measured is the break button. The number is true and answers a smaller question than the one on the slide. B and C both accept the shrunk denominator.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The equity rung's 90 percent interval for the city contains the truth in 81.8 percent of 400 placements. What is the honest report?</p>
+      <button class="qopt" type="button">A · Report it as a 90 percent interval; small shortfalls are normal</button>
+      <button class="qopt" type="button">B · Drop the interval and report the point estimate only</button>
+      <button class="qopt" type="button">C · Report the interval with its measured coverage beside the promised 90, and say why: pickups per zone are skewed, so normal intervals run narrow</button>
+      <p class="qwhy">An interval is a claim about how often it is right, and this one can be checked. Hiding the check (A) or the interval (B) both remove information. The design matters too: spread's outer interval covers only 29.5 percent.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the course</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Forty minutes, on your own city or project.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Audit one real placement</h4>
+        <p>Find a published list of where a city's counters, cameras or air monitors are. Count them by district, then write the two coverage numbers you can compute and the one you cannot (coverage of need). Name the districts that are dark.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Rerun the bench on another month</h4>
+        <p>Rebuild the aggregate from another month with the steps in practitioner session 1 and score the four rules. Write down whether the order of the rungs holds. That is the property worth trusting; the single numbers are not.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered today</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The data</span><span class="note">TLC yellow and green trip records, October 2024: 3,876,702 pickups in 262 zones. Read at source; aggregated, no row-level trips.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Four placement rungs</span><span class="note">Busiest, spread, equity floor, honest interval: city +482.2 / -25.6 / -17.7 percent; outer +6,388.6 / -67.8 / +22.0.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">400 placements per rule</span><span class="note">Mean miss city 21.3 vs 11.4 percent, outer 92.1 vs 6.3; interval coverage 81.8 and 76.8 percent at a promised 90.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The anti-lever</span><span class="note">Trip coverage +68.5 points, outer error +22.0 to +6,388.6 percent, three boroughs dark.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The break button</span><span class="note">0.0 percent on the measured zones against -11.1 percent on the city.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Self-checks that can fail</span><span class="note">Five properties on load; three planted faults each fail one. A Python copy agrees with the browser engine on 3,486 values.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Placing by reports</span><span class="note">Kontokosta and Hong (2021), reported; taught as a disagreement.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Confidence intervals in general</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, builder session 7</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensors seeing neighbouring zones</span><span class="note">Not modelled: zone shapes ship as centroids only.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The ladder.</strong> City error +482.2, -25.6, -17.7 percent; outer +6,388.6, -67.8, +22.0.</div>
+      <div class="cheat-item"><strong>Two coverages.</strong> Busiest 40: 88.9 percent of trips, 15.3 percent of zones.</div>
+      <div class="cheat-item"><strong>Dark.</strong> Busiest leaves Brooklyn, the Bronx and Staten Island with no sensor.</div>
+      <div class="cheat-item"><strong>Floor and tiers.</strong> 4 per borough, quiet half guaranteed, airports taken whole.</div>
+      <div class="cheat-item"><strong>Over 400 draws.</strong> Equity misses the city by 11.4 and the outer boroughs by 6.3 percent.</div>
+      <div class="cheat-item"><strong>Honest interval.</strong> Promised 90, delivered 81.8. Print both.</div>
+      <div class="cheat-item"><strong>The anti-lever.</strong> More trips seen, worse city. +68.5 points, +6,388.6 percent.</div>
+      <div class="cheat-item"><strong>The break.</strong> Shrink the denominator, error vanishes: 0.0 against -11.1.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 10 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p9-who-benefits.html">← Practitioner session 9 · Who benefits</a>
+        <a href="../index.html">All sessions →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var kSel = document.getElementById("ctyp10-k"), fSel = document.getElementById("ctyp10-floor");
+  var cSel = document.getElementById("ctyp10-conf"), sSel = document.getElementById("ctyp10-seed");
+  var out = document.getElementById("ctyp10-out"), antiOut = document.getElementById("ctyp10-anti-out");
+  var mapOut = document.getElementById("ctyp10-map"), verdict = document.getElementById("ctyp10-verdict");
+  var self = document.getElementById("ctyp10-self");
+  var showAnti = false, showBreak = false;
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function pc(x) { return x === null ? "none" : (x > 0 ? "+" : "") + fmt(x * 100, 1) + "%"; }
+  function opts() { return { K: Number(kSel.value), floor: Number(fSel.value), conf: Number(cSel.value), seed: Number(sSel.value), reps: 400 }; }
+  function isCanon(o) { return o.K === 40 && o.floor === 4 && Math.abs(o.conf - 0.9) < 1e-9 && o.seed === 1017; }
+  function drawMap(sel, label) {
+    var Z = CTY.ZONES, on = {};
+    sel.forEach(function (i) { on[i] = true; });
+    var svg = '<svg viewBox="-20 -20 1040 980" class="ctyp10-dots" role="img" aria-label="Dot map of the 262 taxi zone centroids; filled dots carry a sensor under ' + label + '.">';
+    for (var i = 0; i < Z.length; i++) {
+      svg += '<circle cx="' + Z[i][4] + '" cy="' + Z[i][5] + '" r="' + (on[i] ? 12 : 7) + '" fill="' + (on[i] ? "#8CC27A" : "#EAE2E0") + '" stroke="' + (on[i] ? "#241A18" : "#CFC4C1") + '" stroke-width="' + (on[i] ? 3 : 1.5) + '"/>';
+    }
+    mapOut.innerHTML = svg + "</svg>" + '<p class="sql-note">Zone centroids from the TLC zone shapes. Filled: a sensor under ' + label + " (" + sel.length + " of " + Z.length + ").</p>";
+  }
+  function render() {
+    var o = opts();
+    out.innerHTML = '<p class="sql-note">Running the ladder and 2 x 400 placements...</p>';
+    antiOut.innerHTML = "";
+    setTimeout(function () {
+      var L = CTY.ladder(o), R = L.rungs;
+      var html = '<table class="sql-table"><thead><tr><th>Rung</th><th>Zones</th><th>Trips seen</th><th>City</th><th>Outer boroughs</th><th>Dark</th></tr></thead><tbody>';
+      R.forEach(function (r) {
+        var s = r.s, c = s.est.city, ou = s.est.outer;
+        var cityCell = "<b>" + pc(c.err) + "</b>", outCell = "<b>" + pc(ou.err) + "</b>";
+        if (r.intervals) {
+          cityCell = c.lo === null ? "no interval: a stratum has one sensor" : fmt(c.lo, 0) + " to " + fmt(c.hi, 0) + (c.covers ? " (covers)" : " (misses)");
+          outCell = ou.lo === null ? "no interval" : fmt(ou.lo, 0) + " to " + fmt(ou.hi, 0) + (ou.covers ? " (covers)" : " (misses)");
+        }
+        html += "<tr" + (r.id === 4 ? ' class="ctyp10-top"' : "") + "><td>" + r.id + " · " + r.name + "</td><td>" + fmt(s.zonesShare * 100, 1) + "%</td><td>" + fmt(s.tripsShare * 100, 1) + "%</td><td>" + cityCell + "</td><td>" + outCell + "</td><td>" + (s.dark.length ? s.dark.join(", ") : "none") + "</td></tr>";
+      });
+      if (showBreak) {
+        html += '<tr class="ctyp10-brk"><td>BREAK: unsensed zones dropped</td><td>' + fmt(R[0].s.zonesShare * 100, 1) + "%</td><td>-</td><td><b>0.0%</b> reported, " + pc(L.brk.realErr) + " real</td><td>-</td><td>" + L.brk.zonesDropped + " zones left out</td></tr>";
+      }
+      html += "</tbody></table>";
+      var sp = L.rep.spread, eq = L.rep.equity;
+      html += '<p class="sql-note">Over ' + eq.reps + " fresh placements: spread misses the city by " + fmt(sp.meanAbsErrCity * 100, 1) + "% and the outer boroughs by " + fmt(sp.meanAbsErrOuter * 100, 1) + "% on average; equity by " + fmt(eq.meanAbsErrCity * 100, 1) + "% and " + fmt(eq.meanAbsErrOuter * 100, 1) + "%. " +
+        (eq.coverCity === null ? "Equity intervals: none possible at this floor and budget." : "Equity's " + fmt(o.conf * 100, 0) + "% intervals cover the city " + fmt(eq.coverCity * 100, 1) + "% and the outer boroughs " + fmt(eq.coverOuter * 100, 1) + "% of the time.") + " " +
+        (isCanon(o) ? "The canon settings." : "Not the canon settings: your numbers will differ from the figures in the prose.") + "</p>";
+      out.innerHTML = html;
+
+      var e = R[2].s;
+      var msg = "Wrenmouth (constructed), " + o.K + " sensors: the equity rung misses the city by " + pc(e.est.city.err) + " and the outer boroughs by " + pc(e.est.outer.err) + "; the busiest rule by " + pc(R[0].s.est.city.err) + " and " + pc(R[0].s.est.outer.err) + ".";
+      if (showAnti) {
+        var A = L.anti;
+        antiOut.innerHTML = '<table class="sql-table"><thead><tr><th>Placement</th><th>Trips seen</th><th>Sensors outside Manhattan</th><th>Outer-borough error</th></tr></thead><tbody>' +
+          '<tr class="ctyp10-anti"><td>Where trips are already recorded</td><td><b>' + fmt(A.busiest.tripsShare * 100, 1) + "%</b></td><td>" + A.zonesBusiestOuter + "</td><td>" + pc(A.outerErrBusiest) + "</td></tr>" +
+          "<tr><td>Equity floor (rung 3)</td><td>" + fmt(A.equity.tripsShare * 100, 1) + "%</td><td>" + A.zonesEquityOuter + "</td><td><b>" + pc(A.outerErrEquity) + "</b></td></tr></tbody></table>";
+        msg += " Anti-lever: trip coverage up " + fmt(A.tripsShareGain * 100, 1) + " points, and the outer-borough estimate goes from " + pc(A.outerErrEquity) + " to " + pc(A.outerErrBusiest) + ". Worse.";
+      }
+      if (showBreak) msg += " Break button: measured only against its own zones the busiest rule reads 0.0% error; against the city it is " + pc(L.brk.realErr) + ", with " + fmt(L.brk.tripsMissing, 0) + " pickups in " + L.brk.zonesDropped + " zones dropped from the question. The 0.0% is false.";
+      verdict.textContent = msg;
+      drawMap(showAnti ? R[0].s.picked : e.picked, showAnti ? "the busiest rule" : "the equity rung");
+    }, 20);
+  }
+  document.getElementById("ctyp10-anti").addEventListener("click", function () { showAnti = true; render(); });
+  document.getElementById("ctyp10-break").addEventListener("click", function () { showBreak = true; render(); });
+  document.getElementById("ctyp10-reset").addEventListener("click", function () {
+    kSel.value = "40"; fSel.value = "4"; cSel.value = "0.9"; sSel.value = "1017"; showAnti = false; showBreak = false; render();
+  });
+  [kSel, fSel, cSel, sSel].forEach(function (el) { el.addEventListener("change", render); });
+  var st = CTY.selfTestResult || CTY.selfTest();
+  var faults = CTY.FAULTS.filter(function (f) { return !CTY.selfTest(f).pass; }).length;
+  self.textContent = st.pass
+    ? "Real counts: TLC trip records, October 2024 (NYC public data set; aggregated, out-of-month and non-borough rows dropped). Constructed: Wrenmouth, the budget, the rules. The engine's " + st.checks.length + " self-checks pass in this browser, and " + faults + " of " + CTY.FAULTS.length + " planted faults make a check fail, as they should."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #ctyp10-bench .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #ctyp10-bench table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #ctyp10-bench .ctyp10-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0 .3rem; }
+  #ctyp10-bench tr.ctyp10-top td { background: var(--amber-50); }
+  #ctyp10-bench tr.ctyp10-brk td { background: #FEF2F2; }
+  #ctyp10-bench tr.ctyp10-anti td { background: #FEF2F2; }
+  #ctyp10-bench .ctyp10-dots { width: 100%; max-width: 26rem; height: auto; display: block; margin: .6rem auto 0; }
+</style>
+</body>
+</html>

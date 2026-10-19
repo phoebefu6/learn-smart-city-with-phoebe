@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 8 of 10. Publishing a derived city data set honestly: what the TLC promises and does not, what New York City's Open Data Law asks a republisher to state (source, version, modifications), what to release and what to leave behind, and the shipped October 2024 taxi sample as the worked example. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Publishing open data - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 8 of 10. Free to use is not the same as checked. State the source, the version and every modification, and carry the no-accuracy promise forward.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p8-publishing-open-data.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Publishing open data - learn smart city with phoebe">
+<meta name="twitter:description" content="A release is a decision about what to leave behind, written into the file itself.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 8 · Publishing open data - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 8 of 10</div>
+    <h1>Publishing <span class="accent">open data</span></h1>
+    <p class="sub">Every session so far has been a reader's job. Tonight you are the publisher. Wrenmouth, a constructed city transport office, wants to release the zone counts it derived from real New York City taxi records, October 2024, published by the city's Taxi and Limousine Commission. Before it does, it needs three things written down: what the source promised, what the law asks a republisher to state, and what the release leaves behind. Nothing here is legal advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Analysts and engineers who release derived data</span>
+      <span class="chip audience">Anyone who signs off a public data set</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:12">3-15 · What the source promises</span>
+      <span class="a3" style="flex:13">15-28 · What to release</span>
+      <span class="a4" style="flex:17">28-45 · Build-along: the publish note</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's analyst is asked for a file</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed transport office in a fictional city. A neighbourhood group has asked for the pickup counts behind the sensor plan of sessions 5 and 10. The analyst has them: 3,876,702 pickups across 262 zones, counted from real New York City taxi records for October 2024. Her warehouse habit says export the table and attach it. Her first question tonight is a better one: if a stranger opened this file in a year, could they tell where it came from, which month, and what she did to it?</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The chain of promises a city data set passes through, in the publisher's and the law's own words: the TLC did not create the rows and makes no representation as to their accuracy; New York City's Open Data Law puts no registration, licence or use restrictions on public data sets, and lets the city ask a republisher to state the source, the version and the modifications. A way to decide what to release and what to leave behind. And a five-line publish note you can attach to any derived data set, built on the sample file every engine page here ships.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Free to use is not the same as checked<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Open data removes the gate in front of a data set: no sign-up, no licence, no rules about use. It removes nothing behind it. The rows still came from somebody's meter, the publisher still makes no accuracy promise, and every change you make on the way to your own release is one more thing a reader cannot see unless you write it down.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The TLC's trip record page says it plainly: "The trip data was not created by the TLC, and TLC makes no representations as to the accuracy of these data." The rows were "collected and provided to the NYC Taxi and Limousine Commission (TLC) by technology providers". A republisher inherits both sentences, whether or not they repeat them.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where tonight sits among the sessions<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Practitioner session 1 built a profiling ledger: rows in, each drop with its count and reason, rows kept. Session 7 decided which published cells to withhold. Tonight puts both into the file a reader actually receives. Session 9 then asks who benefits from the decisions the file records.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the TLC page, NYC Admin. Code 23-501 and 23-502, the nyc.gov terms</span>
+      <h2>What the source promises, and what it asks</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">A trip record passes through four hands before it reaches your reader: the provider that sent it, the TLC that published it, the law that governs the publication, and you. At each hand-off the promise either stays the same or shrinks. None of them grows. The figure is the chain, with the one duty that lands on you in green.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn chain of promises for a city data set. Providers send meter records to the TLC. The TLC publishes monthly and makes no representation as to accuracy, because it did not create the rows. The Open Data Law sets no registration, licence or use restrictions, section 23-502(d). You republish, highlighted in green: the city may ask you to state the source, version and modifications. Below, before release, agencies may hold back data under section 23-501(g), and the nyc.gov terms provide materials as is, without warranty of accuracy.">
+        <defs>
+          <filter id="ctyp8aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="81" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp8aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp8aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp8aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp8aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp8aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp8aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp8aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp8aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp8aH" x="30" y="32">THE CHAIN OF PROMISES, FROM METER TO YOUR READER</text>
+
+        <g filter="url(#ctyp8aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="180" height="120" rx="8" transform="rotate(-0.5 120 114)" fill="#FFFFFF"/>
+          <rect x="245" y="54" width="180" height="120" rx="8" transform="rotate(0.4 335 114)" fill="#FAF0EE"/>
+          <rect x="460" y="54" width="180" height="120" rx="8" transform="rotate(-0.4 550 114)" fill="#FFFFFF"/>
+          <rect x="675" y="54" width="180" height="120" rx="8" transform="rotate(0.5 765 114)" fill="#8CC27A"/>
+          <path d="M212 114 L241 114" marker-end="url(#ctyp8aAr)"/>
+          <path d="M427 114 L456 114" marker-end="url(#ctyp8aAr)"/>
+          <path d="M642 114 L671 114" marker-end="url(#ctyp8aAr)"/>
+          <path d="M335 178 L335 200 M550 178 L550 200" stroke-dasharray="4 4"/>
+          <rect x="30" y="204" width="395" height="64" rx="8" transform="rotate(0.3 227 236)" fill="url(#ctyp8aHc)"/>
+          <rect x="460" y="204" width="395" height="64" rx="8" transform="rotate(-0.3 657 236)" fill="url(#ctyp8aHc)"/>
+          <!-- doodle: a kerb corner -->
+          <path d="M720 22 L780 22 L780 36 L855 36" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp8aL" x="46" y="80">Providers send</text>
+        <text class="ctyp8aK" x="46" y="104">meter records, under</text>
+        <text class="ctyp8aK" x="46" y="122">the TLC's programs</text>
+        <text class="ctyp8aA" x="46" y="156">where rows are made</text>
+
+        <text class="ctyp8aL" x="261" y="80">TLC publishes</text>
+        <text class="ctyp8aK" x="261" y="104">monthly, parquet,</text>
+        <text class="ctyp8aK" x="261" y="122">about 2 months later</text>
+        <text class="ctyp8aA" x="261" y="156">no accuracy promise</text>
+
+        <text class="ctyp8aL" x="476" y="80">Open Data Law</text>
+        <text class="ctyp8aK" x="476" y="104">no registration,</text>
+        <text class="ctyp8aK" x="476" y="122">licence or use limits</text>
+        <text class="ctyp8aA" x="476" y="156">section 23-502(d)</text>
+
+        <text class="ctyp8aL" x="691" y="80">You republish</text>
+        <text class="ctyp8aK" x="691" y="104">may be asked to state</text>
+        <text class="ctyp8aK" x="691" y="122">source, version and</text>
+        <text class="ctyp8aL" x="691" y="156">every modification</text>
+
+        <text class="ctyp8aL" x="46" y="230">Before release: agencies may hold back</text>
+        <text class="ctyp8aS" x="46" y="250">what the public officers law lets them withhold, 23-501(g)</text>
+        <text class="ctyp8aL" x="476" y="230">nyc.gov terms of use: "AS IS"</text>
+        <text class="ctyp8aS" x="476" y="250">no warranty of accuracy, completeness or currency</text>
+
+        <text class="ctyp8aA" x="30" y="298">Each hand-off passes the checking to the next person. The last person in the chain is you.</text>
+        <text class="ctyp8aN" x="30" y="324">Quoted from the TLC Trip Record Data page, NYC Admin. Code 23-501 and 23-502, and nyc.gov Terms of Use VI.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the only duty in the chain that lands on the republisher: say where the data came from, which version, and what you changed.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The law's two sentences, read slowly<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>New York City's Open Data Law, Administrative Code section 23-502(d), says public data sets "shall be made available without any registration requirement, license requirement or restrictions on their use." That is the generous half. The same subsection says the department "may require a third party providing to the public any public data set to explicitly identify the source and version of the public data set and a description of any modifications made".</p>
+        <p>Read as a publisher, that is a three-item checklist with the items named for you: <strong>source</strong>, <strong>version</strong>, <strong>modifications</strong>. It is the minimum a reader needs to rebuild your number from the original, and it costs a paragraph. Whether or not anyone ever asks, writing it is the professional default.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>"Version" is not decoration for these files. The TLC publishes each month with about a two-month delay "to allow time for full vendor submissions" and warns that minor schema changes may come. A count from "the October 2024 file" downloaded on one date and the same file a year later are not guaranteed to agree. The download date is part of the version.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>No accuracy promise, twice over<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two sentences frame every reuse. The TLC: the trip data "was not created by the TLC, and TLC makes no representations as to the accuracy of these data." The nyc.gov Terms of Use, section VI: materials are provided "AS IS", without warranties including accuracy, completeness or currency.</p>
+        <p>Neither says the data is wrong. Together they say the checks are yours, and your reader inherits the same position one step further away. So a derived release carries the no-promise forward in its own words, then adds what you did to earn some trust: the ledger from session 1, with counts.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The hold-back clause, and what it does not say<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Section 23-501(g) excludes from "public data set" any portion an agency may withhold under the public officers law. In plain words: the law lets agencies hold back before publishing. Pages here make no further claim about when that applies; that is a question for the people who advise on law, not for an analyst.</p>
+        <p>What it means for practice is timing. Once a data set is out, the no-restriction clause means there is no recalling who uses it or for what. Privacy decisions belong before release: session 7's threshold, session 3's re-identification warning. Data protection law elsewhere exists and differs; for scope, see <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR, session 1</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA and DNC, session 1</a>. Nothing here is legal advice.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what to release, using the shipped sample</span>
+      <h2>What to release, and what to leave behind</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">The most important publishing decisions are subtractions. The sample file behind every engine page here started as 3,889,918 real taxi rows and shipped as a table of counts. Walk through it as the worked example: what was dropped and why, what was aggregated away, and what the file says about itself.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn path from rows to the shipped sample. Left: rows kept after the profiling ledger, 3,876,702, after 47 out-of-month and 13,169 outside-borough rows were dropped. Middle: keep two columns, pickup time and pickup zone, and count per zone and hour of week. Right, highlighted in green: what was shipped, 262 zones by 168 hours of pickup counts plus per-zone totals, 123,178 bytes, no trip rows. Below the middle: left behind, dropoff zone, fare, tip, distance and exact seconds. Below the right: stated in the file, source, month, terms and what was modified.">
+        <defs>
+          <filter id="ctyp8bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp8bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp8bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp8bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp8bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp8bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp8bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp8bV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp8bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp8bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp8bH" x="30" y="32">FROM REAL ROWS TO THE SHIPPED SAMPLE, OCTOBER 2024</text>
+
+        <g filter="url(#ctyp8bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="230" height="112" rx="10" transform="rotate(-0.5 145 110)" fill="url(#ctyp8bHc)"/>
+          <path d="M262 110 L312 110" marker-end="url(#ctyp8bAr)"/>
+          <rect x="318" y="54" width="230" height="112" rx="10" transform="rotate(0.4 433 110)" fill="#FFFFFF"/>
+          <path d="M550 110 L600 110" marker-end="url(#ctyp8bAr)"/>
+          <rect x="606" y="54" width="244" height="112" rx="10" transform="rotate(-0.4 728 110)" fill="#8CC27A"/>
+          <path d="M433 170 L433 194 M728 170 L728 194" stroke-dasharray="4 4"/>
+          <rect x="318" y="198" width="230" height="66" rx="8" transform="rotate(0.6 433 231)" fill="#FAF0EE"/>
+          <rect x="606" y="198" width="244" height="66" rx="8" transform="rotate(-0.6 728 231)" fill="#FFFFFF"/>
+          <!-- doodle: a zone outline -->
+          <path d="M60 210 L110 200 L150 222 L132 258 L74 256 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp8bL" x="46" y="80">Rows kept, the ledger</text>
+        <text class="ctyp8bV" x="46" y="108">3,876,702</text>
+        <text class="ctyp8bK" x="46" y="130">after 47 and 13,169</text>
+        <text class="ctyp8bK" x="46" y="148">dropped, with reasons</text>
+
+        <text class="ctyp8bL" x="334" y="80">Keep two columns</text>
+        <text class="ctyp8bK" x="334" y="104">pickup time, pickup zone</text>
+        <text class="ctyp8bK" x="334" y="124">count per zone and</text>
+        <text class="ctyp8bK" x="334" y="142">hour of week</text>
+
+        <text class="ctyp8bL" x="622" y="80">What we shipped</text>
+        <text class="ctyp8bV" x="622" y="108">262 x 168</text>
+        <text class="ctyp8bK" x="622" y="130">pickup counts, plus totals</text>
+        <text class="ctyp8bK" x="622" y="148">123,178 bytes, no trip rows</text>
+
+        <text class="ctyp8bL" x="334" y="224">Left behind</text>
+        <text class="ctyp8bS" x="334" y="244">dropoff, fare, tip, distance</text>
+        <text class="ctyp8bL" x="622" y="224">Stated in the file</text>
+        <text class="ctyp8bS" x="622" y="244">source, month, terms, changes</text>
+
+        <text class="ctyp8bA" x="30" y="294">Publishing is mostly deciding what to leave behind, then saying so inside the file.</text>
+        <text class="ctyp8bN" x="30" y="318">Real New York City taxi records, October 2024, yellow and green; counts as shipped with every engine page.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the release: a table of counts whose own header says where it came from and what was done to it.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What we dropped, and why it is written down<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two drops, both from session 1's ledger. <strong>47 rows</strong> carry a pickup stamp outside October 2024, the earliest in 2009: they do not belong to the month the file claims to describe. <strong>13,169 rows</strong> pick up in zone 1 (Newark Airport), 264 ("Unknown") or 265 ("Outside of NYC"): none can be placed in the five boroughs, so they leave the 262-zone universe. What remains is 3,876,702 pickups.</p>
+        <p>Neither drop is controversial. Both are still modifications in the law's sense, and a reader who downloads the October files and counts 3,889,918 rows deserves to know why your total is smaller before they decide you made a mistake.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The shipped sample carries its own ledger. Open any engine page here (practitioner session 10, say), open the browser console and type <span class="mono">CTY_DATA.meta</span>. It prints the source and its web address, the month, the terms, a sentence describing the modifications, and the raw counts: yellow rows, green rows, dropped out of month, dropped outside the five boroughs, kept.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What we aggregated away<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The sample keeps two columns of each row, the pickup time and the pickup zone, and ships counts: pickups per zone per hour of the week (262 zones by 168 hours), the first week's pickups per zone, and yellow and green pickups per zone, plus one centroid per zone for the maps. No row-level trip leaves the build script. Dropoff zones, fares, tips, distances, payment types and exact timestamps are all left behind.</p>
+        <p>The rule for choosing: release the coarsest grain that still answers the question the release is for. The sensor bench needs counts by zone and hour; it never needs a fare or a dropoff, so they are not in the file. Every column you leave out is a column nobody can misread, join or re-identify.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Suppression: a decision, stated either way<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Session 7 showed the cost of withholding small cells on these same records: a threshold of 5 at zone by hour withholds 41.3 percent of the non-empty cells but 0.7 percent of the trips, and 100.0 percent of Staten Island's cells. The shipped sample withholds no cells. The reason is specific: the rows it counts are already published, row by row, by the TLC, so withholding our aggregates would hide nothing the source does not already show, while erasing the thinnest borough from every engine page.</p>
+        <p>Change one fact and the decision flips. If Wrenmouth (constructed) were publishing counts from its own sensors, data nobody else releases, a small cell would be new information about a few people, and session 7's threshold would apply. Either way the publish note says which choice was made, at what grain and threshold, and what it cost by borough.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When aggregates still single people out<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Counts are safer than rows, not safe by definition. de Montjoye and colleagues (2013) found that "four spatio-temporal points are enough to uniquely identify 95% of the individuals" in hourly phone location data, and that uniqueness decays only as about the 1/10 power of resolution: coarse data gives "little anonymity". That finding is about person traces, not zone counts, and its 95 percent does not transfer to taxi tables. The mechanism does: a cell of one at a quiet hour is close to a person.</p>
+        <p>k-anonymity's own author notes attacks that work on releases meeting it "unless accompanying policies are respected" (Sweeney 2002). Leader session 3 walks through how two honest releases can intersect to one person. Differential privacy is the stronger, formal alternative to suppression; it is named here and not taught.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write the publish note, and attach it to the file</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">Work from the folder and ledger you built in session 1. You will write five fields into a small metadata file that sits next to the data and travels with it. The figure is the note you are building; the green line is the one the law names and the one most often skipped.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn publish note with five ticked lines. Source: NYC TLC Trip Record Data, yellow and green taxi trips. Version: October 2024 files, download date, dictionary dated March 18, 2025, file hashes. Modifications, highlighted in green: 47 out-of-month and 13,169 outside-borough rows dropped, counts per zone and hour of week. Grain and suppression: zone by hour of week, which threshold if any, cost by borough. No promise: the TLC makes no accuracy representation and neither does the release.">
+        <defs>
+          <filter id="ctyp8cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="87" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp8cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp8cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp8cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp8cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp8cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp8cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp8cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp8cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp8cH" x="30" y="32">THE PUBLISH NOTE: FIVE LINES THAT TRAVEL WITH THE FILE</text>
+
+        <g filter="url(#ctyp8cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="820" height="228" rx="10" transform="rotate(-0.2 440 164)" fill="#FAF0EE"/>
+          <rect x="46" y="64" width="788" height="34" rx="6" transform="rotate(0.3 440 81)" fill="#FFFFFF"/>
+          <rect x="46" y="106" width="788" height="34" rx="6" transform="rotate(-0.3 440 123)" fill="#FFFFFF"/>
+          <rect x="46" y="148" width="788" height="34" rx="6" transform="rotate(0.2 440 165)" fill="#8CC27A"/>
+          <rect x="46" y="190" width="788" height="34" rx="6" transform="rotate(-0.2 440 207)" fill="#FFFFFF"/>
+          <rect x="46" y="232" width="788" height="34" rx="6" transform="rotate(0.3 440 249)" fill="url(#ctyp8cHc)"/>
+          <rect x="58" y="73" width="16" height="16" rx="2" transform="rotate(3 66 81)" fill="#FFFFFF"/>
+          <rect x="58" y="115" width="16" height="16" rx="2" transform="rotate(-3 66 123)" fill="#FFFFFF"/>
+          <rect x="58" y="157" width="16" height="16" rx="2" transform="rotate(2 66 165)" fill="#FFFFFF"/>
+          <rect x="58" y="199" width="16" height="16" rx="2" transform="rotate(-2 66 207)" fill="#FFFFFF"/>
+          <rect x="58" y="241" width="16" height="16" rx="2" transform="rotate(3 66 249)" fill="#FFFFFF"/>
+          <path d="M61 81 L65 86 L72 76 M61 123 L65 128 L72 118 M61 165 L65 170 L72 160 M61 207 L65 212 L72 202 M61 249 L65 254 L72 244"/>
+          <!-- doodle: a paper clip on the note -->
+          <path d="M826 40 L826 70 Q826 78 834 78 Q842 78 842 70 L842 46" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp8cL" x="88" y="86">Source</text>
+        <text class="ctyp8cK" x="290" y="86">NYC TLC, Trip Record Data, yellow and green taxi trips, with the page address</text>
+        <text class="ctyp8cL" x="88" y="128">Version</text>
+        <text class="ctyp8cK" x="290" y="128">October 2024 files, your download date, dictionary dated March 18, 2025, hashes</text>
+        <text class="ctyp8cL" x="88" y="170">Modifications</text>
+        <text class="ctyp8cK" x="290" y="170">47 out-of-month and 13,169 outside-borough rows dropped; counts by zone x hour</text>
+        <text class="ctyp8cL" x="88" y="212">Grain and suppression</text>
+        <text class="ctyp8cK" x="290" y="212">zone x hour of week; the threshold, if any, and what it cost by borough</text>
+        <text class="ctyp8cL" x="88" y="254">No promise</text>
+        <text class="ctyp8cK" x="290" y="254">the TLC makes no accuracy representation; say the same, then show your checks</text>
+
+        <text class="ctyp8cN" x="30" y="306">The first three are the items NYC Admin. Code 23-502(d) names. The last two are what a careful reader asks next.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green line is the modifications: the item the law names that a quick export leaves out.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Fingerprint the files you started from</h4>
+        <p>A file name is not a version: the same name can hold different bytes after a re-release. A hash is. Run this on each downloaded file and keep the output; it should print one 64-character string per file.</p>
+        <div class="prompt-box good"><span class="label">python</span>import hashlib, pathlib
+
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1 &lt;&lt; 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+files = ["yellow_tripdata_2024-10.parquet", "green_tripdata_2024-10.parquet", "taxi_zone_lookup.csv"]
+hashes = {name: sha256(name) for name in files}
+print(hashes)</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write source and version</h4>
+        <p>Name the publisher, the page, the month, the date you downloaded and the dictionary date. Put the hashes beside them.</p>
+        <div class="prompt-box good"><span class="label">python</span>meta = {
+    "source": "NYC Taxi &amp; Limousine Commission (TLC), Trip Record Data, yellow and green taxi trips",
+    "url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+    "version": {"month": "2024-10", "downloaded": "YYYY-MM-DD",
+                "dictionary": "Data Dictionary - Yellow Taxi Trip Records, March 18, 2025",
+                "sha256": hashes},
+}</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the modifications from your ledger, not from memory</h4>
+        <p>Use the variables from session 1's build-along so the counts cannot drift from what the code did. You should see 47, 13169 and 3876702.</p>
+        <div class="prompt-box good"><span class="label">python</span>outside = ~t.z.isin(five.LocationID)
+meta["modifications"] = [
+    {"step": "dropped pickups stamped outside October 2024", "rows": int((~inmonth).sum())},
+    {"step": "dropped pickup zones 1, 264, 265 (not in the five boroughs)", "rows": int((inmonth &amp; outside).sum())},
+    {"step": "aggregated to pickup counts per zone and hour of week", "rows_counted": len(kept)},
+]
+print(meta["modifications"])</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>State the grain, the suppression decision and the no-promise</h4>
+        <p>Write the grain you released, whether you withheld small cells and why, and the inherited accuracy position in plain words. Then save the note next to the data with the same base name.</p>
+        <div class="prompt-box good"><span class="label">python</span>import json
+meta["grain"] = "pickup counts per taxi zone (262) and hour of week (168); no row-level trips"
+meta["suppression"] = "none: the source rows are already public; state your threshold and its cost by borough if you set one"
+meta["accuracy"] = "The TLC makes no representation as to the accuracy of the source data. Neither does this release."
+pathlib.Path("pickups_2024-10.meta.json").write_text(json.dumps(meta, indent=2))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the stranger test</h4>
+        <p>Give the data and the note to someone who was not in the room. Ask them to rebuild one number, say Staten Island's month total, from the original files using only your note. If they get stuck, the note is missing a line. Fix the note, not the stranger.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> No file leaves without its note: source, version, modifications, grain and suppression, no promise. Write the modifications from the code's own counts, hash what you started from, and put the note beside the data with the same name. A release a stranger cannot rebuild is a rumour with a download link.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Under NYC Admin. Code 23-502(d), what may the city ask a third party who republishes a public data set to identify?</p>
+      <button class="qopt" type="button">A · The source and version of the data set, and a description of any modifications made</button>
+      <button class="qopt" type="button">B · A licence agreement and a registration number for each user</button>
+      <button class="qopt" type="button">C · A guarantee that the republished data is accurate and complete</button>
+      <p class="qwhy">The same subsection rules out registration, licence requirements and use restrictions (B). Accuracy is promised by nobody in the chain: the TLC makes no representation and the nyc.gov terms say "AS IS" (C). Source, version and modifications are the three items named.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">You publish zone counts derived from the TLC's October 2024 files. What should your release say about accuracy?</p>
+      <button class="qopt" type="button">A · That aggregation removed the errors, so the counts can be treated as accurate</button>
+      <button class="qopt" type="button">B · That the TLC makes no representation as to the accuracy of the source, that you do not either, and which checks you ran, with counts</button>
+      <button class="qopt" type="button">C · Nothing: accuracy is the original publisher's responsibility, not yours</button>
+      <p class="qwhy">Aggregating does not remove what a meter got wrong; it adds it up (A). Saying nothing (C) leaves the reader one step further from the source with less information than you had. Carry the no-promise forward and show your ledger.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Wrenmouth (constructed) will publish zone x hour counts from its own sensors, which nobody else releases. On the taxi records, k = 5 at that grain withheld 41.3% of cells, 0.7% of trips and every Staten Island cell. What belongs in the publish note?</p>
+      <button class="qopt" type="button">A · "Small cells suppressed for privacy", with no further detail</button>
+      <button class="qopt" type="button">B · Nothing about suppression: it is an internal processing step</button>
+      <button class="qopt" type="button">C · The grain, the threshold, and what it withheld by borough, so a reader knows which areas are missing before reading any total</button>
+      <p class="qwhy">Suppression is a modification, and its cost falls unevenly. A reader who does not know Staten Island was withheld will read its absence as zero. A vague line (A) or silence (B) hides exactly the fact that changes the reading.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 9</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on a data set you already have.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the note for your second month</h4>
+        <p>Session 1's homework profiled a second month. Write its five-line publish note with the build-along code. Compare the modifications with October's: did the out-of-month and outside-borough counts change?</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Audit one release you rely on</h4>
+        <p>Pick a derived data set your team uses that came from somewhere else. Can you find its source, version and modifications? Write down which of the five lines is missing, and who would know.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Do the stranger test for real</h4>
+        <p>Hand your note and file to a colleague. Time how long it takes them to rebuild one number. Every question they ask is a line your note needs.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The trip record page</span><span class="note">TLC Trip Record Data: collected by technology providers, not created by the TLC, no representation as to accuracy, monthly with about a two-month delay. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Open Data Law</span><span class="note">NYC Admin. Code 23-502(d): no registration, licence or use restrictions; the city may ask a republisher to state source, version and modifications. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The hold-back clause</span><span class="note">NYC Admin. Code 23-501(g): agencies may withhold what the public officers law allows. Named, no further claim. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Terms of use</span><span class="note">nyc.gov Terms of Use, section VI: "AS IS", no warranty of accuracy, completeness or currency. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The shipped sample as worked example</span><span class="note">47 and 13,169 rows dropped, 3,876,702 counted, 262 x 168 counts, no trip rows, 123,178 bytes. Derived.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Small-cell suppression</span><span class="note">Its cost quoted (k 5, zone x hour). The live grid is practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Re-identification from location traces</span><span class="note">de Montjoye et al. 2013 and Sweeney 2002, named. Leader session 3 goes deeper.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Data protection law beyond the NYC code</span><span class="note">Not taught, no legal advice. See <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA and DNC</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Differential privacy</span><span class="note">Named as the stronger alternative to suppression; not taught here.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Open.</strong> No registration, licence or use restrictions (23-502(d)). No recall either.</div>
+      <div class="cheat-item"><strong>Unchecked.</strong> The TLC did not create the rows and promises no accuracy. Nor do you.</div>
+      <div class="cheat-item"><strong>The three.</strong> Source, version, modifications: the items the law names.</div>
+      <div class="cheat-item"><strong>Version.</strong> Month, download date, dictionary date and a hash. A file name is not a version.</div>
+      <div class="cheat-item"><strong>Modifications.</strong> 47 out of month, 13,169 outside the boroughs. Write them from the code's counts.</div>
+      <div class="cheat-item"><strong>Release less.</strong> The coarsest grain that answers the question. Leave fares and dropoffs behind.</div>
+      <div class="cheat-item"><strong>Suppression.</strong> A decision either way. State grain, threshold and the cost by borough.</div>
+      <div class="cheat-item"><strong>Stranger test.</strong> Someone else rebuilds one number from your note alone.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 8 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p7-aggregation-and-privacy.html">← Practitioner session 7 · Aggregation and privacy</a>
+        <a href="p9-who-benefits.html">Practitioner session 9 · Who benefits →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

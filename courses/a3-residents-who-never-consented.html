@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 3 of 6. City data describes residents who never agreed to be measured. Four where-and-when points single out 95 percent of people in a study of 1.5 million; coarser data helps less than intuition says; k-anonymity has a stated limit. The surveillance trade-off taught as a disagreement. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Residents who never consented - learn smart city with phoebe">
+<meta property="og:description" content="Leader session 3 of 6. No name is needed to single someone out: four points did it for 95 percent. What hiding in a crowd of k buys, and where it stops.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/a3-residents-who-never-consented.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Residents who never consented - learn smart city with phoebe">
+<meta name="twitter:description" content="Re-identification as a mechanism, k-anonymity and its limit, and the surveillance trade-off as an open argument.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 3 · Residents who never consented - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Leader session 3 of 6</div>
+    <h1>Residents who <span class="accent">never consented</span></h1>
+    <p class="sub">A customer agreed to terms when they bought. A resident who took a cab or walked past a counter signed nothing with the planning office, yet the rows are about them. Wrenmouth, a constructed transport office in a fictional city, wants to publish what it measures; the counts it would publish come from real New York City taxi records, October 2024. Tonight is how people get singled out without a name, what hiding in a crowd of k buys and where it stops, and why reasonable people disagree about city sensing at all. Nothing here is legal advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Leaders who sign off what a city publishes</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Four points</span>
+      <span class="a3" style="flex:3">18-28 · Hiding in a crowd</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth, on the morning someone asks for the raw data</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed city transport office. Its counting sensors are being placed (leader session 2), and a local research group has written in: could the office publish what it collects, trip by trip, so they can study travel to work? The analyst from the retail warehouse says yes, after stripping names, plate numbers and card details. In a warehouse that would be the whole job. Tonight is why, for location data, it is the start of the job.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A picture of how a person is singled out from a dataset with no names in it: in a study of 1.5 million people, four where-and-when points were enough for 95 percent. Why making the data coarser buys much less protection than it feels like it should. What k-anonymity promises, in its author's words, and the limit the same paper states. The real cost of hiding small counts in one city's taxi records, which falls almost entirely on the thinnest boroughs. Both sides of the city-sensing argument, stated fairly. And a six-step release review to run before anything about residents leaves the building.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "we removed the names" is not the end<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A warehouse analyst protects people by removing the columns that name them: customer name, email, card number. What is left, a basket of products, rarely points back to one person, and the customer agreed to be in the table anyway.</p>
+        <p>A city row is different on both counts. Nobody agreed to be in it. And the columns left after the names go, a place and a time, are themselves the identifier: very few people sleep in your neighbourhood, travel to your workplace and leave at your hour. The pattern of where and when is a fingerprint, and it survives every column you delete except the ones you were asked to publish.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A New York City taxi trip row carries no passenger name. It carries the taxi zone where "the taximeter was engaged" and the date and time it happened, stamped to the second, plus the drop-off zone and time. Real October 2024 files hold 3,876,702 such pickups in the five boroughs. Whether zone and second are coarse enough to protect anyone is the question Part 1 answers with a mechanism, not a guess.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Spatio-temporal point.</strong> One place at one time for one person: a zone and an hour, an antenna and a minute.</li>
+          <li><strong>Unique.</strong> Only one person in the data matches a set of points. Unique is not yet named, but anyone who knows those points about someone now has their whole record.</li>
+          <li><strong>Re-identification.</strong> Linking a record with no name back to a person, usually by matching it with something already known about them.</li>
+          <li><strong>Resolution.</strong> How fine the place and time are. Coarser resolution means bigger zones or longer time slots.</li>
+          <li><strong>Quasi-identifier.</strong> A column that is harmless alone and identifying in combination: home zone, age band, shift pattern.</li>
+          <li><strong>k-anonymity.</strong> A release property: each person looks like at least k-1 others in the same release.</li>
+          <li><strong>Small-cell suppression.</strong> For published counts, withholding any cell with fewer than k events. A related practice, not Sweeney's definition itself.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers re-identification from location</span>
+      <h2>Four points, and you are alone in the crowd</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Re-identification is not a hack. It is subtraction. Start with everyone in a release. Each where-and-when point you already know about one person removes everyone who was not there then. Most people share a single point with thousands. Very few share four. In the study the field still cites, four points were enough to leave 95 percent of people with no lookalike at all.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn narrowing sequence. Start: everyone in a location release, a study of 1.5 million people over 15 months with hourly locations. Each known point, a zone at night, a zone at 8am, a zone at noon, a zone at 6pm, removes everyone who was not there then: fewer alike, a few alike, a handful. After four points, highlighted in green, one person is left, which de Montjoye and colleagues found true for 95 percent of people.">
+        <defs>
+          <filter id="ctya3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya3aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya3aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya3aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya3aB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctya3aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya3aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya3aH" x="30" y="32">EACH KNOWN POINT REMOVES EVERYONE WHO WAS NOT THERE THEN</text>
+
+        <g filter="url(#ctya3aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="70" width="140" height="200" rx="10" transform="rotate(-0.5 100 170)" fill="url(#ctya3aHc)"/>
+          <path d="M174 170 L196 170" marker-end="url(#ctya3aAr)"/>
+          <rect x="200" y="90" width="120" height="160" rx="10" transform="rotate(0.6 260 170)" fill="#FAF0EE"/>
+          <path d="M324 170 L346 170" marker-end="url(#ctya3aAr)"/>
+          <rect x="350" y="110" width="120" height="120" rx="10" transform="rotate(-0.6 410 170)" fill="#FAF0EE"/>
+          <path d="M474 170 L496 170" marker-end="url(#ctya3aAr)"/>
+          <rect x="500" y="130" width="120" height="80" rx="10" transform="rotate(0.5 560 170)" fill="#FFFFFF"/>
+          <path d="M624 170 L646 170" marker-end="url(#ctya3aAr)"/>
+          <rect x="650" y="138" width="200" height="64" rx="10" transform="rotate(-0.4 750 170)" fill="#8CC27A"/>
+          <!-- doodle: a zone outline -->
+          <path d="M792 22 L828 16 L852 34 L840 58 L804 56 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya3aL" x="44" y="164">everyone in the</text>
+        <text class="ctya3aL" x="44" y="182">location release</text>
+        <text class="ctya3aL" x="214" y="175">fewer alike</text>
+        <text class="ctya3aL" x="364" y="175">a few alike</text>
+        <text class="ctya3aL" x="514" y="175">a handful</text>
+        <text class="ctya3aL" x="664" y="164">unique: one person</text>
+        <text class="ctya3aB" x="664" y="184">true for 95% of people</text>
+
+        <text class="ctya3aS" x="30" y="292">1.5 million people,</text>
+        <text class="ctya3aS" x="30" y="308">15 months, hourly</text>
+        <text class="ctya3aA" x="200" y="292">point 1</text>
+        <text class="ctya3aS" x="200" y="308">a zone at night</text>
+        <text class="ctya3aA" x="350" y="292">point 2</text>
+        <text class="ctya3aS" x="350" y="308">a zone at 8am</text>
+        <text class="ctya3aA" x="500" y="292">point 3</text>
+        <text class="ctya3aS" x="500" y="308">a zone at noon</text>
+        <text class="ctya3aA" x="650" y="292">point 4</text>
+        <text class="ctya3aS" x="650" y="308">a zone at 6pm</text>
+
+        <text class="ctya3aN" x="30" y="350">The four points are illustrative; 95% and the study size are de Montjoye et al. (2013), phone location data.</text>
+        <text class="ctya3aN" x="30" y="368">No name, no id column: the pattern of where and when is the identifier.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - nothing was hacked; each point simply removed everyone who was somewhere else, until the green box held one person.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The mechanism, step by step<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Start with a crowd.</strong> de Montjoye, Hidalgo, Verleysen and Blondel (2013) studied fifteen months of mobility data for 1.5 million people, with location given hourly at the resolution of the carrier's antennas. No names.</p>
+        <p><strong>Add what an outsider already knows.</strong> A neighbour knows roughly where you sleep. A colleague knows where you work and when you arrive. A single receipt or a social post puts you somewhere at a time. Each is one spatio-temporal point.</p>
+        <p><strong>Subtract.</strong> Everyone who was not in that antenna area in that hour drops out. Points multiply each other's effect, because the people who share your night location are mostly not the people who share your lunch location.</p>
+        <p><strong>Count what is left.</strong> The paper's abstract: "four spatio-temporal points are enough to uniquely identify 95% of the individuals." Unique is not the same as named. But once a record is unique, anyone who holds those four points about you can read every other row in it: every trip, every hour, for fifteen months.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The study used no special access to anyone's identity. It asked a purely statistical question of data with the names already gone: how many points does it take before only one person fits? Four, for 95 percent. That is the number to say out loud whenever someone calls a location release anonymous because it has no name column.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why coarser data protects less than it feels like<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The obvious fix is to blur: bigger zones, longer time slots. It helps, but far less than intuition suggests. The same paper found that uniqueness "decays approximately as the 1/10 power" of the resolution, and drew the conclusion itself: "even coarse datasets provide little anonymity."</p>
+        <p>Read that as a leader. A one-tenth power is a very flat curve: you have to make the data enormously coarser to make it a little less unique, and by then it may no longer answer the research question it was released for. Blurring is a dial with a poor exchange rate, not a switch that turns identification off.</p>
+        <p>Apply it to the taxi case without overclaiming. TLC zones are much bigger than a street address, which helps. The trip time is stamped to the second, which does not. Nothing here says anyone has been singled out from those records; the point is that "it is only zones" is not, on its own, an argument a release review should accept.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the study does not say<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The finding is about one kind of data: phone location at antenna resolution, hourly, for fifteen months. Taxi trips are sparser per person, published at a different grain, and most people take few cabs. The mechanism carries over; the exact 95 percent does not, and no page here moves it to a different dataset.</p>
+        <p>The study also does not say how often anyone actually holds four points about a stranger. That depends on who wants to look and what they already have, which is why the release review in Part 3 asks who could hold the outside knowledge, not only whether the release is unique.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers k-anonymity and the surveillance trade-off</span>
+      <h2>Hiding in a crowd of k, and where it stops</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">If uniqueness is the problem, the classic answer is to guarantee a crowd. Sweeney's k-anonymity (2002) says a release protects each person if their information "cannot be distinguished from at least k-1 individuals whose information also appears in the release." It is a real protection and a widely used idea. The same paper is plain that it is not the end: it "examines re-identification attacks that can be realized on releases that adhere to k-anonymity unless accompanying policies are respected."</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn constructed example of two releases about the same people, each meeting k equals 3. Release 1 groups three residents as zone A, age 30 to 39, with stops clinic, gym and office. Release 2 groups three residents as zone A, works nights, with stops clinic, depot and market. A neighbour who knows one resident is zone A, aged 30 to 39 and works nights sees that only clinic appears in both lists, highlighted in green. Each release alone met k equals 3.">
+        <defs>
+          <filter id="ctya3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya3bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya3bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya3bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya3bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya3bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya3bH" x="30" y="32">RELEASE 1, k = 3</text>
+        <text class="ctya3bH" x="470" y="32">RELEASE 2, k = 3, SAME PEOPLE</text>
+
+        <g filter="url(#ctya3bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="46" width="380" height="132" rx="10" transform="rotate(-0.4 220 112)" fill="url(#ctya3bHc)"/>
+          <rect x="46" y="58" width="348" height="28" rx="6" transform="rotate(0.4 220 72)" fill="#FFFFFF"/>
+          <rect x="46" y="94" width="348" height="28" rx="6" transform="rotate(-0.3 220 108)" fill="#FFFFFF"/>
+          <rect x="46" y="130" width="348" height="28" rx="6" transform="rotate(0.3 220 144)" fill="#FFFFFF"/>
+          <rect x="470" y="46" width="380" height="132" rx="10" transform="rotate(0.4 660 112)" fill="url(#ctya3bHc)"/>
+          <rect x="486" y="58" width="348" height="28" rx="6" transform="rotate(-0.4 660 72)" fill="#FFFFFF"/>
+          <rect x="486" y="94" width="348" height="28" rx="6" transform="rotate(0.3 660 108)" fill="#FFFFFF"/>
+          <rect x="486" y="130" width="348" height="28" rx="6" transform="rotate(-0.3 660 144)" fill="#FFFFFF"/>
+          <path d="M380 186 L420 244" marker-end="url(#ctya3bAr)"/>
+          <path d="M500 186 L460 244" marker-end="url(#ctya3bAr)"/>
+          <rect x="200" y="250" width="480" height="66" rx="10" transform="rotate(-0.3 440 283)" fill="#8CC27A"/>
+          <!-- doodle: a lamp post -->
+          <path d="M836 300 L836 246 L852 246" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="852" cy="251" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctya3bL" x="60" y="77">zone A · age 30-39 · stop: clinic</text>
+        <text class="ctya3bL" x="60" y="113">zone A · age 30-39 · stop: gym</text>
+        <text class="ctya3bL" x="60" y="149">zone A · age 30-39 · stop: office</text>
+        <text class="ctya3bL" x="500" y="77">zone A · works nights · stop: clinic</text>
+        <text class="ctya3bL" x="500" y="113">zone A · works nights · stop: depot</text>
+        <text class="ctya3bL" x="500" y="149">zone A · works nights · stop: market</text>
+
+        <text class="ctya3bS" x="46" y="200">hidden among k-1 = 2 lookalikes</text>
+        <text class="ctya3bS" x="850" y="200" text-anchor="end">hidden among k-1 = 2 lookalikes</text>
+
+        <text class="ctya3bL" x="216" y="276">A neighbour knows she is zone A, aged 30-39, works nights.</text>
+        <text class="ctya3bL" x="216" y="298">Only "clinic" is in both lists. Each release alone met k = 3.</text>
+
+        <text class="ctya3bN" x="30" y="346">Constructed example. Sweeney (2002): attacks are possible on k-anonymous releases</text>
+        <text class="ctya3bN" x="30" y="364">unless accompanying policies are respected. Two releases cut differently is one way.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - each release kept every resident in a crowd of three; the green box is what the two crowds share, and it is one fact about one person.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What k buys, and what it does not<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it buys.</strong> Within one release, no combination of the published identifying columns points at fewer than k people. The neighbour with Release 1 alone learns that she is one of three, with three possible stops. That is a real floor, and it is checkable before publishing.</p>
+        <p><strong>What it does not.</strong> The promise is about one release, judged alone. It says nothing about the next release, cut along different columns, or about what an outsider already knows. Put two honest k = 3 releases side by side and the crowds can intersect to one. That is why Sweeney's own abstract ties the protection to "accompanying policies": who gets which releases, and what else is published about the same people.</p>
+        <p>A sibling session reaches the same verdict from the access-control side: <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b5-tokenization.html">learn data access control, session b5</a> treats k-anonymity as useful and not a guarantee. We agree.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The same idea on published counts, and who pays for it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A city rarely publishes person rows. It publishes counts: trips per zone per hour. The related practice there is small-cell suppression: withhold any cell with fewer than k events, because a cell of one or two is close to a person. This borrows Sweeney's idea for aggregates; it is not her definition applied to person records.</p>
+        <p>On real New York City taxi records, October 2024, a threshold of 5 at zone by hour withholds 41.3 percent of the non-empty cells but only 0.7 percent of the trips. The cost is not spread evenly: 100.0 percent of Staten Island's cells go, and 80.0 percent of the Bronx's, against 7.4 percent of Manhattan's. Protection, done honestly, makes the thinnest boroughs vanish from the published picture. Practitioner session 7 lets you move the threshold and the grain yourself.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where serious people disagree<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Should a city measure movement at all, through cameras, plate readers or mobility data for planning? Reasonable people hold both positions, and neither side is short of evidence it finds convincing.</p>
+        <ul>
+          <li><strong>For.</strong> Planning on counts beats planning on anecdote; services can go where need is measured rather than where complaints are loudest; safety work needs to know where harm happens.</li>
+          <li><strong>Against.</strong> People change how they move and gather when they know they are watched, a chilling effect; data collected for one purpose tends to be reused for others, function creep; and the burden falls hardest on people with least say in the decision.</li>
+        </ul>
+        <p>No page here settles it. What a leader can settle is narrower: for this dataset, which purpose, which grain, who receives it, and what would make the office stop. The release review in Part 3 writes those down.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>New York City's Open Data Law, Administrative Code section 23-502(d), says public data sets "shall be made available without any registration requirement, license requirement or restrictions on their use." Once a data set is published, there is no taking back who uses it, or for what. Section 23-501(g) lets agencies hold back what the public officers law allows them to withhold. The decision that protects residents is the one made before publishing.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The law exists, and it is not taught here<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Data protection law in many places covers location data about identifiable people, and what counts as identifiable is exactly the question Part 1 makes hard. The rules, their scope and their exceptions are taught properly in sibling courses: <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR, session 1 on scope</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA, session 1</a>. Nothing on this page is legal advice; take a real release decision to the people who give it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>A release review for Wrenmouth's request</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Take the research group's request to Wrenmouth (constructed): publish trip data so they can study travel to work. Walk it through six steps and end with a one-page decision note. The figure is the trade every step circles: the finer the grain, the more a threshold has to withhold, and the thinnest boroughs lose most at every grain.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bar chart, real New York City taxi counts for October 2024 with a threshold of 5. Share of non-empty cells withheld across all boroughs, and for Staten Island, highlighted in green, by grain. Zone by hour, 30,898 cells: 41.3 percent withheld, Staten Island 100.0 percent, trips withheld 0.7 percent. Zone by daypart, 6,498 cells: 18.4 percent, Staten Island 95.1 percent, trips 0.1 percent. Zone by week, 258 cells: 3.9 percent, Staten Island 33.3 percent, trips 0.0 percent. Borough by hour, 778 cells: 13.0 percent, Staten Island 95.3 percent, trips 0.0 percent.">
+        <defs>
+          <filter id="ctya3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya3cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya3cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya3cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya3cV { font: 800 11px Inter, sans-serif; fill: #6E2F29; }
+          .ctya3cB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctya3cT { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctya3cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya3cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya3cH" x="30" y="30">WHAT A THRESHOLD OF 5 WITHHOLDS, BY GRAIN</text>
+        <text class="ctya3cS" x="280" y="56">cells withheld, all boroughs</text>
+        <text class="ctya3cS" x="560" y="56">Staten Island cells</text>
+        <text class="ctya3cA" x="770" y="56">trips withheld</text>
+
+        <g filter="url(#ctya3cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="260" y="47" width="14" height="10" rx="2" fill="#FAF0EE"/>
+          <rect x="540" y="47" width="14" height="10" rx="2" fill="#8CC27A"/>
+          <path d="M256 68 L256 288"/>
+          <rect x="260" y="74" width="165" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="92" width="400" height="14" rx="3" transform="rotate(-0.2 460 99)" fill="#8CC27A"/>
+          <rect x="260" y="130" width="74" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="148" width="380" height="14" rx="3" transform="rotate(0.2 450 155)" fill="#8CC27A"/>
+          <rect x="260" y="186" width="16" height="14" rx="2" fill="#FAF0EE"/>
+          <rect x="260" y="204" width="133" height="14" rx="3" fill="#8CC27A"/>
+          <rect x="260" y="242" width="52" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="260" width="381" height="14" rx="3" transform="rotate(-0.2 450 267)" fill="#8CC27A"/>
+          <!-- doodle: a kerb corner -->
+          <path d="M800 10 L856 10 L856 40" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya3cL" x="240" y="86" text-anchor="end">Zone x hour</text>
+        <text class="ctya3cS" x="240" y="102" text-anchor="end">30,898 cells</text>
+        <text class="ctya3cL" x="240" y="142" text-anchor="end">Zone x daypart</text>
+        <text class="ctya3cS" x="240" y="158" text-anchor="end">6,498 cells</text>
+        <text class="ctya3cL" x="240" y="198" text-anchor="end">Zone x week</text>
+        <text class="ctya3cS" x="240" y="214" text-anchor="end">258 cells</text>
+        <text class="ctya3cL" x="240" y="254" text-anchor="end">Borough x hour</text>
+        <text class="ctya3cS" x="240" y="270" text-anchor="end">778 cells</text>
+
+        <text class="ctya3cV" x="433" y="85">41.3%</text>
+        <text class="ctya3cB" x="670" y="103">100.0%</text>
+        <text class="ctya3cV" x="342" y="141">18.4%</text>
+        <text class="ctya3cB" x="650" y="159">95.1%</text>
+        <text class="ctya3cV" x="284" y="197">3.9%</text>
+        <text class="ctya3cB" x="403" y="215">33.3%</text>
+        <text class="ctya3cV" x="320" y="253">13.0%</text>
+        <text class="ctya3cB" x="651" y="271">95.3%</text>
+
+        <text class="ctya3cT" x="770" y="102">0.7%</text>
+        <text class="ctya3cT" x="770" y="158">0.1%</text>
+        <text class="ctya3cT" x="770" y="214">0.0%</text>
+        <text class="ctya3cT" x="770" y="270">0.0%</text>
+
+        <text class="ctya3cN" x="30" y="308">Real TLC counts, October 2024, k = 5: cells under 5 trips withheld. Practitioner session 7 runs it live.</text>
+        <text class="ctya3cN" x="30" y="326">Coarser grain withholds less city-wide; Staten Island loses most of its cells at every grain but the week.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - city-wide the threshold costs almost no trips; the green bars show it erasing most of one borough from the published picture.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name the people in the rows</h4>
+        <p>Write one sentence: whose movements are these, and did any of them agree to this use? For Wrenmouth's request the answer is every passenger in the month, and none of them agreed to research publication. Keep the sentence at the top of the note.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask for the purpose, then the grain it needs</h4>
+        <p>Travel to work is a question about zones and dayparts, not about one rider at 08:14:37. Write the coarsest grain that still answers it. Remember the 1/10 power: coarser helps, but less than it feels like, so grain is a start, not the protection.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count the points a stranger could match</h4>
+        <p>For person or trip rows, list the where-and-when fields left after the names go. If a regular rider's pattern could be read from four of them, treat the release as identifying. Four points singled out 95 percent in the study that defines the risk.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Set k and say who it erases</h4>
+        <p>For published counts, pick a threshold and then read its cost by borough, not city-wide. On the real October 2024 records, k = 5 at zone by hour withholds 0.7 percent of trips and every one of Staten Island's cells. Decide whether that is acceptable and write down why.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>List the other releases about the same people</h4>
+        <p>What else does the office, or the city, already publish about these trips, cut along other columns? Two releases that each meet k can intersect to one. If you cannot list them, the review is not finished.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the stop condition and the disagreement</h4>
+        <p>State what would make Wrenmouth withdraw or stop the release, and state both sides of the sensing argument as they apply here, in two lines each. Then send the note to the people who give legal advice. The decision is theirs to check and yours to own.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When someone says a city dataset is anonymous, ask three things before anything else: how many where-and-when points per person are left, what other releases exist about the same people, and which borough a privacy threshold erases. "We removed the names" answers none of them.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A dataset holds months of hourly locations per person, with names and phone numbers removed. Is it anonymous?</p>
+      <button class="qopt" type="button">A · Yes: without a name or number column nobody can be identified</button>
+      <button class="qopt" type="button">B · Yes, as long as the locations are rounded to a zone rather than an address</button>
+      <button class="qopt" type="button">C · Not safely: in a study of 1.5 million people, four where-and-when points made 95 percent unique, and anyone holding those points can read the whole record</button>
+      <p class="qwhy">The pattern of places and times is the identifier. A treats the name column as the only route back to a person. B helps less than it sounds: the same study found uniqueness falls only as about the 1/10 power of resolution.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">An analyst proposes making location data much coarser, bigger zones and longer time slots, and calling it safe. What is the honest response?</p>
+      <button class="qopt" type="button">A · It helps, but uniqueness decays only as about the 1/10 power of resolution, so even coarse data gives little anonymity on its own</button>
+      <button class="qopt" type="button">B · It solves the problem, because coarse data cannot single anyone out</button>
+      <button class="qopt" type="button">C · It makes no difference at all, so the grain does not matter</button>
+      <p class="qwhy">de Montjoye and colleagues: "even coarse datasets provide little anonymity." That is a poor exchange rate, not zero effect, so C overreaches. Grain is still worth choosing for the purpose; it just cannot be the whole protection.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Wrenmouth (constructed) publishes two releases about the same residents, and each one meets k = 3. Is each resident protected?</p>
+      <button class="qopt" type="button">A · Yes: every resident looks like at least two others in each release</button>
+      <button class="qopt" type="button">B · Not necessarily: k is a promise about one release judged alone, and two releases cut along different columns can intersect to one person</button>
+      <button class="qopt" type="button">C · No: k-anonymity never protects anyone</button>
+      <p class="qwhy">Sweeney's paper examines attacks on k-anonymous releases "unless accompanying policies are respected". Within each release the floor holds, which is why C is wrong; across releases it can fail, which is why A is.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty-five minutes, on data you could actually be asked to release.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Count the points in one dataset you hold</h4>
+        <p>Pick any dataset about people's movements or visits at work. List the where-and-when fields per person that would survive removing names. Write whether four of them could describe one regular person's week.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the second release</h4>
+        <p>For the same dataset, list every other place the same people appear in something your organisation publishes or shares. Mark any pair cut along different columns.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write both sides in your own words</h4>
+        <p>Two lines for city sensing and two against, about a real proposal near you. Do not pick a side yet; leader session 4 is about reading the claims each side will make.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Re-identification from location</span><span class="note">de Montjoye, Hidalgo, Verleysen and Blondel (2013), Scientific Reports 3:1376: four points identify 95 percent of 1.5 million. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Coarse data is still unique</span><span class="note">Same paper: uniqueness decays as about the 1/10 power of resolution. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">k-anonymity and its stated limit</span><span class="note">Sweeney (2002), International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems 10(5):557-570. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The surveillance trade-off</span><span class="note">Taught as a disagreement between reasonable positions; no deployment named, nothing settled.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Publishing cannot be undone</span><span class="note">NYC Administrative Code 23-502(d), no restrictions on use; 23-501(g), agencies may hold back. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Small-cell suppression on counts</span><span class="note">Named with canon numbers (k 5, zone x hour: 41.3 percent of cells, 0.7 percent of trips). Practitioner session 7 computes it live.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What a publisher must state</span><span class="note">Touched through the Open Data Law. Practitioner session 8.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Data protection law</span><span class="note">Not taught here and no legal advice. Live in <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR, session 1</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA, session 1</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Masking, tokenisation and access models</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b5-tokenization.html">learn data access control, session b5</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Named incidents and programmes</span><span class="note">Out of scope by design. Re-identification is taught as a mechanism; Wrenmouth is constructed.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> In location data, where and when is the identifier, not the name.</div>
+      <div class="cheat-item"><strong>Four points.</strong> de Montjoye et al. (2013): four points made 95 percent of 1.5 million people unique.</div>
+      <div class="cheat-item"><strong>Coarser is not safe.</strong> Uniqueness falls only as about the 1/10 power of resolution.</div>
+      <div class="cheat-item"><strong>k-anonymity.</strong> Each person indistinguishable from at least k-1 others in the release.</div>
+      <div class="cheat-item"><strong>Its limit.</strong> One release at a time; two releases cut differently can intersect to one.</div>
+      <div class="cheat-item"><strong>Who pays.</strong> k 5, zone x hour: 0.7 percent of trips withheld, 100.0 percent of Staten Island's cells.</div>
+      <div class="cheat-item"><strong>The argument.</strong> Planning on counts vs chilling effects and function creep. Both are held by reasonable people.</div>
+      <div class="cheat-item"><strong>Release review.</strong> People, purpose and grain, points, k and who it erases, other releases, stop condition.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 3 of 6 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a2-where-the-sensors-are-not.html">← Leader session 2 · Where the sensors are not</a>
+        <a href="a4-reading-a-smart-city-claim.html">Leader session 4 · Reading a smart-city claim →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

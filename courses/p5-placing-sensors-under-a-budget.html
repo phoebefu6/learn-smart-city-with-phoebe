@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 5 of 10. Forty counting sensors, 262 taxi zones and three placement rules: busiest zones, spread across boroughs, and an equity floor. Greedy coverage N_h / (n_h + 1) turns a budget into 11/9/11/6/3 or 11/9/10/6/4, airports become a take-all stratum, and a live toy recomputes the allocation on real New York City pickups. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Placing sensors under a budget - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 5 of 10. The busiest-zone rule sees 88.9% of trips and leaves three boroughs dark. Greedy coverage spreads 40 sensors 11/9/10/6/4.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p5-placing-sensors-under-a-budget.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Placing sensors under a budget - learn smart city with phoebe">
+<meta name="twitter:description" content="Where you put 40 sensors decides which boroughs exist in the numbers. Three rules, one formula, one take-all stratum.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 5 · Placing sensors under a budget - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 5 of 10</div>
+    <h1>Placing sensors under a <span class="accent">budget</span></h1>
+    <p class="sub">Wrenmouth, a constructed city transport office, can afford 40 counting sensors for 262 taxi zones, and it has to decide where they go knowing only one week of recorded pickups. The pickups are real: New York City taxi records, October 2024, from the Taxi and Limousine Commission. Tonight you write the three placement rules down as code, watch the busiest-zone rule switch off three boroughs, and learn the one-line formula that splits a budget fairly across places rather than across trips.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Analysts and data scientists who allocate measurement</span>
+      <span class="chip audience">Anyone who has to defend where the sensors went</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:12">3-15 · Three placement rules</span>
+      <span class="a3" style="flex:13">15-28 · Greedy coverage and take-all</span>
+      <span class="a4" style="flex:17">28-45 · Build-along: allocate 40 sensors</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Forty sensors, 262 zones, one week to decide</h2>
+    </div>
+    <p class="lede">Wrenmouth, a constructed city transport office, has a budget of 40 counting sensors. Each one counts every pickup in its zone for the month. The office places them using the first week's recorded pickups, then estimates the whole city from what the 40 zones counted. The zones and the counts are real New York City taxi records, October 2024: 3,876,702 pickups in 262 zones across five boroughs. The budget, the rules and the decision are constructed, and every Wrenmouth number below says so.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Three placement rules you can name and code: busiest zones, spread across boroughs, and an equity floor. The greedy coverage rule, each next sensor to the borough with the most zones per sensor, N_h / (n_h + 1), and the two allocations it produces for Wrenmouth's 40 sensors: 11/9/11/6/3 spread, 11/9/10/6/4 with a floor of 4. Why the two airports are measured with certainty, as a take-all stratum. And a Python function that reproduces both allocations from the zone lookup alone.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The decision, stated plainly<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A placement rule answers two questions in order: how many sensors each borough gets, then which zones inside each borough get them. The first question is the allocation; the second is the draw. Most arguments about sensor placement are really about the first question, and most of the damage happens there too: a borough that gets zero sensors does not appear in the numbers at all.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>In October 2024, Manhattan held 88.0% of the month's recorded pickups on 69 of the 262 zones. Staten Island recorded 231 pickups across its 20 zones in the whole month. Any rule that follows the trips will follow them into Manhattan, because that is where the cabs were.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a sensor is, in this model<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A Wrenmouth sensor is deliberately simple: it counts every pickup in its own zone and nothing in the zones next door. The zone shapes are shipped only as centroids, so neighbour coverage is not modelled. Real counting devices drift, drop readings and need calibrating; those mechanics live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>. This session owns where the sensors are, and who that leaves unmeasured.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the three placement rules</span>
+      <h2>Three rules, one budget</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The same 40 sensors, the same 262 zones, three different rules. Each looks reasonable in a meeting. Lay their allocations side by side and the difference is not a matter of degree: one rule measures two boroughs, the other two measure all five.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn table of how Wrenmouth's constructed budget of 40 sensors splits across five boroughs under three rules. Busiest zones: Manhattan 38, Brooklyn 0 dark, Queens 2 on both airports, Bronx 0 dark, Staten Island 0 dark; it sees 88.9% of trips. Spread across boroughs: 11, 9, 11, 6, 3; 11.8% of trips, none dark. Equity floor of 4, highlighted in green: 11, 9, 10, 6, 4; 20.4% of trips, none dark. Zone counts: Manhattan 69, Brooklyn 61, Queens 69, Bronx 43, Staten Island 20.">
+        <defs>
+          <filter id="ctyp5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp5aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp5aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp5aV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp5aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp5aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp5aH" x="30" y="32">ONE BUDGET OF 40 SENSORS, THREE PLACEMENT RULES</text>
+
+        <g filter="url(#ctyp5aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- row 1: busiest -->
+          <rect x="30" y="96" width="200" height="60" rx="8" transform="rotate(-0.5 130 126)" fill="#FFFFFF"/>
+          <rect x="250" y="96" width="110" height="60" rx="8" transform="rotate(0.6 305 126)" fill="url(#ctyp5aHc)"/>
+          <rect x="368" y="96" width="110" height="60" rx="8" transform="rotate(-0.6 423 126)" fill="#FAF0EE" stroke-dasharray="5 5"/>
+          <rect x="486" y="96" width="110" height="60" rx="8" transform="rotate(0.5 541 126)" fill="#FFFFFF"/>
+          <rect x="604" y="96" width="110" height="60" rx="8" transform="rotate(-0.5 659 126)" fill="#FAF0EE" stroke-dasharray="5 5"/>
+          <rect x="722" y="96" width="110" height="60" rx="8" transform="rotate(0.6 777 126)" fill="#FAF0EE" stroke-dasharray="5 5"/>
+          <!-- row 2: spread -->
+          <rect x="30" y="168" width="200" height="60" rx="8" transform="rotate(0.4 130 198)" fill="#FFFFFF"/>
+          <rect x="250" y="168" width="110" height="60" rx="8" transform="rotate(-0.5 305 198)" fill="#FFFFFF"/>
+          <rect x="368" y="168" width="110" height="60" rx="8" transform="rotate(0.5 423 198)" fill="#FFFFFF"/>
+          <rect x="486" y="168" width="110" height="60" rx="8" transform="rotate(-0.6 541 198)" fill="#FFFFFF"/>
+          <rect x="604" y="168" width="110" height="60" rx="8" transform="rotate(0.5 659 198)" fill="#FFFFFF"/>
+          <rect x="722" y="168" width="110" height="60" rx="8" transform="rotate(-0.5 777 198)" fill="#FFFFFF"/>
+          <!-- row 3: equity floor -->
+          <rect x="30" y="240" width="200" height="60" rx="8" transform="rotate(-0.4 130 270)" fill="#8CC27A"/>
+          <rect x="250" y="240" width="110" height="60" rx="8" transform="rotate(0.5 305 270)" fill="#FFFFFF"/>
+          <rect x="368" y="240" width="110" height="60" rx="8" transform="rotate(-0.5 423 270)" fill="#FFFFFF"/>
+          <rect x="486" y="240" width="110" height="60" rx="8" transform="rotate(0.6 541 270)" fill="#FFFFFF"/>
+          <rect x="604" y="240" width="110" height="60" rx="8" transform="rotate(-0.5 659 270)" fill="#FFFFFF"/>
+          <rect x="722" y="240" width="110" height="60" rx="8" transform="rotate(0.5 777 270)" fill="#FFFFFF"/>
+          <!-- doodle: a kerb line -->
+          <path d="M720 20 L780 20 L780 32 L860 32" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp5aA" x="30" y="72">Rule</text>
+        <text class="ctyp5aL" x="262" y="64">Manhattan</text>
+        <text class="ctyp5aS" x="262" y="82">69 zones</text>
+        <text class="ctyp5aL" x="380" y="64">Brooklyn</text>
+        <text class="ctyp5aS" x="380" y="82">61 zones</text>
+        <text class="ctyp5aL" x="498" y="64">Queens</text>
+        <text class="ctyp5aS" x="498" y="82">69 zones</text>
+        <text class="ctyp5aL" x="616" y="64">Bronx</text>
+        <text class="ctyp5aS" x="616" y="82">43 zones</text>
+        <text class="ctyp5aL" x="734" y="64">Staten Island</text>
+        <text class="ctyp5aS" x="734" y="82">20 zones</text>
+
+        <text class="ctyp5aL" x="46" y="120">Rule 1 · busiest zones</text>
+        <text class="ctyp5aS" x="46" y="140">sees 88.9% of trips</text>
+        <text class="ctyp5aV" x="264" y="126">38</text>
+        <text class="ctyp5aK" x="264" y="146">sensors</text>
+        <text class="ctyp5aV" x="382" y="126">0</text>
+        <text class="ctyp5aA" x="382" y="146">dark</text>
+        <text class="ctyp5aV" x="500" y="126">2</text>
+        <text class="ctyp5aK" x="500" y="146">both airports</text>
+        <text class="ctyp5aV" x="618" y="126">0</text>
+        <text class="ctyp5aA" x="618" y="146">dark</text>
+        <text class="ctyp5aV" x="736" y="126">0</text>
+        <text class="ctyp5aA" x="736" y="146">dark</text>
+
+        <text class="ctyp5aL" x="46" y="192">Rule 2 · spread</text>
+        <text class="ctyp5aS" x="46" y="212">11.8% of trips, none dark</text>
+        <text class="ctyp5aV" x="264" y="198">11</text>
+        <text class="ctyp5aS" x="264" y="218">sensors</text>
+        <text class="ctyp5aV" x="382" y="198">9</text>
+        <text class="ctyp5aS" x="382" y="218">sensors</text>
+        <text class="ctyp5aV" x="500" y="198">11</text>
+        <text class="ctyp5aS" x="500" y="218">sensors</text>
+        <text class="ctyp5aV" x="618" y="198">6</text>
+        <text class="ctyp5aS" x="618" y="218">sensors</text>
+        <text class="ctyp5aV" x="736" y="198">3</text>
+        <text class="ctyp5aS" x="736" y="218">sensors</text>
+
+        <text class="ctyp5aL" x="46" y="264">Rule 3 · equity floor 4</text>
+        <text class="ctyp5aK" x="46" y="284">20.4% of trips, none dark</text>
+        <text class="ctyp5aV" x="264" y="270">11</text>
+        <text class="ctyp5aS" x="264" y="290">sensors</text>
+        <text class="ctyp5aV" x="382" y="270">9</text>
+        <text class="ctyp5aS" x="382" y="290">sensors</text>
+        <text class="ctyp5aV" x="500" y="270">10</text>
+        <text class="ctyp5aS" x="500" y="290">2 take-all</text>
+        <text class="ctyp5aV" x="618" y="270">6</text>
+        <text class="ctyp5aS" x="618" y="290">sensors</text>
+        <text class="ctyp5aV" x="736" y="270">4</text>
+        <text class="ctyp5aS" x="736" y="290">the floor</text>
+
+        <text class="ctyp5aN" x="30" y="326">Each rule places 40 sensors in 262 zones, so each measures 15.3% of zones. Trips seen: 11.8% to 88.9%.</text>
+        <text class="ctyp5aN" x="30" y="346">Constructed: Wrenmouth's budget and rules. Real: zone counts (TLC lookup) and October 2024 pickups.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green rule is the one that measures every borough with at least four sensors; the hatched cell is where rule 1 piles its budget.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Rule 1: put the sensors where the trips are<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Rank the 262 zones by first-week pickups and take the top 40. It is the rule most teams reach for first, because it maximises what the sensors see: the busiest placement covers 88.9% of the month's trips with 15.3% of the zones. It puts 38 sensors in Manhattan and 2 in Queens, and the 2 are JFK Airport and LaGuardia Airport. Brooklyn, the Bronx and Staten Island get none.</p>
+        <p>Then Wrenmouth estimates the city by assuming every unmeasured zone looks like the average measured zone. The measured zones are the busiest in the city, so the estimate is 22,570,200 pickups against a truth of 3,876,702: <strong>+482.2%</strong>. For the outer boroughs, estimated from two airports, the error is <strong>+6,388.6%</strong>. Three boroughs have no estimate at all; they are dark.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The 40 busiest zones in the October 2024 records hold 88.9% of all pickups. That concentration is a fact about where cabs were present to be hailed (practitioner session 3), and a rule that follows it inherits it. Seeing most of the trips is not the same as seeing most of the city.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Rule 2: spread across boroughs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Give each borough sensors in proportion to its zones, using the greedy coverage rule in Part 2, then draw that many zones at random inside each borough with a fixed seed. For 40 sensors the allocation is <strong>11/9/11/6/3</strong> (Manhattan, Brooklyn, Queens, Bronx, Staten Island). Nobody is dark. The sensors now see only 11.8% of trips, and the estimate uses each borough's own average, scaled up by its own zone count.</p>
+        <p>On the canon draw (seed 1017) the city estimate is off by -25.6% and the outer boroughs by -67.8%. It is less wrong than rule 1 by a wide margin, and still wrong in a specific way: a random draw in Queens can easily miss both airports, and they are the two biggest zones in the borough.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Rule 3: an equity floor, then stratify<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every borough gets at least 4 sensors first, and the rest go out by greedy coverage: <strong>11/9/10/6/4</strong>. Inside each borough the zones are split into a busier half and a quieter half by first-week pickups, and Queens' two airports become a stratum of their own that is always measured. The sensors see 20.4% of trips. On the canon draw the city estimate is off by -17.7% (3,191,512 against 3,876,702) and the outer boroughs by +22.0%.</p>
+        <p>Per borough, rule 1 / rule 2 / rule 3: Manhattan +66.8% / -19.8% / -23.1%; Brooklyn dark / -58.4% / +8.2%; Queens +2,724.7% / -70.7% / +25.8%; Bronx dark / -34.2% / -12.8%; Staten Island dark / -42.3% / -19.9%. One draw is one draw: the next card looks at 400 of them.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why seeing more trips made the answer worse<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Compare rule 1 with rule 3 directly. Rule 1 sees 68.5 more percentage points of the trips (88.9% against 20.4%). In exchange, the sensors outside Manhattan fall from 29 to 2 and the outer-borough error goes from +22.0% to +6,388.6%. More coverage of trips, less coverage of the city: that is the anti-lever practitioner session 10 lets you press.</p>
+        <p>Over 400 fresh placements at the same settings, the spread rule misses the city by 21.3% on average and its worst borough by 120.5%; the equity rule misses the city by 11.4% and its worst borough by 47.2%. These are results of a constructed office's rules run on real counts, not a property of any real city's network. Who gains and who loses under each rule is practitioner session 9.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers greedy coverage and the take-all stratum</span>
+      <h2>Where the next sensor goes</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Rules 2 and 3 need a way to turn "in proportion to zones" into whole sensors. Greedy coverage does it one sensor at a time: give the next sensor to the borough with the most zones per sensor after it lands, N_h / (n_h + 1), where N_h is the borough's zone count and n_h its sensors so far. Repeat until the budget is gone. It never gives a borough a fraction of a sensor, and it never forgets a small borough for long.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn greedy step for the 40th sensor under the equity floor. Before it lands: Manhattan 69 zones and 10 sensors, ratio 69 over 11 is 6.27, highlighted in green; Brooklyn 61 zones and 9 sensors, 61 over 10 is 6.10; Queens 69 zones and 10 sensors, 69 over 11 is 6.27, a tie decided by list order; Bronx 43 zones and 6 sensors, 43 over 7 is 6.14; Staten Island 20 zones and 4 sensors, 20 over 5 is 4.00. The sensor goes to Manhattan.">
+        <defs>
+          <filter id="ctyp5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp5bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp5bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp5bV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp5bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp5bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp5bH" x="30" y="32">THE 40TH SENSOR UNDER THE EQUITY FLOOR: MOST ZONES PER SENSOR WINS</text>
+
+        <g filter="url(#ctyp5bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="380" y="50" width="130" height="36" rx="8" transform="rotate(-2 445 68)" fill="url(#ctyp5bHc)"/>
+          <path d="M392 88 L130 116" marker-end="url(#ctyp5bAr)"/>
+          <rect x="30" y="122" width="150" height="120" rx="8" transform="rotate(-0.6 105 182)" fill="#8CC27A"/>
+          <rect x="198" y="122" width="150" height="120" rx="8" transform="rotate(0.5 273 182)" fill="#FFFFFF"/>
+          <rect x="366" y="122" width="150" height="120" rx="8" transform="rotate(-0.5 441 182)" fill="#FAF0EE"/>
+          <rect x="534" y="122" width="150" height="120" rx="8" transform="rotate(0.6 609 182)" fill="#FFFFFF"/>
+          <rect x="702" y="122" width="150" height="120" rx="8" transform="rotate(-0.5 777 182)" fill="#FFFFFF"/>
+          <!-- doodle: a lamp post -->
+          <path d="M800 104 L800 60 L816 60" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="816" cy="65" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp5bL" x="398" y="73">Sensor 40</text>
+
+        <text class="ctyp5bL" x="46" y="146">Manhattan</text>
+        <text class="ctyp5bK" x="46" y="166">69 zones, 10 sensors</text>
+        <text class="ctyp5bK" x="46" y="192">69 / 11 =</text>
+        <text class="ctyp5bV" x="46" y="222">6.27</text>
+
+        <text class="ctyp5bL" x="214" y="146">Brooklyn</text>
+        <text class="ctyp5bS" x="214" y="166">61 zones, 9 sensors</text>
+        <text class="ctyp5bS" x="214" y="192">61 / 10 =</text>
+        <text class="ctyp5bV" x="214" y="222">6.10</text>
+
+        <text class="ctyp5bL" x="382" y="146">Queens</text>
+        <text class="ctyp5bS" x="382" y="166">69 zones, 10 sensors</text>
+        <text class="ctyp5bS" x="382" y="192">69 / 11 =</text>
+        <text class="ctyp5bV" x="382" y="222">6.27</text>
+
+        <text class="ctyp5bL" x="550" y="146">Bronx</text>
+        <text class="ctyp5bS" x="550" y="166">43 zones, 6 sensors</text>
+        <text class="ctyp5bS" x="550" y="192">43 / 7 =</text>
+        <text class="ctyp5bV" x="550" y="222">6.14</text>
+
+        <text class="ctyp5bL" x="718" y="146">Staten Island</text>
+        <text class="ctyp5bS" x="718" y="166">20 zones, 4 sensors</text>
+        <text class="ctyp5bS" x="718" y="192">20 / 5 =</text>
+        <text class="ctyp5bV" x="718" y="222">4.00</text>
+
+        <text class="ctyp5bA" x="382" y="264">a tie, listed after Manhattan</text>
+
+        <text class="ctyp5bA" x="30" y="290">Next sensor goes to the borough with the largest N_h / (n_h + 1): zones per sensor once it lands.</text>
+        <text class="ctyp5bN" x="30" y="312">Ties are decided by list order. Zone counts: TLC lookup. Budget and floor: constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green borough has the most zones per sensor once the 40th lands; a tie at 6.27 is decided by list order, and it is the only reason Queens ends on 10, not 11.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Greedy coverage, sensor by sensor<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Start from zero under rule 2. The first sensor goes to Manhattan (69 / 1), the second to Queens (also 69 / 1, a tie decided by list order), then Brooklyn (61) and the Bronx (43). The fifth goes back to Manhattan, now at 69 / 2 = 34.50. Staten Island's first sensor is the 12th placed, when 20 / 1 = 20.00 beats Manhattan's 69 / 4 = 17.25. Forty steps later the allocation is 11/9/11/6/3.</p>
+        <p>The ratio is the number of zones each sensor would stand for once it lands. Giving the next sensor to the borough where that number is biggest keeps the zones-per-sensor as even as whole sensors allow. It is the same idea as allocating a sample in proportion to stratum size, done one unit at a time so the total is exact.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Staten Island recorded 231 pickups in October 2024, 0.006% of the month, on 7.6% of the city's zones. Allocate by trips and it gets nothing. Allocate by zones and it gets 3 of 40 under rule 2, and the floor lifts it to 4.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The floor, and the tie it moves<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Rule 3 starts every borough at 4 (20 sensors), then runs the same greedy rule for the other 20. The figure shows the last step: Manhattan and Queens tie at 69 / 11 = 6.27, and the tie goes to Manhattan. Under rule 2 Queens also won its 11th sensor, as the 40th. Under rule 3 Staten Island's floor sensor has already used that budget, so Queens ends on 10.</p>
+        <p>A floor is a statement that every borough must be measurable, even at the cost of fewer sensors where the zones are many. It is a policy choice, and Wrenmouth's floor of 4 is constructed. Write it in the allocation memo with the reason, not in a config file nobody reads.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn split of Queens' 10 sensors under the equity floor into three strata. Airports, highlighted in green: 2 zones, JFK and LaGuardia, both measured, a take-all stratum counted rather than estimated. Busier half: 34 zones by first-week pickups, 4 sensors by seeded random draw. Quieter half: 33 zones, 4 sensors by seeded random draw. Estimate equals the airports counted plus 34 times the busier mean plus 33 times the quieter mean.">
+        <defs>
+          <filter id="ctyp5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="57" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp5cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp5cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp5cV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp5cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp5cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp5cH" x="30" y="32">QUEENS, 10 SENSORS UNDER THE EQUITY FLOOR: THREE STRATA</text>
+
+        <g filter="url(#ctyp5cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- doodle: a zone outline around the borough -->
+          <path d="M30 56 L840 52 L850 248 L36 252 Z" stroke="#C98A82" stroke-width="2.5" stroke-dasharray="7 6"/>
+          <rect x="54" y="76" width="240" height="152" rx="10" transform="rotate(-0.6 174 152)" fill="#8CC27A"/>
+          <rect x="320" y="76" width="240" height="152" rx="10" transform="rotate(0.5 440 152)" fill="#FFFFFF"/>
+          <rect x="586" y="76" width="240" height="152" rx="10" transform="rotate(-0.5 706 152)" fill="#FAF0EE"/>
+        </g>
+
+        <text class="ctyp5cL" x="72" y="102">Airports, take-all</text>
+        <text class="ctyp5cK" x="72" y="122">2 zones: JFK, LaGuardia</text>
+        <text class="ctyp5cK" x="72" y="140">both always measured</text>
+        <text class="ctyp5cV" x="72" y="180">2 sensors</text>
+        <text class="ctyp5cK" x="72" y="206">counted, not estimated</text>
+
+        <text class="ctyp5cL" x="338" y="102">Busier half</text>
+        <text class="ctyp5cS" x="338" y="122">34 zones, ranked by first-week</text>
+        <text class="ctyp5cS" x="338" y="140">recorded pickups</text>
+        <text class="ctyp5cV" x="338" y="180">4 sensors</text>
+        <text class="ctyp5cS" x="338" y="206">seeded random draw</text>
+
+        <text class="ctyp5cL" x="604" y="102">Quieter half</text>
+        <text class="ctyp5cS" x="604" y="122">33 zones, the rest</text>
+        <text class="ctyp5cS" x="604" y="140">of Queens</text>
+        <text class="ctyp5cV" x="604" y="180">4 sensors</text>
+        <text class="ctyp5cS" x="604" y="206">seeded random draw</text>
+
+        <text class="ctyp5cA" x="30" y="278">Estimate = airports counted + 34 x mean(busier four) + 33 x mean(quieter four)</text>
+        <text class="ctyp5cN" x="30" y="300">Take-all only when the borough's budget covers the airports plus two. The halves split 4 and 4 by greedy.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green stratum is measured with certainty, so the two largest zones in Queens never decide the estimate by luck of the draw.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Airports as a take-all stratum<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Inside a borough, rule 3 does not draw from all zones at once. If Queens' 10 sensors were drawn at random from 69 zones, whether the estimate included JFK and LaGuardia would be decided by the seed, and the estimate would swing wildly between draws. So the two zones whose service zone is "Airports" form a take-all stratum: both get a sensor, and their counts go into the estimate as counts, with no expansion and no sampling error.</p>
+        <p>The remaining 67 Queens zones split into a busier half (34) and a quieter half (33) by first-week pickups, and greedy coverage splits the other 8 sensors 4 and 4. Each half is then expanded by its own zone count. The take-all only fires when the borough's budget covers the airports plus two, so each half still gets at least one sensor.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>JFK Airport was the busiest zone in the city in October 2024, with 194,145 pickups; LaGuardia Airport recorded 118,732. They are unlike every other Queens zone. Under rule 1, they are also the only two sensors outside Manhattan, which is how two airports came to stand for four boroughs.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why greedy counts zones, not trips<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Run greedy coverage with recorded trips as the size of each borough and you rebuild rule 1 in slow motion: Manhattan's 88.0% share would claim almost every sensor. The point of the rule is to measure places, so the size is the number of places. Trips come back in only inside a borough, to rank the busier and quieter halves, where they decide how zones are grouped and never whether a borough is measured.</p>
+        <p>An allocation is not an estimate. Turning the 40 counts into a city total, and saying how far off it might be, is rung 4 of the ladder in practitioner session 10; the interval mechanics are in <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, session b7</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Allocate 40 sensors, then let the engine draw</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">You write the allocation yourself in Python, from the zone lookup alone, and check it against Wrenmouth's canon: 11/9/11/6/3 and 11/9/10/6/4. Then you split Queens into strata from the first week's pickups. The seeded draws and the scoring run in the engine on this page, which uses the same rules on the same real counts.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pipeline in five steps. One, zone counts from the lookup: 69, 61, 69, 43, 20. Two, allocate by greedy coverage, highlighted in green: 11/9/11/6/3 and 11/9/10/6/4. Three, strata within each borough: Queens 2 airports plus 34 plus 33 zones. Four, a seeded random draw inside each stratum. Five, score the estimate against the month's full count. Steps one to three run in your Python, four and five in the engine on this page.">
+        <defs>
+          <filter id="ctyp5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp5dH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5dL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp5dS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp5dK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp5dA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp5dN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp5dH" x="30" y="32">FROM A ZONE LOOKUP TO A SCORED PLACEMENT</text>
+
+        <g filter="url(#ctyp5dSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="150" height="70" rx="8" transform="rotate(-0.6 105 91)" fill="#FFFFFF"/>
+          <rect x="200" y="56" width="150" height="70" rx="8" transform="rotate(0.5 275 91)" fill="#8CC27A"/>
+          <rect x="370" y="56" width="150" height="70" rx="8" transform="rotate(-0.4 445 91)" fill="#FFFFFF"/>
+          <rect x="540" y="56" width="150" height="70" rx="8" transform="rotate(0.5 615 91)" fill="#FAF0EE"/>
+          <rect x="710" y="56" width="150" height="70" rx="8" transform="rotate(-0.5 785 91)" fill="#FAF0EE"/>
+          <path d="M182 91 L197 91" marker-end="url(#ctyp5dAr)"/>
+          <path d="M352 91 L367 91" marker-end="url(#ctyp5dAr)"/>
+          <path d="M522 91 L537 91" marker-end="url(#ctyp5dAr)"/>
+          <path d="M692 91 L707 91" marker-end="url(#ctyp5dAr)"/>
+          <path d="M105 130 L105 150 M275 130 L275 150 M445 130 L445 150" stroke-dasharray="4 4"/>
+          <rect x="30" y="156" width="150" height="62" rx="8" transform="rotate(0.5 105 187)" fill="url(#ctyp5dHc)"/>
+          <rect x="200" y="156" width="150" height="62" rx="8" transform="rotate(-0.5 275 187)" fill="url(#ctyp5dHc)"/>
+          <rect x="370" y="156" width="150" height="62" rx="8" transform="rotate(0.4 445 187)" fill="url(#ctyp5dHc)"/>
+          <path d="M615 130 L615 150 M785 130 L785 150" stroke-dasharray="4 4"/>
+          <rect x="540" y="156" width="320" height="62" rx="8" transform="rotate(-0.3 700 187)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp5dL" x="46" y="82">1 · Zone counts</text>
+        <text class="ctyp5dS" x="46" y="102">the TLC lookup</text>
+        <text class="ctyp5dL" x="216" y="82">2 · Allocate</text>
+        <text class="ctyp5dK" x="216" y="102">N_h / (n_h + 1)</text>
+        <text class="ctyp5dL" x="386" y="82">3 · Strata</text>
+        <text class="ctyp5dS" x="386" y="102">airports, two halves</text>
+        <text class="ctyp5dL" x="556" y="82">4 · Draw</text>
+        <text class="ctyp5dS" x="556" y="102">seeded, per stratum</text>
+        <text class="ctyp5dL" x="726" y="82">5 · Score</text>
+        <text class="ctyp5dS" x="726" y="102">against the month</text>
+
+        <text class="ctyp5dK" x="46" y="182">prints</text>
+        <text class="ctyp5dK" x="46" y="200">69/61/69/43/20</text>
+        <text class="ctyp5dK" x="216" y="182">11/9/11/6/3</text>
+        <text class="ctyp5dK" x="216" y="200">11/9/10/6/4</text>
+        <text class="ctyp5dK" x="386" y="182">Queens</text>
+        <text class="ctyp5dK" x="386" y="200">2 + 34 + 33 zones</text>
+        <text class="ctyp5dL" x="556" y="182">The engine on this page</text>
+        <text class="ctyp5dS" x="556" y="200">same rules, same real counts, your settings</text>
+
+        <text class="ctyp5dA" x="30" y="252">Steps 1 to 3 run in your Python. Steps 4 and 5 run in the allocation toy below.</text>
+        <text class="ctyp5dN" x="30" y="276">If step 2 does not print the canon allocations, the bug is in your tie rule or your floor.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green step is the one you own tonight: an allocation you can reproduce, explain and defend line by line.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Count zones per borough from the lookup</h4>
+        <p>Keep the five boroughs only. You should see Manhattan 69, Brooklyn 61, Queens 69, Bronx 43, Staten Island 20: the 262 zones of practitioner session 2.</p>
+        <div class="prompt-box good"><span class="label">python</span>import pandas as pd
+zones = pd.read_csv("taxi_zone_lookup.csv")
+order = ["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"]
+five = zones[zones.Borough.isin(order)]
+sizes = [int((five.Borough == b).sum()) for b in order]
+print(sizes, sum(sizes))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write greedy coverage, and make the tie rule explicit</h4>
+        <p>Each next sensor goes to the borough with the largest N_h / (n_h + 1). On a tie the borough listed first wins; the <span class="mono">-h</span> in the key says so out loud. Spread from zero should print 11/9/11/6/3.</p>
+        <div class="prompt-box good"><span class="label">python</span>def greedy(sizes, start, K):
+    n = list(start)
+    for _ in range(K - sum(start)):
+        open_ = [h for h in range(len(sizes)) if n[h] &lt; sizes[h]]
+        best = max(open_, key=lambda h: (sizes[h] / (n[h] + 1), -h))
+        n[best] += 1
+    return n
+
+print(greedy(sizes, [0] * 5, 40))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Add the equity floor</h4>
+        <p>Start every borough at 4, then run the same function. You should get 11/9/10/6/4. Print the ratios before the last step and find the 6.27 tie.</p>
+        <div class="prompt-box good"><span class="label">python</span>floor = 4
+start = [min(floor, s) for s in sizes]
+print(greedy(sizes, start, 40))
+n = greedy(sizes, start, 39)
+print([round(s / (k + 1), 2) for s, k in zip(sizes, n)])</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Split Queens into strata from the first week</h4>
+        <p>Use the <span class="mono">kept</span> frame from practitioner session 1 (columns <span class="mono">t</span> and <span class="mono">z</span>). The airports leave first; the rest rank by first-week pickups, busier half rounded up. You should see 2, 34 and 33, and greedy splits the remaining 8 sensors 4 and 4.</p>
+        <div class="prompt-box good"><span class="label">python</span>w1 = kept[kept.t &lt; "2024-10-08"].groupby("z").size()
+q = five[five.Borough == "Queens"].copy()
+q["w1"] = q.LocationID.map(w1).fillna(0)
+air = q[q.service_zone == "Airports"]
+rest = q[q.service_zone != "Airports"].sort_values(["w1", "LocationID"], ascending=[False, True])
+busier = rest.head((len(rest) + 1) // 2)
+print(len(air), len(busier), len(rest) - len(busier))
+print(greedy([len(busier), len(rest) - len(busier)], [0, 0], 10 - len(air)))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Let the engine draw and score</h4>
+        <p>Open the allocation toy below at the canon settings and check its Spread and Equity columns against your two printouts. Then change the budget and the floor, predict the allocation with your function first, and only then look. The errors are the engine's seeded draws on real counts: your numbers will differ from the prose once you leave the canon settings.</p>
+      </div></div>
+    </div>
+
+    <div class="wk" id="ctyp5-alloc">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The allocation toy, computed in this page from real TLC pickups (October 2024, 262 zones). Constructed, and labelled so: Wrenmouth, the budget, the floor, the seeded draws within boroughs. At the canon settings (40 sensors, floor 4, seed 1017) it prints the canon figures.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="ctyp5-k">Sensor budget</label>
+        <select class="sql-code" id="ctyp5-k">
+          <option value="20">20 sensors</option>
+          <option value="40" selected>40 sensors, the canon</option>
+          <option value="80">80 sensors</option>
+        </select>
+        <label class="sql-label" for="ctyp5-floor">Equity floor per borough</label>
+        <select class="sql-code" id="ctyp5-floor">
+          <option value="2">2</option>
+          <option value="4" selected>4, the canon</option>
+          <option value="6">6</option>
+        </select>
+        <label class="sql-label" for="ctyp5-seed">Seed for the random draws</label>
+        <select class="sql-code" id="ctyp5-seed">
+          <option value="1017" selected>1017, the canon</option>
+          <option value="2">2</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <div class="ctyp5-btns">
+          <button class="btn" id="ctyp5-reset" type="button">Back to the canon settings</button>
+        </div>
+        <div id="ctyp5-out"></div>
+        <p class="sql-note" id="ctyp5-trace">...</p>
+        <p class="sql-note" id="ctyp5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctyp5-self">...</div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Decide how many sensors each borough gets before you decide which zones get them, and write the allocation rule, the floor and the tie rule into the memo with a reason for each. A placement nobody can reproduce from the zone list is a preference, and the borough it leaves dark will not be in the numbers to object.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Wrenmouth (constructed) puts its 40 sensors on the 40 zones with most first-week pickups. They see 88.9% of the month's trips. What is the problem?</p>
+      <button class="qopt" type="button">A · None: seeing 88.9% of trips means the city estimate is close</button>
+      <button class="qopt" type="button">B · 38 sensors land in Manhattan and 2 on the Queens airports, so Brooklyn, the Bronx and Staten Island are dark and the outer-borough estimate is off by +6,388.6%</button>
+      <button class="qopt" type="button">C · The rule needs a bigger budget; with more sensors it becomes fair on its own</button>
+      <p class="qwhy">Trip coverage and city coverage are different denominators: rule 1 measures 15.3% of zones and leaves three of five boroughs with no sensor. C fails too: at 80 sensors the busiest rule still leaves two boroughs dark.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Greedy coverage, mid-allocation: Manhattan has 4 sensors on 69 zones, Brooklyn 4 on 61, the Bronx 4 on 43. Which borough gets the next sensor?</p>
+      <button class="qopt" type="button">A · Manhattan: 69 / 5 = 13.80 beats Brooklyn's 61 / 5 = 12.20 and the Bronx's 43 / 5 = 8.60</button>
+      <button class="qopt" type="button">B · The Bronx, because it has the fewest zones and needs catching up</button>
+      <button class="qopt" type="button">C · Whichever borough recorded the most trips in the first week</button>
+      <p class="qwhy">The rule compares zones per sensor once the next sensor lands, N_h / (n_h + 1). B describes a floor, which has already been applied. C is rule 1 again, the one that leaves boroughs dark.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why does rule 3 measure both Queens airports with certainty instead of drawing them at random with the other Queens zones?</p>
+      <button class="qopt" type="button">A · Airports are outside the five boroughs, so they need special handling</button>
+      <button class="qopt" type="button">B · To raise the share of trips the sensors see, which makes the estimate fair</button>
+      <button class="qopt" type="button">C · JFK (194,145 pickups) and LaGuardia (118,732) are unlike every other Queens zone; as a take-all stratum they are counted, not estimated, so the seed cannot decide whether they are in the estimate</button>
+      <p class="qwhy">Both airports are Queens zones, so A is wrong. Seeing more trips is rule 1's logic (B). Take-all removes the two most extreme zones from the random part, which is what stops the estimate swinging between draws.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, with your <span class="mono">greedy</span> function and the toy.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Predict, then check</h4>
+        <p>For a budget of 20 and of 80, and a floor of 2 and of 6, predict the spread and equity allocations with your function. Then set the toy to the same values and compare. Where a floor of 6 takes sensors from, borough by borough, is the sentence to write down.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the allocation memo</h4>
+        <p>One paragraph for Wrenmouth's (constructed) office: the rule, the allocation, the floor and why, the tie rule, the take-all stratum, and which boroughs each rule leaves dark. Say what is constructed and what is real. Practitioner session 9 asks who benefits from each line of it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Try a trip-weighted greedy</h4>
+        <p>Replace <span class="mono">sizes</span> with each borough's recorded pickups and rerun. Describe what happens to Staten Island and the Bronx, in words, and why that is rule 1 arriving by a different road.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Three placement rules</span><span class="note">Busiest zones, spread across boroughs, equity floor. Constructed rules for Wrenmouth, run on real October 2024 pickups.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Greedy coverage</span><span class="note">Next sensor to the largest N_h / (n_h + 1); canon 11/9/11/6/3 spread and 11/9/10/6/4 with a floor of 4. Reproduced in Python and by the engine.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The take-all stratum</span><span class="note">JFK and LaGuardia measured with certainty; busier and quieter halves by first-week pickups.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Canon placement results</span><span class="note">Trips seen 88.9% / 11.8% / 20.4%; city error +482.2% / -25.6% / -17.7%; three boroughs dark under rule 1. Derived from TLC October 2024 counts.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Estimates with honest intervals</span><span class="note">Named tonight. Rung 4 and coverage over 400 placements: practitioner session 10.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Who benefits from each rule</span><span class="note">Per-borough errors named tonight. Practitioner session 9.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensor drift and missing readings</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Confidence interval mechanics</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, session b7</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Zone adjacency</span><span class="note">A sensor seeing its neighbours is not modelled: zones are shipped as centroids only.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Two questions.</strong> How many per borough (allocation), then which zones (the draw).</div>
+      <div class="cheat-item"><strong>Rule 1.</strong> Busiest zones: 88.9% of trips, 15.3% of zones, three boroughs dark.</div>
+      <div class="cheat-item"><strong>Rule 2.</strong> Spread by greedy coverage: 11/9/11/6/3, nobody dark.</div>
+      <div class="cheat-item"><strong>Rule 3.</strong> Floor of 4, then greedy: 11/9/10/6/4, then strata inside.</div>
+      <div class="cheat-item"><strong>Greedy.</strong> Next sensor to the largest N_h / (n_h + 1). Size = zones, never trips.</div>
+      <div class="cheat-item"><strong>Ties.</strong> Decided by list order. Say so in code and in the memo.</div>
+      <div class="cheat-item"><strong>Take-all.</strong> JFK and LaGuardia always measured, counted not estimated.</div>
+      <div class="cheat-item"><strong>Constructed.</strong> Wrenmouth's budget, floor and rules. Real: zones and pickups.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 5 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p4-where-the-data-is-thin.html">← Practitioner session 4 · Where the data is thin</a>
+        <a href="p6-before-and-after.html">Practitioner session 6 · Before and after →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var kSel = document.getElementById("ctyp5-k"), fSel = document.getElementById("ctyp5-floor"), sSel = document.getElementById("ctyp5-seed");
+  var out = document.getElementById("ctyp5-out"), traceOut = document.getElementById("ctyp5-trace");
+  var verdict = document.getElementById("ctyp5-verdict"), self = document.getElementById("ctyp5-self");
+  var B = CTY.BOROS, Z = CTY.ZONES;
+  var S = B.map(function () { return 0; }), AIR = B.map(function () { return 0; });
+  Z.forEach(function (z) { S[z[1]]++; if (z[3] === 2) AIR[z[1]]++; });
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function pc(x) { return x === null ? "none" : (x > 0 ? "+" : "") + fmt(x * 100, 1) + "%"; }
+  function sum(a) { var s = 0; for (var i = 0; i < a.length; i++) s += a[i]; return s; }
+  function trace(start, K) {
+    var n = start.slice(), steps = [], placed = sum(start);
+    while (placed < K) {
+      var best = -1, bv = -1;
+      for (var h = 0; h < S.length; h++) {
+        if (n[h] >= S[h]) continue;
+        var v = S[h] / (n[h] + 1);
+        if (v > bv + 1e-12) { bv = v; best = h; }
+      }
+      if (best < 0) break;
+      n[best]++; placed++;
+      steps.push(placed + " " + B[best] + " " + fmt(bv, 2));
+    }
+    return { n: n, steps: steps };
+  }
+  function cell(s, k, sensors) {
+    var e = s.est["b" + k];
+    return sensors + " · " + (e.sensors === 0 ? "<b>dark</b>" : pc(e.err));
+  }
+  function render() {
+    var o = { K: Number(kSel.value), floor: Number(fSel.value), seed: Number(sSel.value), reps: 0 };
+    var canon = o.K === 40 && o.floor === 4 && o.seed === 1017;
+    var L = CTY.ladder(o), R = L.rungs, r1 = R[0].s, r2 = R[1].s, r3 = R[2].s;
+    var html = '<table class="sql-table"><thead><tr><th>Borough</th><th>Zones</th><th>Busiest: sensors · error</th><th>Spread: sensors · error</th><th>Equity floor: sensors · error</th></tr></thead><tbody>';
+    B.forEach(function (b, k) {
+      html += "<tr><td>" + b + "</td><td>" + S[k] + "</td><td>" + cell(r1, k, r1.est["b" + k].sensors) + "</td><td>" + cell(r2, k, r2.alloc[k]) + '</td><td class="ctyp5-eq">' + cell(r3, k, r3.alloc[k]) + "</td></tr>";
+    });
+    html += "<tr><td><b>City</b></td><td>" + Z.length + "</td><td>" + fmt(r1.tripsShare * 100, 1) + "% of trips seen · <b>" + pc(r1.est.city.err) + "</b></td><td>" + fmt(r2.tripsShare * 100, 1) + "% of trips seen · <b>" + pc(r2.est.city.err) + "</b></td><td class=\"ctyp5-eq\">" + fmt(r3.tripsShare * 100, 1) + "% of trips seen · <b>" + pc(r3.est.city.err) + "</b></td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var start = S.map(function (s) { return Math.min(o.floor, s); });
+    var floorFits = sum(start) <= o.K;
+    if (!floorFits) start = S.map(function () { return 0; });
+    var T = trace(start, o.K);
+    var agrees = T.n.join("/") === r3.alloc.join("/");
+    var air = B.map(function (b, k) { return AIR[k] ? (r3.alloc[k] > AIR[k] + 1 ? b + (/s$/.test(b) ? "' " : "'s ") + AIR[k] + " airports are a take-all stratum" : b + " has too few sensors for a take-all, so its airports join the busier half") : null; }).filter(Boolean).join("; ");
+    traceOut.innerHTML = "<b>Equity allocation, step by step.</b> " +
+      (floorFits ? "Floor first: " + o.floor + " per borough (" + sum(start) + " sensors). Then each next sensor to the largest N_h / (n_h + 1): " : "The floor of " + o.floor + " x 5 does not fit in " + o.K + " sensors, so greedy coverage runs from zero: ") +
+      (T.steps.length ? T.steps.join(" · ") : "no sensors left after the floor") + ". Result " + T.n.join("/") +
+      (agrees ? ", the same as the engine's." : ", which does NOT match the engine's " + r3.alloc.join("/") + ": do not trust either until you know why.") + " " + air + ".";
+
+    var msg = "Wrenmouth (constructed), " + o.K + " sensors, floor " + o.floor + ", seed " + o.seed + ": the busiest rule leaves " +
+      (r1.dark.length ? r1.dark.length + " of 5 boroughs dark (" + r1.dark.join(", ") + ")" : "no borough dark") +
+      " and misses the city by " + pc(r1.est.city.err) + "; spread misses it by " + pc(r2.est.city.err) + "; the equity floor by " + pc(r3.est.city.err) + ". " +
+      (canon ? "The canon settings: these are the figures in the prose." : "Not the canon settings: your numbers will differ from the figures in the prose.");
+    verdict.textContent = msg;
+  }
+  document.getElementById("ctyp5-reset").addEventListener("click", function () {
+    kSel.value = "40"; fSel.value = "4"; sSel.value = "1017"; render();
+  });
+  [kSel, fSel, sSel].forEach(function (el) { el.addEventListener("change", render); });
+  var st = CTY.selfTestResult || CTY.selfTest();
+  var faults = CTY.FAULTS.filter(function (f) { return !CTY.selfTest(f).pass; }).length;
+  self.textContent = st.pass
+    ? "Real counts: TLC trip records, October 2024 (NYC public data set; aggregated, out-of-month and non-borough rows dropped). Constructed: Wrenmouth, the budget, the floor, the rules. The engine's " + st.checks.length + " self-checks pass in this browser, and " + faults + " of " + CTY.FAULTS.length + " planted faults make a check fail, as they should."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #ctyp5-alloc .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #ctyp5-alloc table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #ctyp5-alloc .ctyp5-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0 .3rem; }
+  #ctyp5-alloc td.ctyp5-eq { background: var(--amber-50); }
+</style>
+</body>
+</html>

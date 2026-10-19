@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 1 of 6. A warehouse row is an event someone meant; a city row exists only where a cab, a sensor or a form happened to be. Real New York City taxi records for October 2024: 88.0 percent of pickups on 69 of 262 zones. Wrenmouth is a constructed transport office. Not investment or procurement advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The city as a data source - learn smart city with phoebe">
+<meta property="og:description" content="Leader session 1 of 6. Who writes a city row, who is never in it, and why 40 sensors can cover 88.9 percent of trips and 15.3 percent of the city.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/a1-the-city-as-a-data-source.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The city as a data source - learn smart city with phoebe">
+<meta name="twitter:description" content="A city row exists only where something happened to be. Real taxi records, a constructed transport office.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 1 · The city as a data source - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Leader session 1 of 6</div>
+    <h1>The city as a <span class="accent">data source</span></h1>
+    <p class="sub">A warehouse row is a business event someone meant. A city row exists only where a sensor, a vehicle or a form happened to be, and it describes residents who never agreed to be measured. Wrenmouth, a constructed transport office in a fictional city, is the decision-maker for all sixteen sessions; the rows it practises on are real New York City taxi records for October 2024, published by the city's Taxi and Limousine Commission. Tonight is who writes a city row, who is never in one, and how lopsided a real city's records are. Nothing here is investment or procurement advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders who fund or sign off city data work</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Rows nobody meant</span>
+      <span class="a3" style="flex:3">18-28 · Where the trips are</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth, on the morning the trip files land</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed city transport office: a director with a sensor budget, a planning team, and a data analyst who came from a retail warehouse. Her first ticket says "show where people need transport". What arrives is not a fact table about people. It is a month of taxi meter records, each written because a cab happened to be hailed somewhere, plus a promise that counting sensors will be bought next quarter. The six leader sessions are about reading that pile as a decision-maker; the ten practitioner sessions are about building on it.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A picture of three ways a city row gets written, a meter engaged, a sensor installed, a resident who chose to report, and of who each one leaves out. The real shape of one city's records: in October 2024, 88.0 percent of New York City's 3,876,702 taxi pickups happened in Manhattan's 69 zones, out of 262. Why Wrenmouth's obvious plan, 40 sensors on the 40 busiest zones, covers 88.9 percent of trips and 15.3 percent of the city. And five questions to put to any city dataset before anyone draws a map with it. Nothing here is investment or procurement advice.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the warehouse instinct misfires here<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A warehouse analyst trusts three things without naming them. A row has an author who meant it: a customer placed an order. Everyone who matters to the question is in the table: every customer who bought appears at least once. And the table's absences mean something: no order means no sale.</p>
+        <p>A city row has none of the three. Its author is a meter, a sensor or a resident with a phone, and each writes a row only where it happens to be. The people the question is about, residents who need to get somewhere, appear only when their need met a cab, crossed a sensor or became a complaint. And an absence means nothing on its own: no pickup in a zone may mean no demand, or no cab, or no record. Each gap alone is a caveat; together they change what a count can prove.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The Taxi and Limousine Commission publishes every yellow and green taxi trip by month. Its own page says the records were "collected and provided" by technology providers, and that "the trip data was not created by the TLC, and TLC makes no representations as to the accuracy of these data." One of the best-known open city datasets starts by telling you who did not write it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Taxi zone.</strong> One of the areas the TLC divides the city into. The official lookup lists 265 rows; the five boroughs hold 262 of them.</li>
+          <li><strong>Pickup.</strong> One trip record, placed in the zone where "the taximeter was engaged", in the data dictionary's words.</li>
+          <li><strong>Hour of week.</strong> Monday 00:00 to Sunday 23:59 in 168 hourly slots. Most city data is a count per place per time slot.</li>
+          <li><strong>Coverage.</strong> The share of something that a measurement reaches. Coverage of trips and coverage of places are different numbers, and the gap between them is the whole of leader session 2.</li>
+          <li><strong>Dark borough.</strong> A borough with no sensor at all. Anything said about it is a guess.</li>
+          <li><strong>Censored demand.</strong> A pickup is recorded only where a cab was there to be hailed, so the record shows supply meeting demand, never demand alone.</li>
+          <li><strong>Constructed.</strong> Wrenmouth, its budget and its rules are invented so the decisions are ours to test. The trip counts are real and cited.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers who writes a city row</span>
+      <h2>A city row exists where something happened to be</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">The clearest way to see the city as a data problem is to draw who writes each row. In a warehouse, the customer does, on purpose. In a city, three writers dominate: a meter engaged when a cab is hailed, a counting sensor that sees only the spot it was bolted to, and a resident who decided a problem was worth reporting. Each writer is honest about what it saw. Each is silent about everywhere it was not.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison. Left, a warehouse row: a customer places an order, and the order row has an author who meant it and includes every buyer. Right, a city row: three writers, a meter engaged only where a cab was hailed, a counting sensor only where it was installed, and a resident report only from people who chose to report, all feed a pile of pickups by zone and hour. Under them, highlighted in green, the people who are never in the pile: demand no cab met, streets with no sensor, residents who did not report.">
+        <defs>
+          <filter id="ctya1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya1aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya1aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya1aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya1aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya1aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya1aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya1aH" x="30" y="32">A WAREHOUSE ROW</text>
+        <text class="ctya1aH" x="330" y="32">A CITY ROW</text>
+
+        <g filter="url(#ctya1aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="250" height="56" rx="8" transform="rotate(-0.6 155 78)" fill="#FFFFFF"/>
+          <path d="M155 108 L155 130" marker-end="url(#ctya1aAr)"/>
+          <rect x="30" y="134" width="250" height="112" rx="8" transform="rotate(0.5 155 190)" fill="#FAF0EE"/>
+          <rect x="330" y="50" width="220" height="56" rx="8" transform="rotate(-0.5 440 78)" fill="#FFFFFF"/>
+          <rect x="330" y="120" width="220" height="56" rx="8" transform="rotate(0.6 440 148)" fill="#FFFFFF"/>
+          <rect x="330" y="190" width="220" height="56" rx="8" transform="rotate(-0.4 440 218)" fill="#FFFFFF"/>
+          <path d="M552 78 L604 120" marker-end="url(#ctya1aAr)"/>
+          <path d="M552 148 L604 148" marker-end="url(#ctya1aAr)"/>
+          <path d="M552 218 L604 176" marker-end="url(#ctya1aAr)"/>
+          <rect x="610" y="96" width="240" height="104" rx="10" transform="rotate(0.5 730 148)" fill="url(#ctya1aHc)"/>
+          <rect x="330" y="270" width="520" height="56" rx="10" transform="rotate(-0.3 590 298)" fill="#8CC27A"/>
+          <!-- doodle: a street grid corner -->
+          <path d="M760 40 L850 40 M760 40 L760 80 M790 40 L790 80 M820 40 L820 80" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya1aL" x="46" y="74">A customer places an order</text>
+        <text class="ctya1aS" x="46" y="94">on purpose, with an id you can ask</text>
+        <text class="ctya1aL" x="46" y="160">order row</text>
+        <text class="ctya1aK" x="46" y="182">author: the buyer, who meant it</text>
+        <text class="ctya1aK" x="46" y="202">every buyer is in the table</text>
+        <text class="ctya1aK" x="46" y="222">no row means no sale</text>
+
+        <text class="ctya1aL" x="346" y="74">A meter is engaged</text>
+        <text class="ctya1aS" x="346" y="94">only where a cab was hailed</text>
+        <text class="ctya1aL" x="346" y="144">A counting sensor</text>
+        <text class="ctya1aS" x="346" y="164">only where it was installed</text>
+        <text class="ctya1aL" x="346" y="214">A resident files a report</text>
+        <text class="ctya1aS" x="346" y="234">only people who chose to report</text>
+
+        <text class="ctya1aL" x="626" y="140">pickups by zone</text>
+        <text class="ctya1aL" x="626" y="158">and hour of week</text>
+
+        <text class="ctya1aL" x="346" y="294">Never in the pile:</text>
+        <text class="ctya1aK" x="346" y="312">demand no cab met, streets with no sensor, residents who did not report</text>
+
+        <text class="ctya1aA" x="30" y="300">no row means: no demand?</text>
+        <text class="ctya1aA" x="30" y="316">or no cab? or no record?</text>
+        <text class="ctya1aN" x="30" y="358">Each writer is honest about where it was and silent about everywhere else. The silence is not in any column.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green band is what no city table holds: the people the question is about, wherever no writer happened to be.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three writers, three blind spots<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The meter.</strong> A taxi trip row begins when "the taximeter was engaged", which happens only where a cab was present and a passenger hailed it. A zone where cabs rarely cruise produces few rows whatever its residents need. Practitioner session 3 turns that into a rule: recorded pickups are demand that met supply.</p>
+        <p><strong>The sensor.</strong> A fixed counter sees its own spot and nothing else. Where it is bolted is a budget decision made before any data exists, and that decision decides which places can ever be described. Leader session 2 and the bench in practitioner session 10 are about that decision.</p>
+        <p><strong>The resident.</strong> A complaint line records people who know it exists, trust it and have time. A 2025 study of New York City's 311 heating and hot water complaints found "some subpopulations reporting at lower rates than others", and built a model to separate the chance of a problem from the chance of reporting it. A map of complaints is partly a map of who complains.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Residents who never agreed to be measured<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A customer agreed to terms when they bought. A resident walking past a counter, or taking a cab, did not sign anything with the planning office. That changes what the data team owes them. Location records are unusually easy to tie back to a person: in a study of fifteen months of phone location data for one and a half million people, de Montjoye and colleagues (2013) found that "four spatio-temporal points are enough to uniquely identify 95% of the individuals."</p>
+        <p>Leader session 3 is the whole argument, and practitioner session 7 computes what protecting published counts costs. For tonight, hold one idea: a city dataset is about people who are not in the room.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What one trip record actually holds<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The TLC says yellow and green taxi records include pick-up and drop-off dates and times, pick-up and drop-off locations, trip distances, itemized fares, rate types, payment types and driver-reported passenger counts. Locations are taxi zones, not addresses. Tips are recorded for card payments only: the data dictionary says "Cash tips are not included."</p>
+        <p>So even inside one row, some columns describe everyone and some describe only the people who paid a certain way. Practitioner session 1 opens a real month of these files field by field.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers where one city's records are</span>
+      <h2>Where the trips are, and where the city is</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Open the real October 2024 files, yellow and green taxis together, and count pickups by borough. The shape is not a gentle slope. Manhattan holds 69 of the 262 zones and 88.0 percent of the 3,876,702 pickups. Staten Island holds 20 zones and 231 pickups, in the whole month. A dashboard built on these counts would describe one borough in detail and four in rumour.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn paired bars for the five boroughs, New York City taxi pickups, October 2024. Share of the 262 zones against share of the 3,876,702 pickups. Manhattan: 26.3 percent of zones, 88.0 percent of pickups. Brooklyn: 23.3 percent of zones, 1.8 percent of pickups. Queens: 26.3 percent of zones, 9.9 percent of pickups. Bronx: 16.4 percent of zones, 0.3 percent of pickups. Staten Island: 7.6 percent of zones, 0.006 percent of pickups.">
+        <defs>
+          <filter id="ctya1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya1bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya1bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya1bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya1bV { font: 800 11px Inter, sans-serif; fill: #6E2F29; }
+          .ctya1bB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctya1bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya1bH" x="30" y="30">SHARE OF ZONES AGAINST SHARE OF PICKUPS, OCTOBER 2024</text>
+        <text class="ctya1bS" x="640" y="30">zones</text>
+        <text class="ctya1bS" x="740" y="30">pickups</text>
+
+        <g filter="url(#ctya1bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="620" y="21" width="14" height="10" rx="2" fill="#FAF0EE"/>
+          <rect x="720" y="21" width="14" height="10" rx="2" fill="#8CC27A"/>
+          <path d="M256 50 L256 318"/>
+          <rect x="260" y="56" width="126" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="74" width="422" height="14" rx="3" fill="#8CC27A"/>
+          <rect x="260" y="108" width="112" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="126" width="9" height="14" rx="2" fill="#8CC27A"/>
+          <rect x="260" y="160" width="126" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="178" width="47" height="14" rx="3" fill="#8CC27A"/>
+          <rect x="260" y="212" width="79" height="14" rx="3" fill="#FAF0EE"/>
+          <rect x="260" y="230" width="4" height="14" rx="1" fill="#8CC27A"/>
+          <rect x="260" y="264" width="36" height="14" rx="3" fill="#FAF0EE"/>
+          <path d="M261 282 L261 296" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya1bL" x="240" y="70" text-anchor="end">Manhattan</text>
+        <text class="ctya1bS" x="240" y="86" text-anchor="end">69 zones</text>
+        <text class="ctya1bL" x="240" y="122" text-anchor="end">Brooklyn</text>
+        <text class="ctya1bS" x="240" y="138" text-anchor="end">61 zones</text>
+        <text class="ctya1bL" x="240" y="174" text-anchor="end">Queens</text>
+        <text class="ctya1bS" x="240" y="190" text-anchor="end">69 zones, incl. 2 airports</text>
+        <text class="ctya1bL" x="240" y="226" text-anchor="end">Bronx</text>
+        <text class="ctya1bS" x="240" y="242" text-anchor="end">43 zones</text>
+        <text class="ctya1bL" x="240" y="278" text-anchor="end">Staten Island</text>
+        <text class="ctya1bS" x="240" y="294" text-anchor="end">20 zones</text>
+
+        <text class="ctya1bV" x="396" y="67">26.3%</text>
+        <text class="ctya1bB" x="692" y="85">88.0%</text>
+        <text class="ctya1bV" x="382" y="119">23.3%</text>
+        <text class="ctya1bB" x="279" y="137">1.8%</text>
+        <text class="ctya1bV" x="396" y="171">26.3%</text>
+        <text class="ctya1bB" x="317" y="189">9.9%</text>
+        <text class="ctya1bV" x="349" y="223">16.4%</text>
+        <text class="ctya1bB" x="274" y="241">0.3%</text>
+        <text class="ctya1bV" x="306" y="275">7.6%</text>
+        <text class="ctya1bB" x="274" y="293">0.006%, 231 pickups</text>
+
+        <text class="ctya1bN" x="30" y="340">Real counts: TLC yellow and green trip records, October 2024, 3,876,702 pickups in the five boroughs.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green bars are where the records are; the pale bars are where the city is. They are not the same shape.</figcaption>
+    </figure>
+
+    <div class="wk" id="ctya1-boro">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Counted in this page from the shipped aggregate of real TLC records (October 2024, yellow and green taxis, pickups per zone and hour). Sort it two ways and watch which borough leads.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="ctya1-sort">Sort boroughs by</label>
+        <select class="sql-code" id="ctya1-sort">
+          <option value="trips" selected>pickups recorded</option>
+          <option value="zones">zones in the borough</option>
+          <option value="under100">zones with under 100 pickups</option>
+        </select>
+        <div id="ctya1-out"></div>
+        <p class="sql-note" id="ctya1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctya1-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the records pile up in one borough<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Yellow cabs cruise where hails are most likely, which is where hails have been most likely before. The city added green cabs to serve the rest, with a rule written on the TLC's own page: they "may not operate in the Hail Exclusionary Zone, south of West 110th St and East 96th St." The rule keeps green cabs out of the core. In our month green cabs wrote 56,147 rows to yellow's 3,833,771.</p>
+        <p>So the pile of records is a picture of where cabs choose to be, not only of where people want to go. A city that read this table as "where transport is needed" would invest where it already has the most.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Whether more city sensing makes a city better run, or simply more watched, is an open argument. One side points to planning that finally rests on counts rather than anecdote; the other to measurement that grows past its first purpose and falls hardest on the people with least say. Both describe real outcomes in different places. No page here settles it; leader session 3 lays both positions side by side.</p>
+        <p>What is not contested is the mechanism on this page: a row exists only where a writer was. Every claim built on city data inherits that.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Five questions to put to any city dataset</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Take one city dataset you have seen or will be asked to fund, about traffic, complaints, footfall or air, and run it through five questions in order. The figure is Wrenmouth's first idea, and why the order matters: the obvious placement looks excellent on the number people usually ask for.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bar chart. Wrenmouth, a constructed office, puts 40 counting sensors on the 40 busiest of 262 zones, using real October 2024 taxi counts. Share of all pickups that happen in measured zones: 88.9 percent. Share of zones measured: 15.3 percent, highlighted in green. Boroughs with any sensor: 2 of 5.">
+        <defs>
+          <filter id="ctya1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya1cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya1cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya1cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya1cV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctya1cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya1cH" x="30" y="32">WRENMOUTH'S FIRST IDEA: 40 SENSORS ON THE 40 BUSIEST ZONES</text>
+
+        <g filter="url(#ctya1cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M256 54 L256 214"/>
+          <rect x="260" y="62" width="427" height="30" rx="4" transform="rotate(-0.3 473 77)" fill="url(#ctya1cHc)"/>
+          <rect x="260" y="114" width="73" height="30" rx="4" transform="rotate(0.4 296 129)" fill="#8CC27A"/>
+          <rect x="260" y="166" width="192" height="30" rx="4" transform="rotate(-0.3 356 181)" fill="#FAF0EE"/>
+          <!-- doodle: a lamp post -->
+          <path d="M836 72 L836 26 L852 26" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="852" cy="31" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctya1cL" x="240" y="78" text-anchor="end">Trips in measured zones</text>
+        <text class="ctya1cS" x="240" y="94" text-anchor="end">the number people ask for</text>
+        <text class="ctya1cL" x="240" y="130" text-anchor="end">Zones measured</text>
+        <text class="ctya1cS" x="240" y="146" text-anchor="end">40 of 262</text>
+        <text class="ctya1cL" x="240" y="182" text-anchor="end">Boroughs with a sensor</text>
+        <text class="ctya1cS" x="240" y="198" text-anchor="end">Manhattan and Queens</text>
+
+        <text class="ctya1cV" x="699" y="84">88.9%</text>
+        <text class="ctya1cV" x="345" y="136">15.3%</text>
+        <text class="ctya1cV" x="464" y="188">2 of 5</text>
+
+        <text class="ctya1cN" x="30" y="246">Placed by first-week pickups; real NYC counts, constructed office. The two Queens sensors sit on the airports;</text>
+        <text class="ctya1cN" x="30" y="264">Brooklyn, the Bronx and Staten Island go dark. Practitioner session 10 runs the whole bench.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - 88.9 percent sounds like a city measured; the green bar is how much of the city actually is.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name the writer</h4>
+        <p>Who or what created each row: a meter, a sensor, a resident, a clerk? Write it down. If the answer is "a provider we do not control", copy the publisher's own accuracy statement next to it, as the TLC's is above.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the trigger</h4>
+        <p>What has to happen for a row to exist? A hail, a vehicle crossing a loop, a complaint filed. Everything that happens without the trigger is invisible. Write one example of a real need the trigger would miss.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask for two denominators</h4>
+        <p>A coverage number needs to say coverage of what. Ask for the share of events covered and the share of places covered. Wrenmouth's busiest-zones plan scores 88.9 percent on the first and 15.3 percent on the second.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask who goes dark</h4>
+        <p>List the places and groups with no row at all. Under the busiest-zones plan that is three whole boroughs. A blank region on a map is a finding about the measurement, not about the region.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask who never agreed</h4>
+        <p>Whose movements or reports are in the data, and what could someone learn about one of them? Note whether the data is published, and at what level of detail. Leader session 3 and practitioner session 7 pick this up.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Commit to a guess about Wrenmouth</h4>
+        <p>With the same 40 sensors spread across the boroughs instead, write down whether you expect the city-wide estimate of pickups to get better or worse, and by roughly how much. Practitioner session 10 checks the guess.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When someone shows you a city number, do not ask whether it is big. Ask who wrote the rows, what triggers one, coverage of what, who goes dark and who never agreed. A city dataset is a map of where the writers were before it is a map of anything else.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Wrenmouth (constructed) places 40 sensors on the 40 busiest zones and reports that its sensors see 88.9 percent of all pickups. What is the right reading?</p>
+      <button class="qopt" type="button">A · The city is well measured: almost nine in ten trips are seen</button>
+      <button class="qopt" type="button">B · Trips are well covered but places are not: 15.3 percent of zones are measured and three boroughs have no sensor at all</button>
+      <button class="qopt" type="button">C · The number is meaningless because taxi data is unreliable</button>
+      <p class="qwhy">Coverage of events and coverage of places are different denominators. The busiest zones hold most of the trips, so the first number looks excellent while Brooklyn, the Bronx and Staten Island go dark. C overreaches: the counts are real; the question is what they cover.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A zone records very few taxi pickups in a month. What can a planner conclude?</p>
+      <button class="qopt" type="button">A · Residents of that zone rarely need to travel</button>
+      <button class="qopt" type="button">B · The zone is well served by other transport</button>
+      <button class="qopt" type="button">C · Little on its own: a pickup is recorded only where a cab was there to be hailed, so few rows can mean little demand, few cabs, or both</button>
+      <p class="qwhy">A pickup is demand that met supply. A and B each read the absence as a fact about residents; the record cannot tell them apart from an absence of cabs. Practitioner session 3 calls this censored demand.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The TLC's trip record page says the data "was not created by the TLC". Why does that matter to a data team?</p>
+      <button class="qopt" type="button">A · The rows come from technology providers' meters, so their accuracy is the providers', and the publisher says it makes no representation about it; checks are the user's job</button>
+      <button class="qopt" type="button">B · It means the data is unofficial and should not be used</button>
+      <button class="qopt" type="button">C · It only matters for legal reasons, not analytical ones</button>
+      <p class="qwhy">Provenance tells you where errors come from. The data is official and widely used, so B is wrong; but a monthly file can still carry rows stamped outside the month, which practitioner session 1 finds. That is analytical, not only legal.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one dataset and on your guess about Wrenmouth.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the five questions on one real city dataset</h4>
+        <p>Pick any open dataset from a city portal near you and write one line per question. Do not judge the dataset; mark which questions its documentation leaves unanswered.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>List the places your city data never sees</h4>
+        <p>Five of them, in your own words: a street with no counter, a neighbourhood that rarely files complaints, a bus route with no tap-in. Leader session 2 asks what it costs to leave each one dark.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Who writes a city row</span><span class="note">Meter, sensor, resident; each silent about where it was not.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">TLC trip records</span><span class="note">TLC Trip Record Data page: providers collect, TLC "makes no representations as to the accuracy". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where one city's records are</span><span class="note">October 2024 yellow and green records: 3,876,702 pickups; Manhattan 88.0 percent on 69 of 262 zones. Counted, python and browser agree.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why green cabs exist</span><span class="note">TLC Green Cab page: barred south of West 110th St and East 96th St. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Unequal reporting</span><span class="note">Boxer, Hong, Kontokosta and Neill (2025), 311 reporting bias. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Location is identifying</span><span class="note">de Montjoye et al. (2013): four points identify 95 percent. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Placing sensors under a budget</span><span class="note">Named tonight (88.9 percent of trips, 15.3 percent of zones). Leader session 2, practitioner sessions 5 and 10.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Consent and re-identification</span><span class="note">Named tonight. Leader session 3, practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensor drift and missing readings</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a1-the-sensor-is-the-source-of-truth.html">learn IoT data, leader session 1</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Vendors, products and named programmes</span><span class="note">Out of scope by design. Wrenmouth is constructed; nothing here is investment or procurement advice.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> A city row exists only where a writer happened to be.</div>
+      <div class="cheat-item"><strong>Three writers.</strong> A meter engaged, a sensor installed, a resident who chose to report.</div>
+      <div class="cheat-item"><strong>No row means.</strong> No demand, or no writer, or no record. The table cannot say which.</div>
+      <div class="cheat-item"><strong>Provenance.</strong> TLC: "not created by the TLC", no representation as to accuracy.</div>
+      <div class="cheat-item"><strong>The shape.</strong> October 2024: 88.0 percent of pickups on 69 of 262 zones. Staten Island: 231.</div>
+      <div class="cheat-item"><strong>Two denominators.</strong> Busiest 40 zones: 88.9 percent of trips, 15.3 percent of zones.</div>
+      <div class="cheat-item"><strong>Consent.</strong> Residents never agreed; four location points identify 95 percent.</div>
+      <div class="cheat-item"><strong>Five questions.</strong> Writer? Trigger? Coverage of what? Who goes dark? Who never agreed?</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 1 of 6 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="a2-where-the-sensors-are-not.html">Leader session 2 · Where the sensors are not →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var sel = document.getElementById("ctya1-sort");
+  var out = document.getElementById("ctya1-out");
+  var verdict = document.getElementById("ctya1-verdict");
+  var self = document.getElementById("ctya1-self");
+  var B = CTY.boroughSummary();
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function pct(x) { return x < 0.001 ? fmt(x * 100, 3) + "%" : fmt(x * 100, 1) + "%"; }
+  function render() {
+    var key = sel.value;
+    var rows = B.slice().sort(function (a, b) {
+      var va = key === "trips" ? a.trips : key === "zones" ? a.zones : a.under100;
+      var vb = key === "trips" ? b.trips : key === "zones" ? b.zones : b.under100;
+      return vb - va || a.boro.localeCompare(b.boro);
+    });
+    var html = '<table class="sql-table"><thead><tr><th>Borough</th><th>Zones</th><th>Pickups</th><th>Share</th><th>Per zone</th><th>Zones under 100</th></tr></thead><tbody>';
+    rows.forEach(function (r) {
+      html += "<tr><td>" + r.boro + "</td><td>" + r.zones + "</td><td><b>" + fmt(r.trips, 0) + "</b></td><td>" + pct(r.share) + "</td><td>" + fmt(r.perZone, 1) + "</td><td>" + r.under100 + "</td></tr>";
+    });
+    out.innerHTML = html + "</tbody></table>";
+    var top = rows[0];
+    verdict.textContent = key === "trips"
+      ? top.boro + " leads with " + pct(top.share) + " of " + fmt(CTY.TOTAL, 0) + " pickups. Sort by zones and it shares first place; sort by thin zones and it falls to the bottom half."
+      : key === "zones"
+        ? "By zones the city looks even: " + rows.map(function (r) { return r.boro + " " + r.zones; }).join(", ") + ". The records are not."
+        : top.boro + " has the most zones with under 100 pickups in a month (" + top.under100 + " of " + top.zones + "). Every one of them is a zone where a count is close to noise.";
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = CTY.selfTestResult || CTY.selfTest();
+  self.textContent = st.pass
+    ? "Real counts from TLC trip records, October 2024 (yellow and green taxis; " + fmt(CTY.TOTAL, 0) + " pickups in the five boroughs; out-of-month rows and Newark, unknown and outside-NYC zones dropped). NYC public data set, source and changes stated. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #ctya1-boro .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #ctya1-boro table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

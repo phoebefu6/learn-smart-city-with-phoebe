@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 2 of 10. Join real New York City taxi pickups to the TLC zone lookup: why 265 rows become 262 zones, why the join direction decides whether empty zones stay on the map, and how the same trips tell a different story at zone x hour than at borough x hour. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Zones, joins and the map - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 2 of 10. 265 lookup rows, 262 zones kept, 4 zones with no pickups that a careless join deletes, and one unit change that moves the Bronx from 80.0% withheld to none.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p2-zones-joins-and-the-map.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Zones, joins and the map - learn smart city with phoebe">
+<meta name="twitter:description" content="A zone id is not a place until you join it. Which side of the join you start from decides what the map can show.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 2 · Zones, joins and the map - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 2 of 10</div>
+    <h1>Zones, joins and <span class="accent">the map</span></h1>
+    <p class="sub">A trip record says where the meter was switched on as a number. Tonight that number becomes a place: real New York City taxi records, October 2024, joined to the Taxi and Limousine Commission's zone lookup and drawn as a dot map. Wrenmouth, a constructed city transport office, needs that map before it can place a single sensor. You will see which zones are not places, which zones a careless join deletes, and how the same trips tell a different story when the unit of the map changes.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Data engineers and analysts new to city data</span>
+      <span class="chip audience">Anyone who will map open trip records</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:12">3-15 · The lookup and the join</span>
+      <span class="a3" style="flex:13">15-28 · Same trips, different units</span>
+      <span class="a4" style="flex:17">28-45 · Build-along: the zone table and the dot map</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's analyst asks for a map</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed transport office in a fictional city; its analyst practises on real New York City records. Session 1 left her with 3,876,702 in-month pickups, each carrying a <span class="mono">PULocationID</span>. Her manager asks a reasonable question: where are they? Answering it takes a small CSV, one join, and two decisions that look like plumbing and are really choices about what the map is allowed to say.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The zone lookup read as a table of 265 rows, of which 262 are places in the five boroughs and three are not (Newark Airport, Unknown, Outside of NYC). A join that starts from the zones, so the 4 zones with no pickups in October stay on the map as zeros instead of vanishing. The modifiable areal unit problem shown with the month's own numbers: the same trips, cut into zone x hour cells, have 41.3% of cells under 5 trips; cut into borough x hour cells, 13.0%. And a 262-row zone table with centroids that every later session reuses.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>A zone is an area with an id<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The data dictionary defines <span class="mono">PULocationID</span> as the "TLC Taxi Zone in which the taximeter was engaged". The trip file holds the id and nothing else: no name, no borough, no coordinates. Those live in two separate official files, the Taxi Zone Lookup table (a CSV) and the Taxi Zones shapefile (the outlines). Until you join, every map of trip records is a bar chart of integers.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>In October 2024, Manhattan's 69 zones held 88.0% of the month's 3,876,702 pickups. Manhattan is 69 of 262 zones, about a quarter of the map. A dot map makes that imbalance visible in a second; a table of ids hides it completely.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The files you need<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>From the TLC Trip Record Data page: the October 2024 yellow and green parquet files (already on disk from session 1), the Taxi Zone Lookup table and the Taxi Zones shapefile, a zip. Download into the same empty folder, keep your scripts elsewhere, and read; nothing in them runs.</p>
+        <p>Taxi zone names and borough names are public geography. Use them freely in labels; they are the vocabulary your readers already have.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the Taxi Zone Lookup and the join</span>
+      <h2>265 rows in, 262 zones kept, and which side you start from</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The lookup is small enough to read whole, and you should: 265 rows with a <span class="mono">LocationID</span>, a borough, a zone name and a service zone. Three rows are not places in the five boroughs. And the join that attaches them to trips has a direction, which decides whether a zone where nothing was recorded shows up as a zero or not at all.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn join. Trip rows, 3,889,871 in October, each carry one PULocationID. They meet the zone lookup of 265 rows with LocationID, Borough, Zone and service zone. Kept, highlighted in green: 262 zones, Manhattan 69, Queens 69, Brooklyn 61, Bronx 43, Staten Island 20. Dropped: ids 1, 264 and 265, Newark Airport, Unknown and Outside of NYC, carrying 13,169 pickups. Below: start from the 262-row lookup and 4 zones keep a zero, Manhattan 2 and Staten Island 2; start from the trips and they never appear.">
+        <defs>
+          <filter id="ctyp2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp2aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp2aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp2aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp2aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp2aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp2aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp2aH" x="30" y="32">THE JOIN: A PICKUP'S ZONE ID MEETS THE 265-ROW LOOKUP</text>
+
+        <g filter="url(#ctyp2aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="220" height="150" rx="8" transform="rotate(-0.6 140 131)" fill="url(#ctyp2aHc)"/>
+          <path d="M254 131 L290 131" marker-end="url(#ctyp2aAr)"/>
+          <rect x="296" y="56" width="250" height="150" rx="8" transform="rotate(0.5 421 131)" fill="#FFFFFF"/>
+          <path d="M550 108 L584 96" marker-end="url(#ctyp2aAr)"/>
+          <path d="M550 160 L584 200" marker-end="url(#ctyp2aAr)"/>
+          <rect x="590" y="44" width="260" height="110" rx="8" transform="rotate(-0.5 720 99)" fill="#8CC27A"/>
+          <rect x="590" y="168" width="260" height="88" rx="8" transform="rotate(0.6 720 212)" fill="#FAF0EE"/>
+          <rect x="30" y="282" width="820" height="84" rx="10" transform="rotate(0.15 440 324)" fill="#FAF0EE"/>
+          <!-- doodle: a street grid corner -->
+          <path d="M520 16 L520 34 M520 25 L600 25 M560 16 L560 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp2aL" x="46" y="82">Trip rows</text>
+        <text class="ctyp2aK" x="46" y="106">PULocationID</text>
+        <text class="ctyp2aS" x="46" y="124">= zone where meter on</text>
+        <text class="ctyp2aL" x="46" y="164">3,889,871 in October</text>
+        <text class="ctyp2aS" x="46" y="184">yellow and green</text>
+
+        <text class="ctyp2aL" x="312" y="82">Zone lookup, 265 rows</text>
+        <text class="ctyp2aK" x="312" y="106">LocationID, Borough,</text>
+        <text class="ctyp2aK" x="312" y="124">Zone, service_zone</text>
+        <text class="ctyp2aS" x="312" y="164">one row per id</text>
+        <text class="ctyp2aA" x="312" y="184">a dictionary, not a map</text>
+
+        <text class="ctyp2aL" x="606" y="68">Kept: 262 zones</text>
+        <text class="ctyp2aK" x="606" y="92">Manhattan 69, Queens 69,</text>
+        <text class="ctyp2aK" x="606" y="110">Brooklyn 61, Bronx 43,</text>
+        <text class="ctyp2aK" x="606" y="128">Staten Island 20</text>
+
+        <text class="ctyp2aL" x="606" y="194">Dropped: ids 1, 264, 265</text>
+        <text class="ctyp2aS" x="606" y="214">Newark, Unknown, Outside</text>
+        <text class="ctyp2aK" x="606" y="234">13,169 pickups, counted</text>
+
+        <text class="ctyp2aL" x="46" y="308">Join direction decides what the map can show.</text>
+        <text class="ctyp2aS" x="46" y="330">Start from the 262-row lookup and left-join the counts: 4 zones keep a 0 (Manhattan 2, Staten Island 2).</text>
+        <text class="ctyp2aS" x="46" y="350">Start from the trips and those 4 zones never appear: an empty zone and a missing zone look the same.</text>
+
+        <text class="ctyp2aN" x="30" y="392">Zone counts: TLC Taxi Zone Lookup. Pickups: October 2024 yellow and green trip records.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is Wrenmouth's universe: 262 places, including the ones where nothing was recorded.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three rows that are not places<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the lookup top to bottom and the borough column holds seven values, not five. Zone 1 is Newark Airport, borough EWR, outside the city. Zone 264 is "Unknown". Zone 265 is "Outside of NYC". The five boroughs hold the other 262: Manhattan 69, Queens 69, Brooklyn 61, Bronx 43, Staten Island 20.</p>
+        <p>In October, 13,169 in-month pickups carry one of the three. Session 1 dropped them with a count and a reason. Tonight's question is what the map does with them, and the answer is nothing: an id that means "missing" has no outline to fill and no centroid to plot. If it reaches the map at all, it arrives as a bar labelled Unknown, and someone will ask where Unknown is.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Start the join from the zones, not the trips<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The warehouse habit is to group the trips by <span class="mono">PULocationID</span>, then join names on. That table has one row per zone that had at least one pickup. In October, 4 of the 262 zones had none: 2 in Manhattan and 2 in Staten Island. They are simply absent, and an absent row cannot be drawn as an empty dot.</p>
+        <p>Start instead from the 262-row lookup, left-join the counts and fill the gaps with 0. Now the table has a row for every place, and a zero is a finding: no cab engaged its meter there in a month. Check it with two numbers you can predict: the row count is 262 and the sum is 3,876,702.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Staten Island's 20 zones recorded 231 pickups in the whole month, and 2 of those zones recorded none. A trips-first join draws Staten Island with 18 dots and no gaps, which looks like sparse coverage. The zones-first join draws 20 dots, 2 of them empty rings, which shows that part of a borough is entirely unseen by this data.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The service zone column, and the dropoff side<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The lookup's last column, <span class="mono">service_zone</span>, sorts zones into "Yellow Zone", "Boro Zone" and "Airports". The two airport zones, JFK and LaGuardia, sit in Queens; JFK alone recorded 194,145 pickups in October and LaGuardia 118,732, most of Queens' 382,136. Session 5 treats them as their own stratum when placing sensors, because a zone that behaves like no other zone should not be averaged with its neighbours.</p>
+        <p>Everything tonight uses the pickup id. The dropoff id joins the same lookup the same way. If you join both, rename the lookup's columns on each side (<span class="mono">PU_Borough</span>, <span class="mono">DO_Borough</span>) so the second join does not overwrite the first.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the modifiable areal unit problem</span>
+      <h2>Same trips, different units, different story</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Geographers have a name for a trap every map falls into: results computed on areas change with the size and the boundaries of the areas. Openshaw's 1984 monograph is the usual reference (reported here; we teach the mechanism with our own numbers). Take the month's pickups, cut them into zone x hour-of-week cells, then into borough x hour-of-week cells, and apply one rule: withhold any cell with fewer than 5 trips. The trips do not change. The story does.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of the same October 2024 pickups under one rule, withhold cells under 5 trips. Zone by hour: 30,898 cells, 41.3% withheld, 0.7% of trips; cells withheld by borough Manhattan 7.4%, Brooklyn 52.1%, Queens 53.3%, Bronx 80.0% highlighted in green, Staten Island 100.0%. Borough by hour: 778 cells, 13.0% withheld, 0.0% of trips; Manhattan, Brooklyn, Queens and Bronx 0.0%, Staten Island 95.3%.">
+        <defs>
+          <filter id="ctyp2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp2bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp2bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp2bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp2bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp2bB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctyp2bV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp2bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp2bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp2bH" x="30" y="32">ONE MONTH OF PICKUPS, ONE RULE (WITHHOLD CELLS UNDER 5), TWO UNITS</text>
+
+        <g filter="url(#ctyp2bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="400" height="270" rx="10" transform="rotate(-0.3 230 185)" fill="#FFFFFF"/>
+          <rect x="450" y="50" width="400" height="270" rx="10" transform="rotate(0.3 650 185)" fill="#FFFFFF"/>
+          <!-- zone x hour bars, width = 2px per percent -->
+          <rect x="150" y="146" width="15" height="16" transform="rotate(-1 157 154)" fill="url(#ctyp2bHc)"/>
+          <rect x="150" y="174" width="104" height="16" transform="rotate(0.8 202 182)" fill="url(#ctyp2bHc)"/>
+          <rect x="150" y="202" width="107" height="16" transform="rotate(-0.6 203 210)" fill="url(#ctyp2bHc)"/>
+          <rect x="150" y="230" width="160" height="16" transform="rotate(0.5 230 238)" fill="#8CC27A"/>
+          <rect x="150" y="258" width="200" height="16" transform="rotate(-0.4 250 266)" fill="url(#ctyp2bHc)"/>
+          <!-- borough x hour bars -->
+          <path d="M570 146 L570 162 M570 174 L570 190 M570 202 L570 218 M570 230 L570 246"/>
+          <rect x="570" y="258" width="191" height="16" transform="rotate(0.4 665 266)" fill="url(#ctyp2bHc)"/>
+          <!-- doodle: a zone outline -->
+          <path d="M770 12 L812 8 L840 22 L828 38 L790 36 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp2bL" x="46" y="76">Zone x hour cells</text>
+        <text class="ctyp2bV" x="46" y="104">41.3%</text>
+        <text class="ctyp2bS" x="110" y="104">of 30,898 cells withheld</text>
+        <text class="ctyp2bS" x="46" y="126">0.7% of trips withheld</text>
+        <text class="ctyp2bK" x="46" y="158">Manhattan</text>
+        <text class="ctyp2bK" x="46" y="186">Brooklyn</text>
+        <text class="ctyp2bK" x="46" y="214">Queens</text>
+        <text class="ctyp2bB" x="46" y="242">Bronx</text>
+        <text class="ctyp2bK" x="46" y="270">Staten Island</text>
+        <text class="ctyp2bK" x="362" y="158">7.4%</text>
+        <text class="ctyp2bK" x="362" y="186">52.1%</text>
+        <text class="ctyp2bK" x="362" y="214">53.3%</text>
+        <text class="ctyp2bB" x="362" y="242">80.0%</text>
+        <text class="ctyp2bK" x="362" y="270">100.0%</text>
+        <text class="ctyp2bA" x="46" y="304">share of each borough's cells withheld</text>
+
+        <text class="ctyp2bL" x="466" y="76">Borough x hour cells</text>
+        <text class="ctyp2bV" x="466" y="104">13.0%</text>
+        <text class="ctyp2bS" x="530" y="104">of 778 cells withheld</text>
+        <text class="ctyp2bS" x="466" y="126">0.0% of trips withheld</text>
+        <text class="ctyp2bK" x="466" y="158">Manhattan</text>
+        <text class="ctyp2bK" x="466" y="186">Brooklyn</text>
+        <text class="ctyp2bK" x="466" y="214">Queens</text>
+        <text class="ctyp2bB" x="466" y="242">Bronx</text>
+        <text class="ctyp2bK" x="466" y="270">Staten Island</text>
+        <text class="ctyp2bK" x="782" y="158">0.0%</text>
+        <text class="ctyp2bK" x="782" y="186">0.0%</text>
+        <text class="ctyp2bK" x="782" y="214">0.0%</text>
+        <text class="ctyp2bB" x="782" y="242">0.0%</text>
+        <text class="ctyp2bK" x="782" y="270">95.3%</text>
+        <text class="ctyp2bA" x="466" y="304">share of each borough's cells withheld</text>
+
+        <text class="ctyp2bL" x="30" y="352">Same trips, same rule. Only the unit changed, and the Bronx went from 80.0% withheld to none.</text>
+        <text class="ctyp2bS" x="30" y="374">Staten Island stays almost dark at either unit: 231 pickups spread over 168 hours of the week.</text>
+        <text class="ctyp2bN" x="30" y="404">Cells: non-empty cells of October 2024 pickups by hour of week. The under-5 rule is constructed for Wrenmouth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green bar is the whole lesson: the Bronx is mostly withheld or fully published depending on a unit someone chose.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading the two panels<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At zone x hour, 12,772 of 30,898 non-empty cells have fewer than 5 trips: 41.3% of the cells, but only 0.7% of the trips, because the small cells are small. Split by borough, the withheld share runs from 7.4% of Manhattan's cells to 80.0% of the Bronx's and 100.0% of Staten Island's.</p>
+        <p>At borough x hour, the same pickups fall into 778 cells and 101 are withheld, 13.0%. Manhattan, Brooklyn, Queens and the Bronx lose nothing. Staten Island still loses 95.3% of its cells. Two analysts with the same file and the same rule would publish two different maps of the Bronx and both be correct.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Wrenmouth (constructed) wants a weekday-evening demand map for its outer districts. At zone x hour it would show the Bronx as mostly blank; at borough x hour it would show the Bronx as one healthy number. Neither map is wrong. Each answers a different question, and the unit is the question.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What changes with the unit<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Size.</strong> Bigger units hold more trips per cell, so fewer cells fall under any threshold, and averages look steadier. The price is detail: a borough total cannot tell you which of the Bronx's 43 zones carry its 13,318 pickups.</p>
+        <p><strong>Boundaries.</strong> Even at the same size, where the lines fall decides which trips share a cell. Taxi zones were drawn by the TLC for its own purposes; a sensor district, a council ward or a grid of squares would cut the same pickups differently. This page measures the size effect with the zones and boroughs we have; the boundary effect needs other outlines and is left as homework.</p>
+        <p>The working rule: pick the unit from the decision, say it out loud, and show at least one other unit before anyone acts on the map.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why this returns in session 7<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Withholding small cells is how publishers of counts protect the people behind them; practitioner session 7 treats it properly, including why it is a related practice for published counts and not the k-anonymity definition applied to person records. Tonight's point is narrower: the unit you map at decides which places get published at all. The thinnest boroughs pay first at every unit.</p>
+        <p>For the limits of k-anonymity itself, <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b5-tokenization.html">learn data access control, session b5</a> covers them. For honest map and chart choices in general, <a href="https://phoebefu6.github.io/learn-dataviz-with-phoebe/courses/03-honesty.html">learn dataviz, honest charts</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Build the 262-row zone table and draw the dots</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">Start from the <span class="mono">kept</span> frame of session 1: 3,876,702 in-month pickups in the five boroughs, with columns <span class="mono">t</span> (pickup time) and <span class="mono">z</span> (zone id). Every check below prints a number you can predict before you run it. The figure is the pipeline; the live map under it is the same table drawn from the shipped aggregate.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pipeline. Kept pickups, 3,876,702 rows, are counted per zone, which gives rows only for zones with trips. A left join onto the 262-row lookup with missing counts filled as 0 keeps 4 zones at zero. Centroids from the zone shapes are attached, highlighted in green, then the dots are drawn. Check before plotting: 262 rows, sum 3,876,702, Manhattan 3,411,386; 258 rows means the table was built from the trips.">
+        <defs>
+          <filter id="ctyp2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp2cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp2cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp2cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp2cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp2cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp2cH" x="30" y="32">FROM PICKUPS TO A MAP, IN FOUR MOVES</text>
+
+        <g filter="url(#ctyp2cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="190" height="110" rx="8" transform="rotate(-0.6 125 111)" fill="url(#ctyp2cHc)"/>
+          <path d="M222 111 L236 111" marker-end="url(#ctyp2cAr)"/>
+          <rect x="240" y="56" width="190" height="110" rx="8" transform="rotate(0.5 335 111)" fill="#FFFFFF"/>
+          <path d="M432 111 L446 111" marker-end="url(#ctyp2cAr)"/>
+          <rect x="450" y="56" width="190" height="110" rx="8" transform="rotate(-0.4 545 111)" fill="#FAF0EE"/>
+          <path d="M642 111 L656 111" marker-end="url(#ctyp2cAr)"/>
+          <rect x="660" y="56" width="190" height="110" rx="8" transform="rotate(0.5 755 111)" fill="#8CC27A"/>
+          <rect x="30" y="196" width="820" height="62" rx="10" transform="rotate(0.15 440 227)" fill="#FFFFFF"/>
+          <!-- doodle: a kerb line -->
+          <path d="M700 22 L760 22 L760 34 L850 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp2cL" x="46" y="82">Kept pickups</text>
+        <text class="ctyp2cK" x="46" y="106">3,876,702 rows</text>
+        <text class="ctyp2cS" x="46" y="126">after the session 1</text>
+        <text class="ctyp2cS" x="46" y="144">ledger</text>
+
+        <text class="ctyp2cL" x="256" y="82">Count per zone</text>
+        <text class="ctyp2cK" x="256" y="106">groupby z, size</text>
+        <text class="ctyp2cS" x="256" y="126">rows only where a</text>
+        <text class="ctyp2cS" x="256" y="144">meter was engaged</text>
+
+        <text class="ctyp2cL" x="466" y="82">Join onto lookup</text>
+        <text class="ctyp2cK" x="466" y="106">262 rows, fill 0</text>
+        <text class="ctyp2cS" x="466" y="126">4 zones keep a zero</text>
+        <text class="ctyp2cS" x="466" y="144">and stay on the map</text>
+
+        <text class="ctyp2cL" x="676" y="82">Attach centroids</text>
+        <text class="ctyp2cK" x="676" y="106">x, y from the shapes</text>
+        <text class="ctyp2cK" x="676" y="126">then draw the dots,</text>
+        <text class="ctyp2cK" x="676" y="144">area = pickups</text>
+
+        <text class="ctyp2cL" x="46" y="222">Check before you plot: 262 rows, sum 3,876,702, Manhattan 3,411,386.</text>
+        <text class="ctyp2cS" x="46" y="242">If the row count is 258, the table was built from the trips and the 4 empty zones are gone.</text>
+
+        <text class="ctyp2cN" x="30" y="290">Counts: October 2024 yellow and green pickups. Centroids: TLC Taxi Zones shapefile.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is where ids become places, and it only works because the box before it kept every zone.</figcaption>
+    </figure>
+
+    <div class="wk" id="ctyp2-map">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The 262 zone centroids from the TLC zone shapes, sized by real October 2024 pickups (yellow and green), computed in this page from the shipped aggregate. Highlight a borough, then change the unit and the threshold to watch the withheld share move.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="ctyp2-boro">Highlight a borough</label>
+        <select class="sql-code" id="ctyp2-boro">
+          <option value="-1">None</option>
+          <option value="0">Manhattan</option>
+          <option value="1">Brooklyn</option>
+          <option value="2">Queens</option>
+          <option value="3" selected>Bronx</option>
+          <option value="4">Staten Island</option>
+        </select>
+        <label class="sql-label" for="ctyp2-space">Unit of the map</label>
+        <select class="sql-code" id="ctyp2-space">
+          <option value="zone" selected>Zone x hour of week</option>
+          <option value="borough">Borough x hour of week</option>
+        </select>
+        <label class="sql-label" for="ctyp2-k">Withhold cells with fewer than</label>
+        <select class="sql-code" id="ctyp2-k">
+          <option value="3">3 trips</option>
+          <option value="5" selected>5 trips, the figure's rule</option>
+          <option value="10">10 trips</option>
+        </select>
+        <div id="ctyp2-dots"></div>
+        <p class="sql-note" id="ctyp2-boro-out">...</p>
+        <div id="ctyp2-out"></div>
+        <p class="sql-note" id="ctyp2-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctyp2-self">...</div>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Read the lookup and keep the five boroughs</h4>
+        <p>Expect 265 and 262, and a borough count of Manhattan 69, Queens 69, Brooklyn 61, Bronx 43, Staten Island 20. Look at the three rows you dropped by eye; it takes ten seconds.</p>
+        <div class="prompt-box good"><span class="label">python</span>import pandas as pd
+zones = pd.read_csv("taxi_zone_lookup.csv")
+B = ["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"]
+five = zones[zones.Borough.isin(B)]
+print(len(zones), len(five))
+print(five.Borough.value_counts())
+print(zones[~zones.Borough.isin(B)])</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count per zone, then join from the zones side</h4>
+        <p>Start from <span class="mono">five</span>, not from the counts. Expect 262 rows, a sum of 3876702 and 4 zeros. Then print the zeros by borough: 2 in Manhattan, 2 in Staten Island.</p>
+        <div class="prompt-box good"><span class="label">python</span>counts = kept.groupby("z").size().rename("pickups")
+zt = five.merge(counts, left_on="LocationID", right_index=True, how="left")
+zt["pickups"] = zt["pickups"].fillna(0).astype(int)
+print(len(zt), zt.pickups.sum(), (zt.pickups == 0).sum())
+print(zt[zt.pickups == 0].Borough.value_counts())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Borough totals, as shares of trips and of zones</h4>
+        <p>Manhattan should print 3411386 pickups on 69 zones: 88.0% of the trips on 26.3% of the zones. Staten Island: 231 pickups on 20 zones. Put the two share columns side by side; that pair is the shape of every later session.</p>
+        <div class="prompt-box good"><span class="label">python</span>b = zt.groupby("Borough").agg(zones=("LocationID", "size"), pickups=("pickups", "sum"))
+b["trip_share"] = (b.pickups / b.pickups.sum() * 100).round(1)
+b["zone_share"] = (b.zones / b.zones.sum() * 100).round(1)
+print(b.sort_values("pickups", ascending=False))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Attach a centroid to every zone and draw the dots</h4>
+        <p>Read the shapefile, keep one row per <span class="mono">LocationID</span>, take each outline's centroid in the file's own projected coordinates, and join on the id. Every one of the 262 zones should get a point. Size the dots by area, not radius, and draw zero zones as hollow rings so they stay visible.</p>
+        <div class="prompt-box good"><span class="label">python</span>import geopandas as gpd
+import matplotlib.pyplot as plt
+shp = gpd.read_file("taxi_zones.zip").drop_duplicates("LocationID")
+c = shp.geometry.centroid
+shp["x"], shp["y"] = c.x, c.y
+zt = zt.merge(shp[["LocationID", "x", "y"]], on="LocationID", how="left")
+print(zt.x.isna().sum())
+has = zt.pickups &gt; 0
+plt.scatter(zt.x[has], zt.y[has], s=zt.pickups[has] ** 0.5 / 4)
+plt.scatter(zt.x[~has], zt.y[~has], s=30, facecolors="none", edgecolors="black")
+plt.gca().set_aspect("equal"); plt.savefig("zones.png", dpi=300)</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count the cells at two units</h4>
+        <p>Make an hour-of-week key, then count non-empty cells and the share under 5 at each unit. Expect 30898 cells and 0.413 at zone x hour, 778 and 0.130 at borough x hour. Those are the two panels of Part 2.</p>
+        <div class="prompt-box good"><span class="label">python</span>k2 = kept.merge(five[["LocationID", "Borough"]], left_on="z", right_on="LocationID")
+k2["how"] = k2.t.dt.dayofweek * 24 + k2.t.dt.hour
+cz = k2.groupby(["z", "how"]).size()
+cb = k2.groupby(["Borough", "how"]).size()
+print(len(cz), round((cz &lt; 5).mean(), 3), len(cb), round((cb &lt; 5).mean(), 3))</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Build the place table first and join the events onto it, never the other way round. Predict the row count and the sum before you run the join, and print both after. Name the unit on every map, and look at one other unit before anyone makes a decision from it.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A colleague groups October's pickups by zone, joins names onto the result, and gets 258 rows. What happened?</p>
+      <button class="qopt" type="button">A · Four zone ids are missing from the lookup and should be added by hand</button>
+      <button class="qopt" type="button">B · The table was built from the trips, so the 4 zones with no pickups (2 in Manhattan, 2 in Staten Island) never got a row; start from the 262-row lookup and left-join the counts</button>
+      <button class="qopt" type="button">C · Four zones were dropped by the month filter in session 1</button>
+      <p class="qwhy">A group-by only produces rows for values that occur. All 262 zones are in the lookup; 4 had no pickups in October. Joining from the zones side keeps them as zeros, and 262 minus 4 is exactly the 258 your colleague saw.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">At zone x hour, 80.0% of the Bronx's cells fall under 5 trips; at borough x hour, none do. Which statement is right?</p>
+      <button class="qopt" type="button">A · The zone x hour figure is wrong because cells that small are noise</button>
+      <button class="qopt" type="button">B · The borough x hour figure is wrong because it hides the detail</button>
+      <button class="qopt" type="button">C · Both are correct for the same trips; the unit decides the story, so it must be chosen from the decision and stated on the map</button>
+      <p class="qwhy">This is the modifiable areal unit problem: results on areas change with the size and boundaries of the areas. Neither unit is the true one. The professional move is to name the unit and show another before acting.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Your zone table has a row labelled "Unknown" with a large count. What should the map do with it?</p>
+      <button class="qopt" type="button">A · Leave it off the map, report its count in the ledger, and keep the 262 zones of the five boroughs as the map's universe</button>
+      <button class="qopt" type="button">B · Plot it at the centre of the city so the total adds up</button>
+      <button class="qopt" type="button">C · Share its count out across all zones in proportion to their pickups</button>
+      <p class="qwhy">Zone 264, "Unknown", is a value that means missing; it has no outline and no centroid. Placing it (B) or spreading it (C) invents locations. Count it, say so, and map what has a place.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 3</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on the same table.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Map the dropoff side</h4>
+        <p>Repeat the zones-first join on <span class="mono">DOLocationID</span>, with renamed lookup columns. Write down which zones have zero pickups and which have zero dropoffs, and whether they are the same zones.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Try a third unit</h4>
+        <p>Cut the same pickups by <span class="mono">service_zone</span> x hour of week and count the cells under 5. Write one sentence on how the story differs from the two units in Part 2, and which decision each unit would suit.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the zeros</h4>
+        <p>Find the 4 zero zones by name. Before session 3, write one line each on whether you think nobody wanted a cab there or no cab was there to be hailed. Session 3 is about why the file cannot tell you which.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Taxi Zone Lookup</span><span class="note">TLC: 265 rows; 262 in the five boroughs (Manhattan 69, Queens 69, Brooklyn 61, Bronx 43, Staten Island 20); Newark, Unknown, Outside of NYC. Downloaded 2026-10-17.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Joining pickups to zones</span><span class="note">Zones-first left join: 262 rows, 3,876,702 pickups, 4 zero zones (Manhattan 2, Staten Island 2); 13,169 non-borough pickups counted and left off.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where the pickups are</span><span class="note">Manhattan 88.0% of pickups on 69 of 262 zones; Staten Island 231. Derived from the October 2024 files.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Centroid dot map</span><span class="note">From the TLC Taxi Zones shapefile, one centroid per zone; live above.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The modifiable areal unit problem</span><span class="note">Openshaw (1984), reported. Taught with our numbers only: 41.3% vs 13.0% of cells under 5. Boundary effects left as homework.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Small-cell suppression</span><span class="note">Used here as a lens on units. Treated properly in practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Zone adjacency</span><span class="note">The shapes ship as centroids only, so which zones neighbour which is not modelled.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chart and map honesty in general</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-dataviz-with-phoebe/courses/03-honesty.html">learn dataviz, honest charts</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The lookup.</strong> 265 rows; 262 are places in the five boroughs.</div>
+      <div class="cheat-item"><strong>Not places.</strong> 1 Newark, 264 Unknown, 265 Outside of NYC: count, do not map.</div>
+      <div class="cheat-item"><strong>Join direction.</strong> Zones first, left join, fill 0. Trips first loses the 4 empty zones.</div>
+      <div class="cheat-item"><strong>Predict, then print.</strong> 262 rows, sum 3,876,702. 258 means a trips-first join.</div>
+      <div class="cheat-item"><strong>The shape.</strong> Manhattan: 88.0% of pickups on 69 of 262 zones.</div>
+      <div class="cheat-item"><strong>The thin end.</strong> Staten Island: 231 pickups in a month, 2 zones with none.</div>
+      <div class="cheat-item"><strong>MAUP.</strong> Same trips, under-5 cells: 41.3% at zone x hour, 13.0% at borough x hour.</div>
+      <div class="cheat-item"><strong>On every map.</strong> Name the unit, show one other, then decide.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 2 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p1-anatomy-of-a-trip-record.html">← Practitioner session 1 · Anatomy of a trip record</a>
+        <a href="p3-demand-you-see-vs-demand-that-exists.html">Practitioner session 3 · Demand you see vs demand that exists →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var bSel = document.getElementById("ctyp2-boro"), sSel = document.getElementById("ctyp2-space");
+  var kSel = document.getElementById("ctyp2-k");
+  var dots = document.getElementById("ctyp2-dots"), bOut = document.getElementById("ctyp2-boro-out");
+  var out = document.getElementById("ctyp2-out"), verdict = document.getElementById("ctyp2-verdict");
+  var self = document.getElementById("ctyp2-self");
+  var Z = CTY.ZONES, T = CTY.TRUTH, TOT = CTY.TOTAL;
+  var maxT = Math.max.apply(null, T);
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function drawMap(b) {
+    var svg = '<svg viewBox="-30 -30 1060 1000" class="ctyp2-dotmap" role="img" aria-label="Dot map of the 262 taxi zone centroids, dot area by October 2024 pickups; hollow rings are zones with no pickups' + (b >= 0 ? "; filled green: " + CTY.BOROS[b] : "") + '.">';
+    var order = Z.map(function (_, i) { return i; }).sort(function (a, c) { return T[c] - T[a]; });
+    order.forEach(function (i) {
+      var on = b >= 0 && Z[i][1] === b, r = T[i] > 0 ? 4 + 26 * Math.sqrt(T[i] / maxT) : 6;
+      if (T[i] === 0) {
+        svg += '<circle cx="' + Z[i][4] + '" cy="' + Z[i][5] + '" r="' + r + '" fill="#FFFFFF" stroke="#241A18" stroke-width="2.5"/>';
+      } else {
+        svg += '<circle cx="' + Z[i][4] + '" cy="' + Z[i][5] + '" r="' + fmt(r, 1).replace(/,/g, "") + '" fill="' + (on ? "#8CC27A" : "#EBCBC6") + '" fill-opacity="' + (on ? "0.95" : "0.7") + '" stroke="' + (on ? "#241A18" : "#C98A82") + '" stroke-width="' + (on ? 2 : 1.2) + '"/>';
+      }
+    });
+    dots.innerHTML = svg + "</svg>";
+  }
+  function render() {
+    var b = Number(bSel.value), space = sSel.value, k = Number(kSel.value);
+    drawMap(b);
+    var S = CTY.boroughSummary(), zeros = T.filter(function (x) { return x === 0; }).length;
+    if (b >= 0) {
+      var s = S[b], z0 = Z.filter(function (z, i) { return z[1] === b && T[i] === 0; }).length;
+      bOut.textContent = s.boro + ": " + fmt(s.trips, 0) + " pickups on " + s.zones + " of " + Z.length + " zones, so " + fmt(s.share * 100, 1) + "% of the month's pickups on " + fmt(s.zones / Z.length * 100, 1) + "% of the zones" + (z0 ? "; " + z0 + " zones with none (hollow rings)." : ".");
+    } else {
+      bOut.textContent = Z.length + " zones, " + fmt(TOT, 0) + " pickups; " + zeros + " zones with none, drawn as hollow rings.";
+    }
+    var r = CTY.suppress({ k: k, time: "hour", space: space });
+    var html = '<table class="sql-table"><thead><tr><th>Borough</th><th>Cells</th><th>Withheld</th><th>Share of cells</th></tr></thead><tbody>';
+    r.byBoro.forEach(function (x, i) {
+      html += "<tr" + (i === b ? ' class="ctyp2-on"' : "") + "><td>" + x.boro + "</td><td>" + fmt(x.cells, 0) + "</td><td>" + fmt(x.suppressed, 0) + "</td><td><b>" + (x.cellShare === null ? "none" : fmt(x.cellShare * 100, 1) + "%") + "</b></td></tr>";
+    });
+    html += "<tr><td><b>All five</b></td><td>" + fmt(r.cells, 0) + "</td><td>" + fmt(r.suppressed, 0) + "</td><td><b>" + fmt(r.cellShare * 100, 1) + "%</b></td></tr></tbody></table>";
+    out.innerHTML = html;
+    verdict.textContent = "At " + (space === "zone" ? "zone" : "borough") + " x hour of week with a threshold of " + k + ", " + fmt(r.cellShare * 100, 1) + "% of non-empty cells and " + fmt(r.tripShare * 100, 1) + "% of trips would be withheld. " +
+      (k === 5 ? "These are the figures in the Part 2 drawing." : "Not the figure's rule: your numbers will differ from the prose.");
+  }
+  [bSel, sSel, kSel].forEach(function (el) { el.addEventListener("change", render); });
+  var st = CTY.selfTestResult || CTY.selfTest();
+  self.textContent = st.pass
+    ? "Real counts: TLC trip records, October 2024 (NYC public data set; aggregated to zone x hour of week, out-of-month and non-borough rows dropped). Constructed: Wrenmouth and the under-k rule. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #ctyp2-map .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #ctyp2-map table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #ctyp2-map tr.ctyp2-on td { background: var(--amber-50); }
+  #ctyp2-map .ctyp2-dotmap { width: 100%; max-width: 28rem; height: auto; display: block; margin: .6rem auto 0; }
+</style>
+</body>
+</html>

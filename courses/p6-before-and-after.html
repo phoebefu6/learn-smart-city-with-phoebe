@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 6 of 10. A before-after chart is a claim, not a finding: five stories fit the same drop, regression to the mean makes the worst sites improve with nothing done, and a comparison group picked the same way is the cheapest defence. A seeded simulation, then a test on real New York City taxi records. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Before and after - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 6 of 10. Pick the worst junctions, measure them again, and they improve with no treatment. Read every before-after as a claim.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p6-before-and-after.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Before and after - learn smart city with phoebe">
+<meta name="twitter:description" content="One site, one before, one after: five stories fit the same two lines. Learn to name them before anyone names a winner.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 6 · Before and after - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 6 of 10</div>
+    <h1>Before and <span class="accent">after</span></h1>
+    <p class="sub">Every city change ends with the same slide: a line that was high before and lower after. Tonight you learn to read that slide as a claim. Wrenmouth, a constructed city transport office, has just changed the signal timing at its worst junctions and wants to say it worked. You will name the five stories that fit the same drop, watch the worst sites improve with nothing done, simulate the cheapest defence, then test the mechanism on real New York City taxi records, October 2024.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Analysts asked to evaluate a city pilot</span>
+      <span class="chip audience">Anyone who signs off a before-after chart</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:12">3-15 · Five stories, one drop</span>
+      <span class="a3" style="flex:13">15-28 · Pick the worst, measure again</span>
+      <span class="a4" style="flex:17">28-45 · Build-along: simulate, then test</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's director wants a headline</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed transport office in a fictional city. Its team ranked junctions by last month's delays, retimed the signals at the five worst, measured again a month later, and the five are better. The director has a headline drafted. The analyst's job tonight is not to say no; it is to say which other stories fit the same two numbers, and what it would take to tell them apart.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Five rival stories you can say out loud against any before-after: the change, regression to the mean, season and calendar, something else that changed, and a measure that moved. The mechanism of regression to the mean in one picture: pick on a noisy baseline, re-measure, and the picks drift back toward the average with no treatment. A seeded Python simulation that shows it, shows it growing with measurement error, and shows what a comparison group picked the same way buys you. And a test of the same mechanism on real taxi rows. Estimating the effect properly is learn experimentation's job; you leave knowing when to call it.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The slide that starts every argument<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A before-after has three parts: a window before, a change, a window after. It is the cheapest evaluation there is and the one every city can afford, which is why it is everywhere. It answers "did the number move?" well. It answers "did our change move it?" only when every other reason the number could move has been ruled out, and one site with one before and one after rarely rules out anything.</p>
+        <p>That is not a reason to distrust the team. It is a reason to write "after the change, delays fell" instead of "the change cut delays" until the design earns the stronger sentence.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What this session frames and what it hands on<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Here you learn to spot a weak before-after and to describe the design that would strengthen it. The estimation methods themselves, difference-in-differences and synthetic control, are taught properly in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation, session b9</a> and <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">session b8</a>. The leader version of the claim checklist is leader session 4.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers before-after as a claim, and the contested evidence</span>
+      <h2>A before-after is a claim, not a finding</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Draw the director's slide and then, underneath it, list every story that would produce exactly that drop. If more than one fits, the slide does not choose between them. The skill is to make the list quickly and calmly, before anyone is attached to the first story.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn before-after chart with no numbers: a level line before a change, a dashed line where the change was made, and a lower line after it, labelled the observed drop. Below it, five boxes give five stories that fit the same drop. Highlighted in green: the change did it, the claim on the slide. Then regression to the mean, picked because it was at its worst; season and calendar; something else changed too; and the measure moved, such as a new column or a new rule.">
+        <defs>
+          <filter id="ctyp6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp6aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp6aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp6aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp6aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp6aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp6aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp6aH" x="30" y="32">THE DIRECTOR'S SLIDE, AND FIVE STORIES THAT FIT IT</text>
+
+        <g filter="url(#ctyp6aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="48" width="820" height="164" rx="10" transform="rotate(0.2 440 130)" fill="#FFFFFF"/>
+          <path d="M60 186 L830 186"/>
+          <path d="M70 96 L130 92 L190 99 L250 90 L310 97 L370 93 L400 95" stroke="#6E2F29" stroke-width="2.6"/>
+          <path d="M420 62 L420 182" stroke-dasharray="5 5"/>
+          <path d="M440 132 L500 128 L560 135 L620 127 L680 133 L740 129 L790 131" stroke="#6E2F29" stroke-width="2.6"/>
+          <path d="M812 94 L812 124" marker-end="url(#ctyp6aAr)"/>
+          <rect x="30" y="250" width="156" height="104" rx="8" transform="rotate(-0.8 108 302)" fill="#8CC27A"/>
+          <rect x="196" y="250" width="156" height="104" rx="8" transform="rotate(0.6 274 302)" fill="url(#ctyp6aHc)"/>
+          <rect x="362" y="250" width="156" height="104" rx="8" transform="rotate(-0.5 440 302)" fill="#FAF0EE"/>
+          <rect x="528" y="250" width="156" height="104" rx="8" transform="rotate(0.7 606 302)" fill="#FAF0EE"/>
+          <rect x="694" y="250" width="156" height="104" rx="8" transform="rotate(-0.6 772 302)" fill="#FFFFFF"/>
+          <!-- doodle: a junction corner -->
+          <path d="M790 14 L790 34 L770 34 M810 14 L810 34 L830 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp6aA" x="70" y="72">a city number: delay, trips, complaints</text>
+        <text class="ctyp6aL" x="80" y="160">before window</text>
+        <text class="ctyp6aL" x="450" y="164">after window</text>
+        <text class="ctyp6aL" x="428" y="78">change made</text>
+        <text class="ctyp6aK" x="660" y="112">the observed drop</text>
+        <text class="ctyp6aA" x="790" y="204">time</text>
+
+        <text class="ctyp6aA" x="30" y="238">FIVE STORIES, ONE DROP</text>
+
+        <text class="ctyp6aL" x="44" y="276">The change did it</text>
+        <text class="ctyp6aK" x="44" y="298">the claim on the slide</text>
+        <text class="ctyp6aK" x="44" y="318">true once the other</text>
+        <text class="ctyp6aK" x="44" y="336">four are ruled out</text>
+
+        <text class="ctyp6aL" x="210" y="276">Back to normal</text>
+        <text class="ctyp6aS" x="210" y="298">picked because it was</text>
+        <text class="ctyp6aS" x="210" y="318">at its worst; it drifts</text>
+        <text class="ctyp6aS" x="210" y="336">back on its own</text>
+
+        <text class="ctyp6aL" x="376" y="276">Season, calendar</text>
+        <text class="ctyp6aS" x="376" y="298">school terms, holidays,</text>
+        <text class="ctyp6aS" x="376" y="318">weather, weekday mix</text>
+
+        <text class="ctyp6aL" x="542" y="276">Something else</text>
+        <text class="ctyp6aS" x="542" y="298">changed too: fares,</text>
+        <text class="ctyp6aS" x="542" y="318">roadworks, a new rule</text>
+
+        <text class="ctyp6aL" x="708" y="276">The measure moved</text>
+        <text class="ctyp6aS" x="708" y="298">a new column, a new</text>
+        <text class="ctyp6aS" x="708" y="318">sensor, a new definition</text>
+
+        <text class="ctyp6aN" x="30" y="382">One site, one before, one after: all five stories fit the same two lines. The chart cannot choose.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the story on the slide; it becomes a finding only when the other four are out.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Five stories, said out loud<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The change did it.</strong> The story on the slide. It may well be true. It is the only one of the five the team wants, which is the reason to list the others first.</p>
+        <p><strong>Back to normal.</strong> Wrenmouth picked the five junctions because last month they were the worst. Some of that badness was the junction; some was a bad month. Measure again and the bad-month part does not repeat. Part 2 is all about this one.</p>
+        <p><strong>Season and calendar.</strong> A month with school holidays, a month with more rain, a month with an extra Friday. Trip counts and delays follow the calendar whether or not anything changed.</p>
+        <p><strong>Something else changed too.</strong> A fare change, a closed bridge, a new rule across the whole city. Concurrent changes land on the same dates as yours and get credited to yours.</p>
+        <p><strong>The measure moved.</strong> A new sensor model, a recalibration, a changed definition of "delay", a column that did not exist before. If the ruler changed, the number can move with nothing on the street moving.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Pilot results are the commonest case<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"The pilot cut journey times" is a sentence you will read often. A single-site before-after is a claim, not a finding: it fits the change, and it fits every story in the figure. Pilots are especially exposed to "back to normal", because pilot sites are rarely chosen at random. They are chosen because they were the worst, the most complained about, or the most visible, and each of those is a selection on a high baseline.</p>
+        <p>The honest rewrite keeps the observation and drops the verb: "after the pilot started, journey times at the site fell; we have not yet ruled out regression to the mean, season or concurrent changes." That sentence is publishable today. The stronger one needs a design.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The measure can move under you even in a well-run public file. The TLC data dictionary adds a column, <span class="mono">cbd_congestion_fee</span>, a "Per-trip charge for MTA's Congestion Relief Zone starting Jan. 5, 2025." The October 2024 file used across these sessions does not have it at all. Anyone comparing totals across that date compares two schemas as well as two periods: check what a total includes before and after before comparing it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Congestion pricing: where reasonable people disagree<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Road-use charges are the before-after argument at city scale. Evaluations disagree on how large the effects are, how long they last and who bears the cost. Some readers see a durable change in traffic and travel; others see effects that fade, shift to other places and times, or fall hardest on people with the fewest alternatives. Both positions are held by careful people looking at real data.</p>
+        <p>Part of why they disagree is exactly tonight's list: before-after comparisons of a charge are exposed to regression to the mean, to season, and to everything else that changed in the same year. This page gives no figure from any city's scheme, and does not pick a side. What you can do is ask, of any number you are shown: which of the five stories did this evaluation rule out, and how? The methods that rule them out are in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation b9</a> and <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">b8</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers regression to the mean (Barnett et al. 2005)</span>
+      <h2>Pick the worst, measure again, watch them improve</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Regression to the mean is the story most likely to be behind a city pilot, because city teams naturally act where things look worst. The mechanism is simple enough to draw: rank sites on one noisy measurement, take the worst, measure them again, and they drift back toward the average with nothing done to them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn regression to the mean, no real values. Top row: junctions as dots along a baseline measurement, with a dashed line for the average; the five worst at the far right are highlighted in green. Bottom row: the same junctions measured again with nothing done; the five green dots have moved back toward the average. They improved, and nothing was done. Below: a baseline pick selects junctions that were bad and unlucky on that day; the luck does not repeat, and more measurement error makes the effect bigger.">
+        <defs>
+          <filter id="ctyp6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp6bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp6bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp6bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp6bB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctyp6bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp6bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp6bH" x="30" y="32">REGRESSION TO THE MEAN: PICK THE WORST, MEASURE AGAIN</text>
+
+        <g filter="url(#ctyp6bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 110 L840 110" stroke="#CFC4C1"/>
+          <path d="M60 220 L840 220" stroke="#CFC4C1"/>
+          <path d="M440 72 L440 258" stroke-dasharray="5 5"/>
+          <circle cx="90" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="140" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="180" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="230" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="270" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="320" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="360" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="400" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="470" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="500" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="540" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="580" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="620" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="650" cy="110" r="7" fill="#FFFFFF"/>
+          <circle cx="700" cy="110" r="7" fill="#8CC27A"/>
+          <circle cx="730" cy="110" r="7" fill="#8CC27A"/>
+          <circle cx="760" cy="110" r="7" fill="#8CC27A"/>
+          <circle cx="790" cy="110" r="7" fill="#8CC27A"/>
+          <circle cx="818" cy="110" r="7" fill="#8CC27A"/>
+          <path d="M680 92 Q760 76 836 92" stroke="#6E2F29"/>
+          <circle cx="100" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="150" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="190" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="240" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="280" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="330" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="370" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="410" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="465" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="500" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="720" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="760" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="795" cy="220" r="7" fill="#FFFFFF"/>
+          <circle cx="545" cy="220" r="7" fill="#8CC27A"/>
+          <circle cx="578" cy="220" r="7" fill="#8CC27A"/>
+          <circle cx="611" cy="220" r="7" fill="#8CC27A"/>
+          <circle cx="644" cy="220" r="7" fill="#8CC27A"/>
+          <circle cx="677" cy="220" r="7" fill="#8CC27A"/>
+          <path d="M700 120 L549 208" marker-end="url(#ctyp6bAr)"/>
+          <path d="M730 120 L582 208" marker-end="url(#ctyp6bAr)"/>
+          <path d="M760 120 L615 208" marker-end="url(#ctyp6bAr)"/>
+          <path d="M790 120 L648 208" marker-end="url(#ctyp6bAr)"/>
+          <path d="M818 120 L681 208" marker-end="url(#ctyp6bAr)"/>
+          <rect x="30" y="272" width="820" height="60" rx="10" transform="rotate(0.15 440 302)" fill="#FAF0EE"/>
+          <!-- doodle: a street grid corner -->
+          <path d="M780 22 L860 22 M780 40 L860 40 M800 14 L800 48 M840 14 L840 48" stroke="#C98A82" stroke-width="2"/>
+        </g>
+
+        <text class="ctyp6bA" x="60" y="92">baseline: pick the worst five</text>
+        <text class="ctyp6bS" x="446" y="66">the average</text>
+        <text class="ctyp6bB" x="700" y="66">worse</text>
+        <text class="ctyp6bA" x="60" y="202">same junctions, measured again, nothing done</text>
+        <text class="ctyp6bB" x="545" y="248">they improved, and nothing was done</text>
+
+        <text class="ctyp6bL" x="46" y="296">Why: a baseline pick selects junctions that were bad and also unlucky in that window.</text>
+        <text class="ctyp6bS" x="46" y="318">Measure again and the luck does not repeat. More measurement error, bigger effect (Barnett et al. 2005).</text>
+
+        <text class="ctyp6bN" x="30" y="356">Dot positions are drawn for the mechanism; no real junction delays appear here.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green dots are the pilot sites: picked on one measurement, judged on the next, and closer to average either way.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the epidemiologists wrote down<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Barnett, van der Pols and Dobson wrote the standard short explanation for medicine, and it transfers to streets unchanged. Regression to the mean "can make natural variation in repeated data look like real change". Their rule: "unusually large or small measurements tend to be followed by measurements that are closer to the mean."</p>
+        <p>Two conditions make it bigger, and a city meets both. The effect grows "with increasing measurement error", and "when follow-up measurements are only examined on a sub-sample selected using a baseline value." Picking the five worst junctions and re-measuring only those five is that sub-sample, exactly.</p>
+        <p>Their advice is just as plain: it "should always be considered as a possible cause of an observed change", and it is dealt with by design and suitable methods, not by hoping.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why thin data makes it worse<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Measurement error in city data is often just small numbers. A zone with a handful of pickups a day can double or halve from one week to the next by chance. Rank zones by last week's change and the top and bottom of the list fill up with thin zones, because thin zones are where chance moves the number most.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>In the October 2024 taxi records, Staten Island's 20 zones recorded 231 pickups in the whole month, and every one of those zones is under 100 pickups. A "worst week" list built from these records would be dominated by zones where a few trips decide the ranking. Practitioner session 4 shows where the data is this thin; tonight's point is what it does to a before-after: the thinner the cell, the bigger the drift back.</p>
+        </div>
+        <p>The fix is not to drop thin zones silently. It is to judge them on more than one measurement, or to compare them with similar zones that were not changed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Defences by design, named not taught<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Measure the baseline more than once.</strong> Select on one window, use a second, separate window as the "before". The luck that got a site picked is then not in the number you compare against.</p>
+        <p><strong>A comparison group picked the same way.</strong> Take the worst ten, change five chosen by a seeded random draw, leave five alone, re-measure all ten. Both groups regress; the difference between their changes is the part the luck cannot explain. The build-along simulates this.</p>
+        <p><strong>The full methods.</strong> Difference-in-differences generalises the comparison-group idea: <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation b9</a>. When you have one changed area and many unchanged ones, synthetic control builds a weighted look-alike: <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">learn experimentation b8</a>. For auditing the causal claim itself, <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/courses/a2-the-claim-audit.html">learn causal inference a2</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Simulate the drift, then test it on real rows</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">Two halves. First a seeded simulation of 60 junctions where nothing is ever changed, so any improvement you see is regression to the mean and nothing else. Then the same move on the real October 2024 taxi records from practitioner session 1. Every number here is printed by your own run at your settings; your numbers will differ with the seed, and the shape will not. This page prints none of them, on purpose.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn design of a comparison group. The worst ten on baseline are split by a seeded random draw: five get the change, five do not. Both are re-measured: the changed five improve by the change plus the luck, the unchanged five improve by the luck alone. Highlighted in green: the estimate is the difference between the two improvements; the full method lives in learn experimentation b9 and b8.">
+        <defs>
+          <filter id="ctyp6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp6cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp6cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp6cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp6cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp6cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp6cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp6cH" x="30" y="32">THE CHEAPEST DEFENCE: A COMPARISON GROUP PICKED THE SAME WAY</text>
+
+        <g filter="url(#ctyp6cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="80" width="220" height="90" rx="10" transform="rotate(-0.6 140 125)" fill="url(#ctyp6cHc)"/>
+          <path d="M252 115 L304 86" marker-end="url(#ctyp6cAr)"/>
+          <path d="M252 135 L304 174" marker-end="url(#ctyp6cAr)"/>
+          <rect x="310" y="50" width="240" height="70" rx="8" transform="rotate(0.5 430 85)" fill="#FFFFFF"/>
+          <rect x="310" y="140" width="240" height="70" rx="8" transform="rotate(-0.5 430 175)" fill="#FFFFFF"/>
+          <path d="M552 85 L594 85" marker-end="url(#ctyp6cAr)"/>
+          <path d="M552 175 L594 175" marker-end="url(#ctyp6cAr)"/>
+          <rect x="600" y="50" width="250" height="70" rx="8" transform="rotate(-0.4 725 85)" fill="#FAF0EE"/>
+          <rect x="600" y="140" width="250" height="70" rx="8" transform="rotate(0.4 725 175)" fill="#FAF0EE"/>
+          <path d="M852 85 L866 85 L866 268 L854 268" marker-end="url(#ctyp6cAr)"/>
+          <path d="M725 212 L725 236" marker-end="url(#ctyp6cAr)"/>
+          <rect x="310" y="240" width="540" height="58" rx="10" transform="rotate(0.3 580 269)" fill="#8CC27A"/>
+          <!-- doodle: a kerb -->
+          <path d="M40 286 L120 286 L120 274 L260 274" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp6cL" x="46" y="106">Worst ten on baseline</text>
+        <text class="ctyp6cK" x="46" y="128">selected by one rule</text>
+        <text class="ctyp6cS" x="46" y="148">same window, same luck</text>
+
+        <text class="ctyp6cL" x="326" y="78">Five get the change</text>
+        <text class="ctyp6cS" x="326" y="100">chosen by a seeded random draw</text>
+        <text class="ctyp6cL" x="326" y="168">Five do not</text>
+        <text class="ctyp6cS" x="326" y="190">same selection, same luck</text>
+
+        <text class="ctyp6cL" x="616" y="78">Re-measured: improves</text>
+        <text class="ctyp6cS" x="616" y="100">the change plus the luck</text>
+        <text class="ctyp6cL" x="616" y="168">Re-measured: improves</text>
+        <text class="ctyp6cS" x="616" y="190">the luck alone</text>
+
+        <text class="ctyp6cL" x="326" y="264">Estimate = the difference between the two improvements</text>
+        <text class="ctyp6cK" x="326" y="284">The full method lives in learn experimentation b9 and b8.</text>
+
+        <text class="ctyp6cN" x="30" y="324">Simulated in the build-along with a seeded draw; your numbers will differ, the shape will not.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the only number worth a headline: what the changed group did beyond the group that regressed on its own.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Simulate 60 junctions where nothing ever changes</h4>
+        <p>Each junction gets a fixed true average delay, then two noisy measurements a month apart. No treatment exists anywhere in this code, so any improvement you find is the selection talking.</p>
+        <div class="prompt-box good"><span class="label">python</span>import numpy as np
+rng = np.random.default_rng(1017)
+n = 60
+true = rng.normal(10, 2, n)            # each junction's real average delay, minutes
+before = true + rng.normal(0, 3, n)    # one noisy month
+after = true + rng.normal(0, 3, n)     # measured again, nothing changed</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick the worst five and measure them again</h4>
+        <p>Print three numbers: the five's average before, their average after, and the average of all 60 after. The five improve, toward the overall average, with no treatment. Write your three numbers down.</p>
+        <div class="prompt-box good"><span class="label">python</span>worst = np.argsort(before)[-5:]
+print(before[worst].mean(), after[worst].mean(), after.mean())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Turn up the measurement error</h4>
+        <p>Barnett and colleagues say the effect grows with measurement error. Check it: rerun the pick at three noise levels and print the apparent improvement each time. Thin city data is the high-noise row.</p>
+        <div class="prompt-box good"><span class="label">python</span>for noise in [1, 3, 6]:
+    b = true + rng.normal(0, noise, n)
+    a = true + rng.normal(0, noise, n)
+    w = np.argsort(b)[-5:]
+    print(noise, round(b[w].mean() - a[w].mean(), 2))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Add a comparison group picked the same way</h4>
+        <p>Take the worst ten, change five chosen by a seeded random draw, leave five alone. With no true effect, both groups improve and the difference sits near zero. Then set <span class="mono">effect = 1</span> and rerun: the treated group's raw improvement is usually bigger than 1 (the luck is still in it), while the difference moves toward 1. With five per group the difference is noisy, which is exactly why b9 and b8 exist.</p>
+        <div class="prompt-box good"><span class="label">python</span>effect = 0
+top10 = np.argsort(before)[-10:]
+treated = rng.permutation(top10)[:5]
+control = np.setdiff1d(top10, treated)
+after2 = after.copy()
+after2[treated] -= effect
+gain_t = (before[treated] - after2[treated]).mean()
+gain_c = (before[control] - after2[control]).mean()
+print(round(gain_t, 2), round(gain_c, 2), round(gain_t - gain_c, 2))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Test it on real rows: the zones that fell hardest</h4>
+        <p>Use the <span class="mono">kept</span> table from practitioner session 1 (pickup time <span class="mono">t</span>, zone <span class="mono">z</span>). Count pickups per zone in three equal seven-day windows, so the weekday mix is identical. Among zones with at least 100 pickups in week one, take the ten that fell most from week one to week two. Nothing was done to them. Look at week three, and write down whether they bounced back. This page prints no number for it: it is your measurement, and if they did not rebound, list which of the other four stories might hold them down.</p>
+        <div class="prompt-box good"><span class="label">python</span>import pandas as pd
+week = pd.cut(kept.t.dt.day, [0, 7, 14, 21], labels=["w1", "w2", "w3"])
+c = kept.groupby([kept.z, week], observed=True).size().unstack()
+c = c[c.w1 &gt;= 100]
+fell = (c.w2 / c.w1).nsmallest(10).index
+print(c.loc[fell, ["w1", "w2", "w3"]].sum())</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before anyone writes "the change cut", list the five stories and say which ones the design rules out. If you picked sites because they were worst, assume they would have improved anyway until a comparison group picked the same way says otherwise. Write "after", not "because of", until the design earns it.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Wrenmouth (constructed) retimed the signals at the five junctions with the worst delays last month. This month all five are better. What is the strongest honest response?</p>
+      <button class="qopt" type="button">A · The change worked: all five improved, so the result is consistent</button>
+      <button class="qopt" type="button">B · The five were picked on a high baseline, so they would likely drift back toward the average anyway; compare them with similar junctions picked the same way and left alone</button>
+      <button class="qopt" type="button">C · The change failed: improvements at the worst sites are always regression to the mean</button>
+      <p class="qwhy">Selecting on a baseline value and re-measuring only the selection is the condition under which regression to the mean is largest (Barnett et al. 2005). A treats consistency as proof; C resolves the question the other way with no more evidence. A comparison group picked the same way separates the two.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">When does regression to the mean grow larger?</p>
+      <button class="qopt" type="button">A · With more measurement error, and when follow-up measurements are examined only on a sub-sample selected using a baseline value</button>
+      <button class="qopt" type="button">B · When the sites are measured with a better, more precise instrument</button>
+      <button class="qopt" type="button">C · Only when the change made was large</button>
+      <p class="qwhy">Barnett and colleagues name both conditions. The build-along shows the first one: raise the noise, and the apparent improvement of the worst five grows. The size of any change made has nothing to do with it; the effect appears with no change at all.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A colleague compares trips into Manhattan's core in October 2024 with February 2025 and writes "the congestion fee reduced trips by this much". What is the right response?</p>
+      <button class="qopt" type="button">A · Accept it: the fee started between the two months, so the timing fits</button>
+      <button class="qopt" type="button">B · Reject it: congestion fees are known to have no effect</button>
+      <button class="qopt" type="button">C · Treat it as a claim: the two months differ in season, other changes and even schema (the fee column only exists from Jan. 5, 2025); name the rival stories and use a comparison design before calling it an effect</button>
+      <p class="qwhy">Evaluations of road-use charges disagree on size and durability; this page takes no side and quotes no figure. What it can say is that a two-month before-after leaves season, concurrent changes and a changed measure all standing. The designs that address them are in learn experimentation b9 and b8.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 7</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, half on paper, half in the notebook.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Rewrite one before-after sentence</h4>
+        <p>Find a before-after claim in any public report or article about a city change. Do not name it in your notes; just copy the sentence. Under it, write the five stories, mark which ones the report ruled out and how, and rewrite the sentence so it claims only what the design supports.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Flip the selection</h4>
+        <p>Rerun the last build-along step choosing the ten zones that rose most from week one to week two. If regression to the mean is at work, they should look worse in week three with nothing done. Write down what you see, and whether thin zones dominate either list.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the method you will need next</h4>
+        <p>Read the opening of <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation b9</a> and write one line on how its comparison differs from step 4 of tonight's build-along.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Regression to the mean</span><span class="note">Barnett, A. G., van der Pols, J. C. and Dobson, A. J. (2005). Regression to the mean: what it is and how to deal with it. International Journal of Epidemiology 34(1):215-220. doi:10.1093/ije/dyh299. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Before-after as a claim</span><span class="note">Five rival stories; single-site pilot results as a claim, not a finding.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The measure that moved</span><span class="note">TLC yellow taxi data dictionary (March 18, 2025): <span class="mono">cbd_congestion_fee</span> from Jan. 5, 2025; absent in October 2024. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Simulation and real-row test</span><span class="note">Seeded numpy simulation; three equal weeks of October 2024 taxi records. Your numbers, printed by your run.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Congestion pricing evidence</span><span class="note">Taught as a disagreement; no figure from any city's scheme.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">A comparison group picked the same way</span><span class="note">Framed and simulated; not estimated with standard errors.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Difference-in-differences</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation b9</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Geo tests and synthetic control</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">learn experimentation b8</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Causal diagrams and identification</span><span class="note">Not taught here; the claim audit is in <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/courses/a2-the-claim-audit.html">learn causal inference a2</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Before-after.</strong> A claim, not a finding. One site fits five stories.</div>
+      <div class="cheat-item"><strong>Five stories.</strong> The change, back to normal, season, something else, the measure moved.</div>
+      <div class="cheat-item"><strong>Regression to the mean.</strong> Pick the worst, measure again, they improve with nothing done.</div>
+      <div class="cheat-item"><strong>Bigger when.</strong> More measurement error; follow-up only on a sample picked by its baseline.</div>
+      <div class="cheat-item"><strong>Thin data.</strong> Small counts swing most, so they crowd every "worst" list.</div>
+      <div class="cheat-item"><strong>Cheapest defence.</strong> A comparison group picked the same way; read the difference.</div>
+      <div class="cheat-item"><strong>The sentence.</strong> Write "after", not "because of", until the design earns it.</div>
+      <div class="cheat-item"><strong>Hand-off.</strong> Difference-in-differences: experimentation b9. Synthetic control: b8.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 6 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p5-placing-sensors-under-a-budget.html">← Practitioner session 5 · Placing sensors under a budget</a>
+        <a href="p7-aggregation-and-privacy.html">Practitioner session 7 · Aggregation and privacy →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

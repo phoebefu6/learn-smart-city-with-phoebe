@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 1 of 10. One real month of New York City taxi trip records, field by field: what the meter measured, which columns describe only card payers, why a monthly file is not a clean month, and a profiling pass in pandas that keeps 3,876,702 of 3,889,918 rows and says why. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Anatomy of a trip record - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 1 of 10. A row is one meter engagement. 47 rows in the October file are not from October; cash tips are not in the tip column.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p1-anatomy-of-a-trip-record.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anatomy of a trip record - learn smart city with phoebe">
+<meta name="twitter:description" content="Read the data dictionary, then read the file. They disagree in small ways that matter.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 1 · Anatomy of a trip record - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 1 of 10</div>
+    <h1>Anatomy of a <span class="accent">trip record</span></h1>
+    <p class="sub">Before anyone places a sensor or draws a map, someone has to open the file. Tonight that file is real: New York City's yellow and green taxi trip records for October 2024, published by the Taxi and Limousine Commission. Wrenmouth, a constructed city transport office, is about to build everything in the next nine sessions on records like these. You will read the data dictionary, then read the file, and find the places where they part company: a column that only describes card payers, a month that is not quite a month, and zones that are not places.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Data engineers and analysts new to city data</span>
+      <span class="chip audience">Anyone who will query open trip records</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-15 · One row, field by field</span>
+      <span class="a3" style="flex:3">15-25 · How a record travels</span>
+      <span class="a4" style="flex:5">25-45 · Build-along: profile the month</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's analyst opens the October file</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed transport office in a fictional city; its analyst practises on real New York City records because they are public, large and honestly documented. The yellow taxi file for October 2024 has 3,833,771 rows and 19 columns; the green file has 56,147 rows. Her warehouse habit says: load it, trust the types, group by. Her first hour says: read what each column measures, and who wrote it, before any group by.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A trip record read as one meter engagement: when and where the meter was switched on and off, the distance the meter measured, how the fare was paid, and a code for the provider that sent it. The two columns that describe only some riders: tips and totals leave out cash tips. Why a monthly file is not a clean month: 47 rows in the October files carry pickup stamps from outside October, the earliest in 2009. And a pandas profiling pass you can rerun that keeps 3,876,702 of 3,889,918 rows and writes down every row it dropped.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Read the dictionary, then the file<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The TLC publishes a one-page data dictionary for yellow taxi records, dated March 18, 2025. It is good, and it is not the file. The dictionary lists <span class="mono">airport_fee</span>; the October 2024 file calls the column <span class="mono">Airport_fee</span>, capital A. The dictionary lists <span class="mono">cbd_congestion_fee</span>, a charge "starting Jan. 5, 2025"; an October 2024 file does not have it at all.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The TLC page says the records were "collected and provided to the NYC Taxi and Limousine Commission (TLC) by technology providers", publishes them monthly with about a two-month delay "to allow time for full vendor submissions", and warns that minor schema changes may come. Every one of those sentences is a profiling instruction.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Getting the files<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The TLC Trip Record Data page links one parquet file per month per service: yellow, green and two kinds of for-hire vehicle. It also links the Taxi Zone Lookup table (a small CSV) and the zone shapes. Download into a fresh, empty folder, keep your scripts somewhere else, and read the files; there is nothing in them to run.</p>
+        <p>The city's Open Data Law lets anyone use public data sets without registration or licence, and lets the city ask republishers to state the source, the version and any changes. Practitioner session 8 turns that into a publishing checklist.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the yellow taxi data dictionary</span>
+      <h2>One row, field by field</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Group the 19 columns by what they measure and the record stops being a wide table and becomes one event: a meter switched on in one zone and off in another. Each group has its own trap, and the one that bites first is the quietest: a column that silently describes only the riders who paid a certain way.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn anatomy of one yellow taxi trip record in five groups. When: pickup and dropoff datetimes, the moments the meter was engaged and disengaged. Where: pickup and dropoff location ids, a taxi zone, not an address. How far: trip distance in miles by the taximeter, 81,639 rows are zero. How paid, highlighted in green: payment type, and tip amount, filled only for card tips. Who wrote it: a provider code and the store and forward flag, Y when the record was held in vehicle memory.">
+        <defs>
+          <filter id="ctyp1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="13" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp1aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp1aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp1aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp1aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp1aB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctyp1aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp1aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp1aH" x="30" y="32">ONE YELLOW TRIP RECORD, GROUPED BY WHAT EACH FIELD MEASURES</text>
+
+        <g filter="url(#ctyp1aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="150" height="180" rx="8" transform="rotate(-0.5 105 140)" fill="#FFFFFF"/>
+          <rect x="200" y="50" width="150" height="180" rx="8" transform="rotate(0.4 275 140)" fill="#FFFFFF"/>
+          <rect x="370" y="50" width="150" height="180" rx="8" transform="rotate(-0.4 445 140)" fill="#FAF0EE"/>
+          <rect x="540" y="50" width="150" height="180" rx="8" transform="rotate(0.5 615 140)" fill="#8CC27A"/>
+          <rect x="710" y="50" width="150" height="180" rx="8" transform="rotate(-0.4 785 140)" fill="url(#ctyp1aHc)"/>
+          <rect x="30" y="252" width="830" height="58" rx="10" transform="rotate(0.15 445 281)" fill="#FAF0EE"/>
+          <!-- doodle: a kerb line -->
+          <path d="M700 22 L760 22 L760 34 L860 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp1aL" x="46" y="76">When</text>
+        <text class="ctyp1aK" x="46" y="102">pickup_datetime</text>
+        <text class="ctyp1aS" x="46" y="120">= meter engaged</text>
+        <text class="ctyp1aK" x="46" y="146">dropoff_datetime</text>
+        <text class="ctyp1aS" x="46" y="164">= meter disengaged</text>
+        <text class="ctyp1aA" x="46" y="206">the meter's clock</text>
+
+        <text class="ctyp1aL" x="216" y="76">Where</text>
+        <text class="ctyp1aK" x="216" y="102">PULocationID</text>
+        <text class="ctyp1aS" x="216" y="120">= zone, meter on</text>
+        <text class="ctyp1aK" x="216" y="146">DOLocationID</text>
+        <text class="ctyp1aS" x="216" y="164">= zone, meter off</text>
+        <text class="ctyp1aA" x="216" y="206">a zone, not an address</text>
+
+        <text class="ctyp1aL" x="386" y="76">How far</text>
+        <text class="ctyp1aK" x="386" y="102">trip_distance</text>
+        <text class="ctyp1aS" x="386" y="120">= taximeter miles</text>
+        <text class="ctyp1aK" x="386" y="146">81,639 rows</text>
+        <text class="ctyp1aS" x="386" y="164">are exactly zero</text>
+        <text class="ctyp1aA" x="386" y="206">measured, not routed</text>
+
+        <text class="ctyp1aL" x="556" y="76">How paid</text>
+        <text class="ctyp1aK" x="556" y="102">payment_type</text>
+        <text class="ctyp1aK" x="556" y="120">card, cash, dispute</text>
+        <text class="ctyp1aK" x="556" y="146">tip_amount</text>
+        <text class="ctyp1aK" x="556" y="164">card tips only</text>
+        <text class="ctyp1aL" x="556" y="206">cash tips: absent</text>
+
+        <text class="ctyp1aL" x="726" y="76">Who wrote it</text>
+        <text class="ctyp1aK" x="726" y="102">VendorID</text>
+        <text class="ctyp1aK" x="726" y="120">= a provider code</text>
+        <text class="ctyp1aK" x="726" y="146">store_and_fwd_flag</text>
+        <text class="ctyp1aK" x="726" y="164">Y = held offline</text>
+        <text class="ctyp1aL" x="726" y="206">19,910 rows say Y</text>
+
+        <text class="ctyp1aL" x="46" y="278">A row is one meter engagement: where and when the meter was switched on, not where a person began.</text>
+        <text class="ctyp1aS" x="46" y="298">The yellow file also carries fares, surcharges, rate codes and passenger counts; the five groups are the ones that bite.</text>
+
+        <text class="ctyp1aN" x="30" y="344">Field meanings quoted from the TLC yellow taxi data dictionary (March 18, 2025); counts from the October 2024 file.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the quiet trap: an average tip computed from this column is an average over card payers only.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What each group measures, in the dictionary's words<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>When.</strong> <span class="mono">tpep_pickup_datetime</span> is "The date and time when the meter was engaged", and dropoff is when it was disengaged. These are the meter's stamps, not a phone's or a server's. Green records use <span class="mono">lpep_</span> instead of <span class="mono">tpep_</span>, so a union of the two needs renamed columns.</p>
+        <p><strong>Where.</strong> <span class="mono">PULocationID</span> is the "TLC Taxi Zone in which the taximeter was engaged". A zone is an area with an id, not a point: practitioner session 2 joins it to names and boroughs, and finds the ids that are not places at all.</p>
+        <p><strong>How far.</strong> <span class="mono">trip_distance</span> is "The elapsed trip distance in miles reported by the taximeter". In October, 81,639 yellow rows report exactly zero. Some will be cancelled or voided trips; the file does not say which, so keep them and flag them rather than guess.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Columns that describe only some riders<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The dictionary is blunt: <span class="mono">tip_amount</span> "is automatically populated for credit card tips. Cash tips are not included", and <span class="mono">total_amount</span> "Does not include cash tips." In October, the payment codes split 2,854,092 credit card, 477,350 cash, 80,888 dispute, 27,546 no charge, and 393,895 rows coded 0, which the dictionary calls a Flex Fare trip.</p>
+        <p>Those 393,895 code-0 rows are exactly the rows whose store-and-forward flag is empty: the same rows, checked one by one. A column that is null for one group and a code that is zero for the same group is a pattern worth a line in your notes, even before you know why.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A dashboard that reports "average tip by neighbourhood" from this column reports where card payers tip. If cash use differs between neighbourhoods, the map shows payment habits and calls them generosity. The fix is not a cleverer average; it is a footnote saying whose tips are in the column.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Provider codes, and why pages here never name a provider<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><span class="mono">VendorID</span> is "A code indicating the TPEP provider that provided the record." The dictionary maps the codes to company names. For analysis the code is what matters: a defect that appears in one provider's rows and not another's is a provenance finding, and you can report it by code.</p>
+        <p>Splitting a profile by provider code is the cheapest provenance check there is. If one code accounts for most of the zero distances, or all of the out-of-month stamps, you have found where the problem enters, not just that it exists.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers how a record reaches the monthly file</span>
+      <h2>A monthly file is not a clean month</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">A trip record makes a journey before it reaches you: the meter stamps it, the vehicle may hold it if it has no connection, the provider's server collects it, the provider submits it, and the TLC publishes the month about two months later. Every hand-off is a place where a stamp can be wrong or a row can arrive in the wrong file. The October files show the result without explaining it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn journey of one trip record, left to right: the meter is engaged and stamps the time; the trip ends; if the vehicle has no connection the record is held in vehicle memory, store and forward, 19,910 yellow rows flagged Y; the provider's server collects it; the TLC publishes the month about two months later, highlighted in green, and the October files still hold 47 rows stamped outside October, the earliest in 2009.">
+        <defs>
+          <filter id="ctyp1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="17" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp1bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp1bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp1bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp1bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp1bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp1bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp1bH" x="30" y="32">HOW ONE RECORD REACHES THE OCTOBER FILE</text>
+
+        <g filter="url(#ctyp1bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="150" height="70" rx="8" transform="rotate(-0.6 105 91)" fill="#FFFFFF"/>
+          <rect x="200" y="56" width="150" height="70" rx="8" transform="rotate(0.5 275 91)" fill="#FFFFFF"/>
+          <rect x="370" y="56" width="150" height="70" rx="8" transform="rotate(-0.4 445 91)" fill="#FAF0EE"/>
+          <rect x="540" y="56" width="150" height="70" rx="8" transform="rotate(0.5 615 91)" fill="#FFFFFF"/>
+          <rect x="710" y="56" width="150" height="70" rx="8" transform="rotate(-0.5 785 91)" fill="#8CC27A"/>
+          <path d="M182 91 L197 91" marker-end="url(#ctyp1bAr)"/>
+          <path d="M352 91 L367 91" marker-end="url(#ctyp1bAr)"/>
+          <path d="M522 91 L537 91" marker-end="url(#ctyp1bAr)"/>
+          <path d="M692 91 L707 91" marker-end="url(#ctyp1bAr)"/>
+          <path d="M105 130 L105 150 M445 130 L445 150 M785 130 L785 150" stroke-dasharray="4 4"/>
+          <rect x="30" y="156" width="150" height="76" rx="8" transform="rotate(0.5 105 194)" fill="url(#ctyp1bHc)"/>
+          <rect x="370" y="156" width="150" height="76" rx="8" transform="rotate(-0.4 445 194)" fill="url(#ctyp1bHc)"/>
+          <rect x="710" y="156" width="150" height="76" rx="8" transform="rotate(0.4 785 194)" fill="url(#ctyp1bHc)"/>
+          <!-- doodle: a lamp post -->
+          <path d="M610 230 L610 186 L626 186" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="626" cy="191" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp1bL" x="46" y="82">Meter engaged</text>
+        <text class="ctyp1bS" x="46" y="102">stamps the pickup</text>
+        <text class="ctyp1bL" x="216" y="82">Trip ends</text>
+        <text class="ctyp1bS" x="216" y="102">stamps the dropoff</text>
+        <text class="ctyp1bL" x="386" y="82">No connection?</text>
+        <text class="ctyp1bS" x="386" y="102">held in the vehicle</text>
+        <text class="ctyp1bL" x="556" y="82">Provider server</text>
+        <text class="ctyp1bS" x="556" y="102">collects, submits</text>
+        <text class="ctyp1bL" x="726" y="82">TLC monthly file</text>
+        <text class="ctyp1bK" x="726" y="102">about 2 months later</text>
+
+        <text class="ctyp1bK" x="46" y="182">a clock in the</text>
+        <text class="ctyp1bK" x="46" y="200">vehicle, not a server</text>
+        <text class="ctyp1bK" x="386" y="182">store and forward:</text>
+        <text class="ctyp1bK" x="386" y="200">19,910 rows say Y</text>
+        <text class="ctyp1bK" x="726" y="182">47 rows outside</text>
+        <text class="ctyp1bK" x="726" y="200">October, one in 2009</text>
+
+        <text class="ctyp1bA" x="30" y="266">The file shows the stamps. It does not say which hand-off produced an odd one.</text>
+        <text class="ctyp1bN" x="30" y="298">The two-month delay is "to allow time for full vendor submissions" (TLC). Counts: October 2024 yellow and green files.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the file you download: complete enough to publish, still carrying 47 stamps from other months.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Rows stamped outside the month<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In the October 2024 yellow file, the earliest pickup stamp is 2009-01-01 00:35:59 and the latest is 2024-11-14 18:30:00. Across yellow and green together, 47 rows fall outside October. That is a tiny share of 3.9 million, and it is still a decision: keep them and your hour-of-week counts include a 2009 Thursday; drop them silently and nobody can reproduce your total.</p>
+        <p>The professional move is the boring one: filter on the pickup stamp, count what you dropped, and write the count next to the result. The October totals quoted across all sixteen sessions are after exactly this filter.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Zones that are not places<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The zone lookup has 265 rows. Zone 1 is Newark Airport, outside the city. Zone 264 is "Unknown". Zone 265 is "Outside of NYC". In October, 13,169 in-month pickups carry one of those three, and they cannot be placed in any of the five boroughs. Wrenmouth's universe is the 262 zones that are.</p>
+        <p>A <span class="mono">LocationID</span> of 264 is a value in an integer column that means "missing". Treat it as missing, count it, and do not let it become a bar on a map labelled Unknown.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the publisher does and does not promise<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two sentences frame every use of these files. The TLC: "The trip data was not created by the TLC, and TLC makes no representations as to the accuracy of these data." The city's general terms of use: materials are provided "AS IS", without warranties of accuracy, completeness or currency.</p>
+        <p>Neither sentence says the data is bad. Together they say the checks are yours. A profiling pass is not optional hygiene here; it is the only quality control between the meter and your chart. For sensor feeds you own, missingness has mechanics of its own: <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a> covers them.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Profile the month in pandas, and keep a ledger</h2>
+      <span class="tag demo">20 min hands on</span>
+    </div>
+    <p class="lede">Download the October 2024 yellow and green files and the zone lookup into one empty folder, then work from a script kept somewhere else. Each step prints a number; every number below came from running exactly this code with pandas 2.1.4. The figure is the ledger you are building: what came in, what left, and why.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn ledger of the October 2024 profiling pass. Yellow plus green rows in: 3,889,918. Minus 47 rows stamped outside October: 3,889,871. Minus 13,169 rows picked up in Newark, unknown or outside-NYC zones. Kept, highlighted in green: 3,876,702 pickups in the 262 zones of the five boroughs.">
+        <defs>
+          <filter id="ctyp1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="19" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp1cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp1cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp1cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp1cV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp1cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp1cH" x="30" y="32">THE PROFILING LEDGER, OCTOBER 2024</text>
+
+        <g filter="url(#ctyp1cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="230" height="84" rx="10" transform="rotate(-0.5 145 96)" fill="url(#ctyp1cHc)"/>
+          <path d="M262 96 L312 96" marker-end="url(#ctyp1cAr)"/>
+          <rect x="318" y="54" width="230" height="84" rx="10" transform="rotate(0.4 433 96)" fill="#FFFFFF"/>
+          <path d="M550 96 L600 96" marker-end="url(#ctyp1cAr)"/>
+          <rect x="606" y="54" width="244" height="84" rx="10" transform="rotate(-0.4 728 96)" fill="#8CC27A"/>
+          <path d="M290 100 L290 176" stroke-dasharray="4 4"/>
+          <path d="M578 100 L578 176" stroke-dasharray="4 4"/>
+          <rect x="200" y="180" width="190" height="56" rx="8" transform="rotate(0.6 295 208)" fill="#FAF0EE"/>
+          <rect x="488" y="180" width="190" height="56" rx="8" transform="rotate(-0.6 583 208)" fill="#FAF0EE"/>
+        </g>
+
+        <text class="ctyp1cL" x="46" y="80">Rows in</text>
+        <text class="ctyp1cV" x="46" y="106">3,889,918</text>
+        <text class="ctyp1cS" x="46" y="126">yellow 3,833,771 + green</text>
+        <text class="ctyp1cL" x="334" y="80">In October</text>
+        <text class="ctyp1cV" x="334" y="106">3,889,871</text>
+        <text class="ctyp1cS" x="334" y="126">filtered on pickup stamp</text>
+        <text class="ctyp1cL" x="622" y="80">Kept, five boroughs</text>
+        <text class="ctyp1cV" x="622" y="106">3,876,702</text>
+        <text class="ctyp1cS" x="622" y="126" style="fill:#241A18">pickups in 262 zones</text>
+
+        <text class="ctyp1cL" x="216" y="204">47 dropped</text>
+        <text class="ctyp1cS" x="216" y="222">stamped outside October</text>
+        <text class="ctyp1cL" x="504" y="204">13,169 dropped</text>
+        <text class="ctyp1cS" x="504" y="222">Newark, 264, 265</text>
+
+        <text class="ctyp1cN" x="30" y="276">Every dropped row has a count and a reason. The total you publish is reproducible because the ledger is.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the number every later session uses, and it is only trustworthy because the two drops beside it are written down.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Load both files and look at the schema</h4>
+        <p>You should see 3833771 and 56147, and 19 yellow columns ending in <span class="mono">Airport_fee</span>, capital A. Compare that list with the dictionary before anything else.</p>
+        <div class="prompt-box good"><span class="label">python</span>import pandas as pd
+y = pd.read_parquet("yellow_tripdata_2024-10.parquet")
+g = pd.read_parquet("green_tripdata_2024-10.parquet")
+print(len(y), len(g))
+print(y.columns.tolist())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Profile the columns that only describe some riders</h4>
+        <p>Payment codes come out as 2854092 card, 477350 cash, 393895 code 0, 80888 dispute, 27546 no charge. Then the empty flags and the zero distances: 393895 and 81639.</p>
+        <div class="prompt-box good"><span class="label">python</span>print(y["payment_type"].value_counts())
+print(y["store_and_fwd_flag"].isna().sum(), (y["trip_distance"] == 0).sum())
+print((y["store_and_fwd_flag"].isna() == (y["payment_type"] == 0)).all())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Stack yellow and green, then filter the month</h4>
+        <p>The two services name their timestamps differently, so rename on the way in. The filter drops 47 rows; print the number, do not just apply it.</p>
+        <div class="prompt-box good"><span class="label">python</span>t = pd.concat([
+    y[["tpep_pickup_datetime", "PULocationID"]].set_axis(["t", "z"], axis=1),
+    g[["lpep_pickup_datetime", "PULocationID"]].set_axis(["t", "z"], axis=1),
+])
+print(y["tpep_pickup_datetime"].min(), y["tpep_pickup_datetime"].max())
+inmonth = (t.t &gt;= "2024-10-01") &amp; (t.t &lt; "2024-11-01")
+print((~inmonth).sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Keep the zones that are places</h4>
+        <p>The lookup has 265 rows and 262 in the five boroughs. You should keep 3876702 pickups and drop 13169. Those are the totals every later session uses.</p>
+        <div class="prompt-box good"><span class="label">python</span>zones = pd.read_csv("taxi_zone_lookup.csv")
+five = zones[zones.Borough.isin(["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"])]
+print(len(zones), len(five))
+kept = t[inmonth &amp; t.z.isin(five.LocationID)]
+print(len(kept), (inmonth &amp; ~t.z.isin(five.LocationID)).sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the ledger down</h4>
+        <p>Three lines in a text file next to your output: rows in, each drop with its count and reason, rows kept. Add the file names, the download date and the dictionary date. That is the source, version and modifications the city's Open Data Law asks a republisher to state.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Read the dictionary, then read the schema, then profile before you aggregate. Every filter prints its count, every drop has a reason, and the ledger travels with the number. A total nobody can reproduce is an opinion.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A colleague computes the average <span class="mono">tip_amount</span> per pickup zone from the yellow file and maps it as "where riders tip most". What is wrong?</p>
+      <button class="qopt" type="button">A · Nothing, as long as zero-distance trips are dropped first</button>
+      <button class="qopt" type="button">B · Tips should be averaged per dropoff zone instead</button>
+      <button class="qopt" type="button">C · The column is filled only for card tips, so the map mixes generosity with how often people pay by card in each zone</button>
+      <p class="qwhy">The data dictionary says cash tips are not included in <span class="mono">tip_amount</span> or <span class="mono">total_amount</span>. A and B change the denominator or the grouping but not whose tips the column holds.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The October 2024 yellow file contains a pickup stamped 2009-01-01. What is the professional move?</p>
+      <button class="qopt" type="button">A · Filter on the pickup stamp to the month, count what was dropped (47 rows across yellow and green), and record the count with the result</button>
+      <button class="qopt" type="button">B · Keep it: the TLC published it in the October file, so it is an October trip</button>
+      <button class="qopt" type="button">C · Delete the whole file and wait for a corrected release</button>
+      <p class="qwhy">The file is complete enough to use and still carries stamps from other months. Keeping them (B) puts a 2009 trip into an October hour-of-week count; discarding everything (C) throws away 3.9 million good rows. Filter, count, record.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">13,169 in-month pickups carry zone 1, 264 or 265. What are they?</p>
+      <button class="qopt" type="button">A · Trips in three small Manhattan zones</button>
+      <button class="qopt" type="button">B · Pickups at Newark Airport, in an "Unknown" zone, or "Outside of NYC": none can be placed in the five boroughs, so they leave Wrenmouth's 262-zone universe with a recorded count</button>
+      <button class="qopt" type="button">C · Duplicate rows that the provider sent twice</button>
+      <p class="qwhy">The lookup's last two rows are "Unknown" and "Outside of NYC", and zone 1 is Newark Airport. A value meaning "missing" inside an id column is still missing.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on the same files.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Split one defect by provider code</h4>
+        <p>Group the zero-distance rows, or the out-of-month rows, by <span class="mono">VendorID</span>. Write down whether one code accounts for most of them. Report it by code; that is a provenance finding.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Profile a second month</h4>
+        <p>Download any other month and rerun the four steps. Write a ledger for it. Note anything that changed: a column renamed, added or dropped, a different count of stamps outside the month.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The yellow taxi data dictionary</span><span class="note">TLC, March 18, 2025: meter engaged and disengaged, zones, taximeter miles, card tips only, store and forward. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The trip record page</span><span class="note">TLC Trip Record Data: providers collect, monthly with about a two-month delay, no representation as to accuracy. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Profiling the October 2024 files</span><span class="note">3,833,771 yellow and 56,147 green rows; 47 out of month; 13,169 outside the five boroughs; 3,876,702 kept. Run with pandas 2.1.4.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dictionary against schema</span><span class="note"><span class="mono">Airport_fee</span> in the file, no congestion fee column before January 2025.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Terms of use</span><span class="note">NYC Admin. Code 23-502 (no registration, licence or use restrictions; state source and changes); nyc.gov terms, "AS IS". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Zones, joins and maps</span><span class="note">Named tonight (265 rows, 262 kept). Practitioner session 2.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Publishing what you derived</span><span class="note">The ledger is the start. Practitioner session 8.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Missing readings in sensor feeds</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">For-hire vehicle trip records</span><span class="note">Published by the TLC; not used here, for size and scope.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>A row.</strong> One meter engagement: on in one zone, off in another.</div>
+      <div class="cheat-item"><strong>Where.</strong> A taxi zone id, not an address. 264 and 265 mean missing.</div>
+      <div class="cheat-item"><strong>Tips.</strong> Card tips only; totals exclude cash tips. Say whose tips you averaged.</div>
+      <div class="cheat-item"><strong>Provenance.</strong> A provider code per row; split defects by it.</div>
+      <div class="cheat-item"><strong>The month.</strong> 47 rows outside October, the earliest in 2009. Filter on the stamp.</div>
+      <div class="cheat-item"><strong>Dictionary vs file.</strong> <span class="mono">Airport_fee</span>, capital A. Read the schema.</div>
+      <div class="cheat-item"><strong>The ledger.</strong> 3,889,918 in, 47 and 13,169 out, 3,876,702 kept.</div>
+      <div class="cheat-item"><strong>Terms.</strong> Free to use; state source, version and changes; no accuracy promise.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 1 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="p2-zones-joins-and-the-map.html">Practitioner session 2 · Zones, joins and the map →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

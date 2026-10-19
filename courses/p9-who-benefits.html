@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 9 of 10. Who benefits from each sensor-placement rule: per-borough errors on real New York City taxi pickups, three boroughs left dark by the busiest rule, worst-borough error over 400 draws 47.2% vs 120.5%, the denominator that turns a -11.1% error into 0.0%, unequal reporting in 311 data, and surveillance trade-offs taught as a disagreement. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Who benefits - learn smart city with phoebe">
+<meta property="og:description" content="Practitioner session 9 of 10. Every equity metric is a fraction. Pick the denominator and you have picked who counts.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/p9-who-benefits.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Who benefits - learn smart city with phoebe">
+<meta name="twitter:description" content="One sensor budget, five boroughs, three rules. Read the errors borough by borough and the winners change.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 9 · Who benefits - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Practitioner session 9 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Practitioner session 9 of 10</div>
+    <h1>Who <span class="accent">benefits</span></h1>
+    <p class="sub">A sensor plan is also a decision about whose streets get a number. Wrenmouth, a constructed city transport office, has three placement rules for 40 counting sensors, each tried on real New York City taxi records, October 2024. Tonight you read their errors borough by borough instead of city-wide, find the denominator that makes a missing borough disappear from the score, and build an equity scorecard that cannot be gamed by measuring only where trips are already recorded.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Analysts and data scientists who rank places</span>
+      <span class="chip audience">Anyone who signs off a sensor plan</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:13">3-16 · Errors by borough</span>
+      <span class="a3" style="flex:12">16-28 · The denominator decides</span>
+      <span class="a4" style="flex:17">28-45 · Build-along: an equity scorecard</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's office asks the wrong question first</h2>
+    </div>
+    <p class="lede">Wrenmouth, a constructed city transport office, has tried three rules for placing 40 sensors across 262 real New York City taxi zones (sessions 5 and 10). Its first question was "which rule has the smallest city-wide error?" The better question arrives one meeting later, from someone in an outer borough: "which rule gives my borough a number at all, and how wrong is it?" A city-wide error is an average, and averages are very good at hiding who paid for them.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A way to read any placement rule borough by borough: who is measured, who is dark, whose error is large. The denominator problem in two forms: measuring 88.9% of trips while measuring 15.3% of zones, and a "dark zones dropped" score that reads 0.0% when the real error is -11.1%. Why resident-generated data such as 311 complaints carries the same bias. A small pandas scorecard that treats a dark borough as the worst result, never as a missing one. And the surveillance trade-off, held open as a disagreement.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three rules, one budget, recapped<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Busiest.</strong> Put the 40 sensors in the zones with the most first-week pickups. <strong>Spread.</strong> Share them across boroughs in proportion to zones by greedy coverage, then draw zones at random within each borough. <strong>Equity floor.</strong> Every borough gets at least 4, the rest by greedy coverage, with the two airports as a take-all stratum and a busier and quieter half in each borough.</p>
+        <p>All three rules are constructed: Wrenmouth's budget, Wrenmouth's choices. The pickups they are scored against are real, 3,876,702 of them in the October 2024 files. Every Wrenmouth number below is from the canon run (K 40, seed 1017) that session 10's bench reproduces.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "benefit" here means "gets measured well"<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A counting sensor does not fix a street. What it changes is what the office can see: a borough with a good estimate can argue for buses, crossings or kerb space with a number; a borough with no estimate argues with anecdotes. So "who benefits" in this session is narrow and concrete: whose trips are counted, and whose estimate is close to the truth.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers per-borough errors and dark boroughs</span>
+      <h2>Read the errors borough by borough</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Split the same 40 sensors into five boroughs and every rule turns out to serve somebody. The busiest rule serves Manhattan and the two airports, and leaves three boroughs with no number at all. The spread rule measures everyone and misses Queens by -70.7% on this draw. The equity floor measures everyone and keeps every borough within 26% on this draw, while Manhattan does slightly worse than under spread.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 362" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn grid of three placement rules by five boroughs, showing sensors and estimate error for each, constructed canon on real October 2024 pickups. Busiest rule: Manhattan 38 sensors, plus 66.8 percent; Brooklyn no sensor, dark; Queens 2 sensors, both airports, plus 2,724.7 percent; Bronx dark; Staten Island dark. Spread rule: Manhattan 11, minus 19.8 percent; Brooklyn 9, minus 58.4; Queens 11, minus 70.7; Bronx 6, minus 34.2; Staten Island 3, minus 42.3. Equity floor, highlighted in green: Manhattan 11, minus 23.1; Brooklyn 9, plus 8.2; Queens 10, plus 25.8; Bronx 6, minus 12.8; Staten Island 4, minus 19.9. Over 400 placements the worst-borough error is 120.5 percent for spread and 47.2 percent for equity.">
+        <defs>
+          <filter id="ctyp9aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp9aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp9aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp9aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp9aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp9aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp9aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp9aV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp9aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp9aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp9aH" x="30" y="32">40 SENSORS, THREE RULES, FIVE BOROUGHS: SENSORS AND ESTIMATE ERROR</text>
+
+        <g filter="url(#ctyp9aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- rule labels -->
+          <rect x="30" y="86" width="140" height="60" rx="8" transform="rotate(-0.6 100 116)" fill="#FAF0EE"/>
+          <rect x="30" y="156" width="140" height="60" rx="8" transform="rotate(0.5 100 186)" fill="#FAF0EE"/>
+          <rect x="30" y="226" width="140" height="60" rx="8" transform="rotate(-0.5 100 256)" fill="#8CC27A"/>
+          <!-- row 1: busiest -->
+          <rect x="180" y="86" width="130" height="60" rx="8" transform="rotate(0.4 245 116)" fill="#FFFFFF"/>
+          <rect x="318" y="86" width="130" height="60" rx="8" transform="rotate(-0.4 383 116)" fill="url(#ctyp9aHc)"/>
+          <rect x="456" y="86" width="130" height="60" rx="8" transform="rotate(0.5 521 116)" fill="#FFFFFF"/>
+          <rect x="594" y="86" width="130" height="60" rx="8" transform="rotate(-0.5 659 116)" fill="url(#ctyp9aHc)"/>
+          <rect x="732" y="86" width="130" height="60" rx="8" transform="rotate(0.4 797 116)" fill="url(#ctyp9aHc)"/>
+          <!-- row 2: spread -->
+          <rect x="180" y="156" width="130" height="60" rx="8" transform="rotate(-0.4 245 186)" fill="#FFFFFF"/>
+          <rect x="318" y="156" width="130" height="60" rx="8" transform="rotate(0.5 383 186)" fill="#FFFFFF"/>
+          <rect x="456" y="156" width="130" height="60" rx="8" transform="rotate(-0.5 521 186)" fill="#FFFFFF"/>
+          <rect x="594" y="156" width="130" height="60" rx="8" transform="rotate(0.4 659 186)" fill="#FFFFFF"/>
+          <rect x="732" y="156" width="130" height="60" rx="8" transform="rotate(-0.4 797 186)" fill="#FFFFFF"/>
+          <!-- row 3: equity -->
+          <rect x="180" y="226" width="130" height="60" rx="8" transform="rotate(0.5 245 256)" fill="#FFFFFF"/>
+          <rect x="318" y="226" width="130" height="60" rx="8" transform="rotate(-0.4 383 256)" fill="#FFFFFF"/>
+          <rect x="456" y="226" width="130" height="60" rx="8" transform="rotate(0.4 521 256)" fill="#FFFFFF"/>
+          <rect x="594" y="226" width="130" height="60" rx="8" transform="rotate(-0.5 659 256)" fill="#FFFFFF"/>
+          <rect x="732" y="226" width="130" height="60" rx="8" transform="rotate(0.5 797 256)" fill="#FFFFFF"/>
+          <!-- doodle: a zone outline corner -->
+          <path d="M760 40 L790 18 L830 22 L858 44" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp9aL" x="190" y="58">Manhattan</text>
+        <text class="ctyp9aS" x="190" y="74">69 zones</text>
+        <text class="ctyp9aL" x="328" y="58">Brooklyn</text>
+        <text class="ctyp9aS" x="328" y="74">61 zones</text>
+        <text class="ctyp9aL" x="466" y="58">Queens</text>
+        <text class="ctyp9aS" x="466" y="74">69 zones</text>
+        <text class="ctyp9aL" x="604" y="58">Bronx</text>
+        <text class="ctyp9aS" x="604" y="74">43 zones</text>
+        <text class="ctyp9aL" x="742" y="58">Staten Island</text>
+        <text class="ctyp9aS" x="742" y="74">20 zones</text>
+
+        <text class="ctyp9aL" x="42" y="110">1 · Busiest</text>
+        <text class="ctyp9aS" x="42" y="132">first-week top 40</text>
+        <text class="ctyp9aL" x="42" y="180">2 · Spread</text>
+        <text class="ctyp9aS" x="42" y="202">greedy by zones</text>
+        <text class="ctyp9aL" x="42" y="250">3 · Equity</text>
+        <text class="ctyp9aK" x="42" y="272">floor of 4 each</text>
+
+        <text class="ctyp9aK" x="190" y="108">38 sensors</text>
+        <text class="ctyp9aV" x="190" y="134">+66.8%</text>
+        <text class="ctyp9aK" x="328" y="108">0 sensors</text>
+        <text class="ctyp9aV" x="328" y="134">dark</text>
+        <text class="ctyp9aK" x="466" y="108">2, both airports</text>
+        <text class="ctyp9aV" x="466" y="134">+2,724.7%</text>
+        <text class="ctyp9aK" x="604" y="108">0 sensors</text>
+        <text class="ctyp9aV" x="604" y="134">dark</text>
+        <text class="ctyp9aK" x="742" y="108">0 sensors</text>
+        <text class="ctyp9aV" x="742" y="134">dark</text>
+
+        <text class="ctyp9aK" x="190" y="178">11 sensors</text>
+        <text class="ctyp9aV" x="190" y="204">-19.8%</text>
+        <text class="ctyp9aK" x="328" y="178">9 sensors</text>
+        <text class="ctyp9aV" x="328" y="204">-58.4%</text>
+        <text class="ctyp9aK" x="466" y="178">11 sensors</text>
+        <text class="ctyp9aV" x="466" y="204">-70.7%</text>
+        <text class="ctyp9aK" x="604" y="178">6 sensors</text>
+        <text class="ctyp9aV" x="604" y="204">-34.2%</text>
+        <text class="ctyp9aK" x="742" y="178">3 sensors</text>
+        <text class="ctyp9aV" x="742" y="204">-42.3%</text>
+
+        <text class="ctyp9aK" x="190" y="248">11 sensors</text>
+        <text class="ctyp9aV" x="190" y="274">-23.1%</text>
+        <text class="ctyp9aK" x="328" y="248">9 sensors</text>
+        <text class="ctyp9aV" x="328" y="274">+8.2%</text>
+        <text class="ctyp9aK" x="466" y="248">10 sensors</text>
+        <text class="ctyp9aV" x="466" y="274">+25.8%</text>
+        <text class="ctyp9aK" x="604" y="248">6 sensors</text>
+        <text class="ctyp9aV" x="604" y="274">-12.8%</text>
+        <text class="ctyp9aK" x="742" y="248">4 sensors</text>
+        <text class="ctyp9aV" x="742" y="274">-19.9%</text>
+
+        <text class="ctyp9aA" x="30" y="314">Over 400 placements, worst-borough error: spread 120.5%, equity 47.2%. Busiest never moves: 3 stay dark.</text>
+        <text class="ctyp9aN" x="30" y="340">Pickups: real NYC records, October 2024. Rules, budget and errors: Wrenmouth's constructed canon, seed 1017.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - read across a row and each rule has a borough it serves; read down a column and Staten Island only gets a number from rules 2 and 3.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Dark is not a large error, it is no number<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The busiest rule puts 38 sensors in Manhattan and 2 in Queens, both on the airport zones, JFK and LaGuardia. Brooklyn, the Bronx and Staten Island get none. Its city-wide error is +482.2% and its outer-borough error is +6,388.6%, because two airports stand in for 193 outer-borough zones.</p>
+        <p>The three dark boroughs do not appear in that table with a bad score. They do not appear at all. A budget meeting that ranks boroughs by estimated trips will rank three of them with a blank, and a blank sorts wherever the spreadsheet puts it. That is the first rule of reading for equity: count the dark units before you read any error.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Staten Island has 20 taxi zones and recorded 231 pickups in the whole of October 2024, 0.006% of the month. Under any rule that ranks by recorded trips it is last in line for a sensor. Its residents still travel; the taxi records just say very little about how. A rule that follows recorded trips will keep not measuring them.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>One draw is not a rule<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The spread and equity rules draw zones at random within each borough, so the grid shows one seeded draw. On this draw the spread rule's worst borough is Queens at -70.7%. Over 400 fresh placements its worst-borough error is 120.5%; the equity rule's is 47.2%. The mean absolute error for the outer boroughs is 92.1% for spread and 6.3% for equity.</p>
+        <p>So a single run flatters both rules, and the gap between them only becomes clear over many draws. If someone shows you one placement and its per-borough errors, ask for the distribution. Session 10's bench prints it at your own settings.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Equity is not free, and the honest rung says so<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Moving sensors to thin boroughs takes them from somewhere. On this draw Manhattan's error is -23.1% under the equity floor against -19.8% under spread, and the equity rung's 90% intervals cover Brooklyn, Queens, the Bronx and Staten Island but miss Manhattan. Over 400 placements the equity interval covers the city truth about 82% of the time (0.8175) and the outer-borough truth about 77% (0.7675), short of the nominal 90% because pickups are so skewed.</p>
+        <p>None of that makes the equity floor the wrong choice. It makes it a choice with a cost, paid mostly by the borough that already has the most data. Write the cost down next to the benefit; a plan that claims every borough wins has not been read borough by borough.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers equity metrics, the denominator problem and unequal reporting</span>
+      <h2>The denominator decides who counts</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Every equity metric is a fraction, and most arguments about fairness are arguments about the bottom line. Divide by trips and the busiest rule looks superb. Divide by zones and all three rules look identical. Divide by "the zones we measured" and any rule scores perfectly. The fraction you choose is the decision about whose absence counts.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn denominator diagram for the busiest rule, constructed canon on real October 2024 pickups. Top bar: 262 zones, 40 measured, 222 unsensed highlighted in green. Second bar: 3,876,702 pickups, 88.9 percent in the 40 measured zones, 430,870 in the other 222. Two outcomes: divide by the measured zones only and the reported error is 0.0 percent; divide by all 262 zones and the real error is minus 11.1 percent.">
+        <defs>
+          <filter id="ctyp9bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp9bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp9bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp9bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp9bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp9bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp9bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctyp9bV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp9bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp9bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp9bH" x="30" y="32">THE BUSIEST RULE, MEASURED AGAINST TWO DIFFERENT DENOMINATORS</text>
+
+        <g filter="url(#ctyp9bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- zones bar -->
+          <rect x="150" y="54" width="107" height="46" rx="6" transform="rotate(-0.4 203 77)" fill="#FFFFFF"/>
+          <rect x="261" y="54" width="589" height="46" rx="6" transform="rotate(0.2 555 77)" fill="#8CC27A"/>
+          <!-- pickups bar -->
+          <rect x="150" y="124" width="622" height="46" rx="6" transform="rotate(0.2 461 147)" fill="url(#ctyp9bHc)"/>
+          <rect x="776" y="124" width="74" height="46" rx="6" transform="rotate(-0.5 813 147)" fill="#FFFFFF"/>
+          <!-- outcomes -->
+          <rect x="30" y="214" width="400" height="74" rx="10" transform="rotate(-0.4 230 251)" fill="#FAF0EE"/>
+          <rect x="450" y="214" width="400" height="74" rx="10" transform="rotate(0.4 650 251)" fill="#FFFFFF"/>
+          <!-- doodle: a kerb line -->
+          <path d="M700 22 L760 22 L760 34 L860 34" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctyp9bL" x="30" y="74">Zones</text>
+        <text class="ctyp9bS" x="30" y="92">262 in all</text>
+        <text class="ctyp9bK" x="160" y="82">40 measured</text>
+        <text class="ctyp9bL" x="276" y="82">222 unsensed zones: no sensor, no estimate of their own</text>
+
+        <text class="ctyp9bL" x="30" y="144">Pickups</text>
+        <text class="ctyp9bS" x="30" y="162">3,876,702</text>
+        <text class="ctyp9bL" x="166" y="152">88.9% of pickups sit in the 40 measured zones</text>
+        <text class="ctyp9bS" x="556" y="192">the other 222 zones: 430,870 pickups</text>
+
+        <text class="ctyp9bL" x="46" y="238">Divide by the 40 measured zones</text>
+        <text class="ctyp9bV" x="46" y="264">reported error 0.0%</text>
+        <text class="ctyp9bS" x="46" y="280">true by construction; says nothing</text>
+        <text class="ctyp9bL" x="466" y="238">Divide by all 262 zones</text>
+        <text class="ctyp9bV" x="466" y="264">real error -11.1%</text>
+        <text class="ctyp9bS" x="466" y="280">222 zones and 430,870 pickups put back</text>
+
+        <text class="ctyp9bN" x="30" y="318">Pickups: real NYC records, October 2024. Placement and both errors: Wrenmouth's constructed canon.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green bar is the denominator that goes missing: drop it and the busiest rule scores perfectly; keep it and the same estimate is 11.1% short.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Four fractions, four winners<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Share of trips measured.</strong> Busiest 88.9%, spread 11.8%, equity 20.4%. The denominator is recorded trips, so it rewards measuring where trips are already recorded. This is the anti-lever from session 5 wearing a metric's clothes.</p>
+        <p><strong>Share of zones measured.</strong> 15.3% for all three, because 40 of 262 is 40 of 262. It cannot rank the rules at all.</p>
+        <p><strong>Boroughs with any sensor.</strong> Busiest 2 of 5, spread and equity 5 of 5. Crude, and the first thing to report.</p>
+        <p><strong>Worst-borough error over many draws.</strong> Spread 120.5%, equity 47.2%; busiest has three boroughs with no estimate, which is worse than any number. This is the metric that asks who is served worst, and it is the one the busiest rule cannot game.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Residents' reports have the same denominator<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Taxi pickups appear only where a cab was present. Complaints appear only where someone chose to report. A map of 311 calls is a map of problems multiplied by the willingness and ability to call, and the two cannot be read apart from the counts alone.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Boxer, Hong, Kontokosta and Neill (2025) studied heating and hot water complaints in New York City and found "some subpopulations reporting at lower rates than others". Their latent-variable model separates the probability that a problem exists from the probability that it is reported. A study of one US city by Kontokosta and Hong (2021) reports that lower-income and minority neighbourhoods were less likely to report street condition or nuisance issues despite greater need (reported; we did not open the full paper).</p>
+        </div>
+        <p>So a rule that sends inspectors, or sensors, to where complaints are highest is the busiest rule again, with residents instead of cabs doing the recording. The same reading applies: count the places with few reports before ranking the places with many.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Surveillance trade-offs: hold the disagreement open<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Measuring a borough well means measuring its residents more. Reasonable people disagree about where that lands. One position: cameras, plate readers and mobility data give planning and safety value, and leaving a neighbourhood unmeasured leaves it unplanned for. The other: more sensing brings chilling effects and function creep, a counter installed for buses becomes a record used for something else, and thinly measured places may prefer to stay that way. Both are held seriously; this page does not settle them.</p>
+        <p>Two facts sharpen the argument without resolving it. de Montjoye and colleagues (2013) found "four spatio-temporal points are enough to uniquely identify 95% of the individuals" in hourly mobility data, so finer sensing in a quiet borough means fewer people behind each record. And privacy protection is unequal too: at k 5, zone x hour, small-cell suppression withholds 100.0% of Staten Island's trips, 49.0% of the Bronx's and 0.0% of Manhattan's (session 7). The places that gain most from being measured are the places where publishing is hardest. Leader session 3 holds the consent side of the same disagreement.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Build an equity scorecard that a dark borough cannot slip past</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">You will put Wrenmouth's canon per-borough results into a small pandas table and score the three rules. The trap is in the defaults: pandas skips missing values when it takes a maximum, so a dark borough quietly leaves the metric. The fix is one line, and the habit is the point. The placement numbers are Wrenmouth's constructed canon; the pickup totals are the real October 2024 records.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 366" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn equity scorecard for the three rules, constructed canon at K 40. Share of pickups measured: busiest 88.9 percent, spread 11.8, equity 20.4. Share of zones measured: 15.3 percent for all three. Boroughs with a sensor: 2 of 5, 5 of 5, 5 of 5. Outer-borough error: plus 6,388.6 percent, minus 67.8, plus 22.0. Worst-borough error over 400 draws, highlighted in green: busiest 3 dark, spread 120.5 percent, equity 47.2 percent.">
+        <defs>
+          <filter id="ctyp9cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctyp9cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctyp9cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctyp9cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp9cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctyp9cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctyp9cV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctyp9cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctyp9cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctyp9cH" x="30" y="32">AN EQUITY SCORECARD FOR THE THREE RULES (CANON, K 40, CONSTRUCTED)</text>
+
+        <g filter="url(#ctyp9cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="76" width="290" height="38" rx="7" transform="rotate(-0.3 175 95)" fill="#FAF0EE"/>
+          <rect x="30" y="120" width="290" height="38" rx="7" transform="rotate(0.3 175 139)" fill="#FAF0EE"/>
+          <rect x="30" y="164" width="290" height="38" rx="7" transform="rotate(-0.3 175 183)" fill="#FAF0EE"/>
+          <rect x="30" y="208" width="290" height="38" rx="7" transform="rotate(0.3 175 227)" fill="#FAF0EE"/>
+          <rect x="30" y="252" width="290" height="38" rx="7" transform="rotate(-0.3 175 271)" fill="#8CC27A"/>
+          <rect x="330" y="76" width="170" height="38" rx="7" transform="rotate(0.4 415 95)" fill="#FFFFFF"/>
+          <rect x="510" y="76" width="170" height="38" rx="7" transform="rotate(-0.4 595 95)" fill="#FFFFFF"/>
+          <rect x="690" y="76" width="170" height="38" rx="7" transform="rotate(0.4 775 95)" fill="#FFFFFF"/>
+          <rect x="330" y="120" width="170" height="38" rx="7" transform="rotate(-0.4 415 139)" fill="#FFFFFF"/>
+          <rect x="510" y="120" width="170" height="38" rx="7" transform="rotate(0.4 595 139)" fill="#FFFFFF"/>
+          <rect x="690" y="120" width="170" height="38" rx="7" transform="rotate(-0.4 775 139)" fill="#FFFFFF"/>
+          <rect x="330" y="164" width="170" height="38" rx="7" transform="rotate(0.4 415 183)" fill="#FFFFFF"/>
+          <rect x="510" y="164" width="170" height="38" rx="7" transform="rotate(-0.4 595 183)" fill="#FFFFFF"/>
+          <rect x="690" y="164" width="170" height="38" rx="7" transform="rotate(0.4 775 183)" fill="#FFFFFF"/>
+          <rect x="330" y="208" width="170" height="38" rx="7" transform="rotate(-0.4 415 227)" fill="#FFFFFF"/>
+          <rect x="510" y="208" width="170" height="38" rx="7" transform="rotate(0.4 595 227)" fill="#FFFFFF"/>
+          <rect x="690" y="208" width="170" height="38" rx="7" transform="rotate(-0.4 775 227)" fill="#FFFFFF"/>
+          <rect x="330" y="252" width="170" height="38" rx="7" transform="rotate(0.4 415 271)" fill="url(#ctyp9cHc)"/>
+          <rect x="510" y="252" width="170" height="38" rx="7" transform="rotate(-0.4 595 271)" fill="#FFFFFF"/>
+          <rect x="690" y="252" width="170" height="38" rx="7" transform="rotate(0.4 775 271)" fill="#FFFFFF"/>
+          <!-- doodle: a lamp post -->
+          <path d="M852 54 L852 18 L838 18" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="838" cy="23" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctyp9cL" x="346" y="64">1 · Busiest</text>
+        <text class="ctyp9cL" x="526" y="64">2 · Spread</text>
+        <text class="ctyp9cL" x="706" y="64">3 · Equity</text>
+
+        <text class="ctyp9cL" x="44" y="100">Share of pickups measured</text>
+        <text class="ctyp9cL" x="44" y="144">Share of zones measured</text>
+        <text class="ctyp9cL" x="44" y="188">Boroughs with a sensor</text>
+        <text class="ctyp9cL" x="44" y="232">Outer-borough error</text>
+        <text class="ctyp9cL" x="44" y="276">Worst-borough error, 400 draws</text>
+
+        <text class="ctyp9cV" x="346" y="101">88.9%</text>
+        <text class="ctyp9cV" x="526" y="101">11.8%</text>
+        <text class="ctyp9cV" x="706" y="101">20.4%</text>
+        <text class="ctyp9cV" x="346" y="145">15.3%</text>
+        <text class="ctyp9cV" x="526" y="145">15.3%</text>
+        <text class="ctyp9cV" x="706" y="145">15.3%</text>
+        <text class="ctyp9cV" x="346" y="189">2 of 5</text>
+        <text class="ctyp9cV" x="526" y="189">5 of 5</text>
+        <text class="ctyp9cV" x="706" y="189">5 of 5</text>
+        <text class="ctyp9cV" x="346" y="233">+6,388.6%</text>
+        <text class="ctyp9cV" x="526" y="233">-67.8%</text>
+        <text class="ctyp9cV" x="706" y="233">+22.0%</text>
+        <text class="ctyp9cV" x="346" y="277">3 dark</text>
+        <text class="ctyp9cV" x="526" y="277">120.5%</text>
+        <text class="ctyp9cV" x="706" y="277">47.2%</text>
+
+        <text class="ctyp9cA" x="30" y="318">Rows 1 and 2 cannot rank the rules fairly: one rewards busy zones, the other is identical by design.</text>
+        <text class="ctyp9cN" x="30" y="344">Pickups: real NYC records, October 2024. Rules, budget and errors: Wrenmouth's constructed canon.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green row is the one to lead with: it asks who is served worst, and a dark borough scores as the worst result, not as a blank.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the canon into two tables</h4>
+        <p>One table of sensors, one of single-draw errors, borough by borough. A dark borough's error is missing, so it goes in as <span class="mono">NaN</span>, not zero. Each rule's sensors should sum to 40.</p>
+        <div class="prompt-box good"><span class="label">python</span>import numpy as np
+import pandas as pd
+b = ["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"]
+sensors = pd.DataFrame({"busiest": [38, 0, 2, 0, 0],
+                        "spread":  [11, 9, 11, 6, 3],
+                        "equity":  [11, 9, 10, 6, 4]}, index=b)
+err = pd.DataFrame({"busiest": [66.8, np.nan, 2724.7, np.nan, np.nan],
+                    "spread":  [-19.8, -58.4, -70.7, -34.2, -42.3],
+                    "equity":  [-23.1, 8.2, 25.8, -12.8, -19.9]}, index=b)
+print(sensors.sum())</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Spring the trap on purpose</h4>
+        <p>Take the worst absolute error per rule with the defaults, then count how many boroughs each maximum was taken over. The busiest rule's worst is computed over 2 boroughs, not 5: three residents' boroughs have left the metric without a trace.</p>
+        <div class="prompt-box good"><span class="label">python</span>print(err.abs().max())     # busiest 2724.7, spread 70.7, equity 25.8
+print(err.abs().count())   # busiest 2, spread 5, equity 5</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Make dark the worst result</h4>
+        <p>Any rule with a dark borough gets an infinite worst error, and the dark count is reported beside it. Now no amount of accuracy in Manhattan can buy the busiest rule a better rank.</p>
+        <div class="prompt-box good"><span class="label">python</span>worst = err.abs().max().where(err.notna().all(), np.inf)
+dark = (sensors == 0).sum()
+print(pd.DataFrame({"worst_single_draw": worst, "dark": dark}))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Check the denominator by hand</h4>
+        <p>Under the busiest rule each sensor counts its zone in full, so the estimate of the measured zones is exact. Divide by the measured zones and you get 0.0%; divide by the whole city and you get -11.1%. The working: 3,876,702 minus the 430,870 pickups in the 222 unsensed zones.</p>
+        <div class="prompt-box good"><span class="label">python</span>truth, unsensed = 3876702, 430870
+measured = truth - unsensed          # pickups in the 40 measured zones
+estimate = measured
+print(round(100 * (estimate - measured) / measured, 1))   # 0.0
+print(round(100 * (estimate - truth) / truth, 1))         # -11.1
+print(round(100 * measured / truth, 1))                   # 88.9</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Add the many-draw row and write the paragraph</h4>
+        <p>Your single-draw worst errors are 70.7% and 25.8%; the canon over 400 placements is 120.5% and 47.2%. Put both in the table and label which is which. Then write three sentences, one per rule: who is measured, who is dark, who pays for the improvement. Say that the rules are constructed and the pickups are real.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before you report any score for places, write down its denominator and count the units that are not in it. A missing place is the worst result, never a blank that the aggregate skips. Lead with who is served worst, then show the average.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A manager says the busiest rule is "clearly the best coverage: it measures 88.9% of trips". What is the strongest reply?</p>
+      <button class="qopt" type="button">A · Agree: trips are what the city cares about, so trip coverage is the right metric</button>
+      <button class="qopt" type="button">B · The denominator is recorded trips, which rewards measuring where trips are already recorded; it measures 15.3% of zones, leaves three boroughs dark, and misses the outer boroughs by +6,388.6%</button>
+      <button class="qopt" type="button">C · 88.9% is too low; with a bigger budget the busiest rule would be fair</button>
+      <p class="qwhy">Trip coverage is a fraction whose bottom line favours busy zones. The equity rule measures 20.4% of trips and every borough. At K 80 the busiest rule still leaves 2 boroughs dark (canon), so a bigger budget (C) does not fix the rule.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A report scores the busiest placement against "the zones we have data for" and shows an error of 0.0%. What happened?</p>
+      <button class="qopt" type="button">A · The 222 unsensed zones and their 430,870 pickups were dropped from the denominator; against the whole city the same estimate is -11.1%</button>
+      <button class="qopt" type="button">B · The busiest rule is exact because it measures the busiest zones</button>
+      <button class="qopt" type="button">C · Rounding: the error is small but not zero</button>
+      <p class="qwhy">Each sensor counts its own zone in full, so scoring it against only those zones reads 0.0% by construction. The number says nothing about the rest of the city.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">One neighbourhood files far fewer heating complaints than its neighbours. What can you conclude from the counts alone?</p>
+      <button class="qopt" type="button">A · It has fewer heating problems</button>
+      <button class="qopt" type="button">B · Its residents are less likely to report, so it has more problems</button>
+      <button class="qopt" type="button">C · Nothing yet: a complaint count mixes the chance of a problem with the chance of reporting it, and Boxer and colleagues (2025) model the two separately</button>
+      <p class="qwhy">Both A and B read one cause into a count with two. The 311 study found some subpopulations reporting at lower rates, which is exactly why the count alone cannot tell you which.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 10</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, with the scorecard you just built.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Add two budgets</h4>
+        <p>From the canon comparison settings: at K 20 the busiest rule measures 61.7% of trips and misses the city by +708.8%; at K 80 it measures 97.9% and still leaves 2 boroughs dark. Add both to your scorecard, then open session 10's bench, try your own settings and add a column labelled "my run" (your numbers will differ).</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the denominator of one metric you report</h4>
+        <p>Pick a rate or share from your own work. Write its denominator in one sentence, list who is not in it, and say whether a missing group would show as a blank, a zero or a bad score.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the surveillance disagreement, both sides</h4>
+        <p>One paragraph per position on adding sensors to Wrenmouth's thinly measured boroughs: the planning case and the chilling-effect case. Do not pick a winner; end with the one fact that would change your mind.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Per-borough errors and dark boroughs</span><span class="note">Wrenmouth canon (constructed), K 40, seed 1017, on real October 2024 pickups: busiest leaves Brooklyn, Bronx and Staten Island dark; worst-borough error over 400 draws 47.2% equity vs 120.5% spread.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The denominator problem</span><span class="note">88.9% of trips vs 15.3% of zones; reported 0.0% vs real -11.1% with 222 zones and 430,870 pickups dropped. Derived, working shown.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Unequal reporting in 311 data</span><span class="note">Boxer, K., Hong, B., Kontokosta, C. E. and Neill, D. B. (2025). Estimating reporting bias in 311 complaint data. The Annals of Applied Statistics 19:1691-1713. doi:10.1214/24-AOAS2003. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Reporting bias in one US city</span><span class="note">Kontokosta, C. E. and Hong, B. (2021). Bias in smart city governance. Sustainable Cities and Society 64:102503. doi:10.1016/j.scs.2020.102503. Reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Surveillance trade-offs</span><span class="note">Taught as a disagreement, no deployment named. de Montjoye et al. (2013), Scientific Reports 3:1376, read at source (abstract). Consent side: leader session 3.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Who privacy suppression costs</span><span class="note">k 5, zone x hour withholds 100.0% of Staten Island's trips and 0.0% of Manhattan's. Practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Privacy and data protection law</span><span class="note">Named, not taught, no legal advice: <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR, scope</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Why sensor readings go missing</span><span class="note">Missingness mechanics live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Read by borough.</strong> A city-wide error is an average that hides who paid for it.</div>
+      <div class="cheat-item"><strong>Count the dark.</strong> Busiest rule: 3 of 5 boroughs with no sensor and no estimate.</div>
+      <div class="cheat-item"><strong>Dark is worst.</strong> A missing place scores as the worst result, never a skipped blank.</div>
+      <div class="cheat-item"><strong>Trips vs zones.</strong> 88.9% of trips, 15.3% of zones: same sensors, two stories.</div>
+      <div class="cheat-item"><strong>The shrinking denominator.</strong> Reported 0.0%, real -11.1%. Put the 222 zones back.</div>
+      <div class="cheat-item"><strong>Many draws.</strong> Worst-borough error over 400: equity 47.2%, spread 120.5%.</div>
+      <div class="cheat-item"><strong>Reports are recordings.</strong> 311 counts mix the problem with the reporting.</div>
+      <div class="cheat-item"><strong>Trade-offs stay open.</strong> More measurement serves and exposes the same residents.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 9 of 10 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p8-publishing-open-data.html">← Practitioner session 8 · Publishing open data</a>
+        <a href="p10-the-sensor-placement-bench.html">Practitioner session 10 · The sensor-placement bench →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

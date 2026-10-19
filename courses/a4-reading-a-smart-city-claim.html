@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 4 of 6. Five questions to put to any smart-city claim before it moves a budget: regression to the mean when the worst places are picked, a denominator that reports 0.0 percent error while the real error is -11.1 percent, and congestion pricing taught as an open disagreement. Real New York City taxi records, October 2024; Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Reading a smart-city claim - learn smart city with phoebe">
+<meta property="og:description" content="Leader session 4 of 6. Why the worst junctions improve with no treatment, and how dropping 222 unsensed zones turns a -11.1 percent error into 0.0 percent.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/a4-reading-a-smart-city-claim.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reading a smart-city claim - learn smart city with phoebe">
+<meta name="twitter:description" content="Five questions between a city claim and a decision. Real taxi records, a constructed transport office.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 4 · Reading a smart-city claim - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Leader session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Leader session 4 of 6</div>
+    <h1>Reading a <span class="accent">smart-city claim</span></h1>
+    <p class="sub">"The pilot cut delays." "Our sensors count the city with no error." "The charge worked." Every one of these arrives as a number with a story attached, and the story is where the decision gets made. Wrenmouth, a constructed transport office in a fictional city, receives three such claims tonight; the numbers behind them come from real New York City taxi records, October 2024, published by the city's Taxi and Limousine Commission. Tonight is five questions that sit between a claim and a budget, and two mechanisms that make bad claims look good.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders who fund or sign off city data work</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · The worst get better</span>
+      <span class="a3" style="flex:3">18-28 · The shrinking denominator</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth, on the morning three claims land</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed city transport office. On one morning its director gets three memos. The roads team says new signage at the five worst junctions cut delays the following month. The sensor team says its counters measure the city's taxi trips with an error of 0.0 percent. And a council member forwards two evaluations of another city's congestion charge that reach opposite conclusions. Each memo asks for money or a signature. None is lying. Two of them are wrong in ways the memo cannot show, and the third is a disagreement nobody can settle by reading harder.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A five-question checklist for any smart-city claim: compared with what, how were the places chosen, who is in the denominator, what else changed, and how sure are we about whom. Why picking the worst junctions and measuring them again shows an improvement even when nothing was done. How dropping the 222 zones nobody measured turns a real error of -11.1 percent into a reported 0.0 percent, on real October 2024 taxi counts. And a way to hold a contested question, congestion pricing, without pretending it is settled.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What counts as a smart-city claim<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A claim is any sentence that ties a city number to a cause or a quality: this intervention changed that outcome, this measurement is accurate, this place needs more. In a warehouse a claim can usually be checked against the ledger, because the ledger is the business. In a city the rows exist only where a meter, a sensor or a resident happened to be, so the check itself is built from partial rows. A claim is not wrong for being partial; it is wrong when it hides which part.</p>
+        <p>Tonight's habit is to treat every claim as a question the author should already have answered, and to ask for the answer before the money moves.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Before-after claim.</strong> "We measured, we acted, we measured again, it got better." The weakest design a city uses, and the most common.</li>
+          <li><strong>Regression to the mean.</strong> Unusually high or low readings tend to be followed by readings closer to the average, with no cause at all.</li>
+          <li><strong>Selected on the baseline.</strong> Places chosen because their first reading was extreme. The design that makes regression to the mean biggest.</li>
+          <li><strong>Denominator.</strong> What a share or an error is divided by. Change it quietly and any number can look good.</li>
+          <li><strong>Comparison group.</strong> Places that did not get the treatment, measured the same way at the same time. The first thing a before-after claim lacks.</li>
+          <li><strong>Interval.</strong> A range that should contain the truth a stated share of the time. Whether it really does is a separate question.</li>
+          <li><strong>Constructed.</strong> Wrenmouth, its memos and its junctions are invented. The taxi counts and the bench results are real and cited.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers regression to the mean in before-after claims</span>
+      <h2>Pick the worst, measure again, watch them improve</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">The roads team did something every city does. It ranked junctions by last month's delays, picked the five worst, put up signage, and counted again a month later. The five were better. The problem is not the signage; it is the picking. Any count mixes a lasting level with a month of luck, and the five that came top of the list were, on average, the ones that also had the worst luck. Luck does not repeat on schedule, so the next count drifts back towards the middle whether or not anyone did anything.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two panel sketch, constructed example with no numbers. Left panel, first count: ten junctions drawn as dots scattered around a dashed city mean line; the five highest, meaning most delay, are hatched as the worst five picked for treatment. Right panel, next count with no treatment: the same five junctions, filled green, have moved down towards the same mean line, each with an arrow from its old position. The improvement comes from selecting on an extreme first reading.">
+        <defs>
+          <filter id="ctya4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya4aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya4aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya4aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya4aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya4aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya4aH" x="30" y="32">FIRST COUNT: PICK THE WORST FIVE</text>
+        <text class="ctya4aH" x="460" y="32">NEXT COUNT: NOTHING DONE, THEY LOOK BETTER</text>
+        <text class="ctya4aA" x="30" y="58">higher = more delay</text>
+
+        <g filter="url(#ctya4aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panel frames -->
+          <rect x="24" y="44" width="400" height="190" rx="10" transform="rotate(-0.4 224 139)" stroke="#CFC4C1"/>
+          <rect x="454" y="44" width="400" height="190" rx="10" transform="rotate(0.4 654 139)" stroke="#CFC4C1"/>
+          <!-- mean lines -->
+          <path d="M40 170 L410 170" stroke="#C98A82" stroke-dasharray="6 6"/>
+          <path d="M470 170 L840 170" stroke="#C98A82" stroke-dasharray="6 6"/>
+          <!-- left: ten junctions, the worst five hatched -->
+          <circle cx="60" cy="150" r="9" fill="#FFFFFF"/>
+          <circle cx="96" cy="90" r="9" fill="url(#ctya4aHc)"/>
+          <circle cx="132" cy="200" r="9" fill="#FFFFFF"/>
+          <circle cx="168" cy="75" r="9" fill="url(#ctya4aHc)"/>
+          <circle cx="204" cy="185" r="9" fill="#FFFFFF"/>
+          <circle cx="240" cy="110" r="9" fill="url(#ctya4aHc)"/>
+          <circle cx="276" cy="215" r="9" fill="#FFFFFF"/>
+          <circle cx="312" cy="95" r="9" fill="url(#ctya4aHc)"/>
+          <circle cx="348" cy="160" r="9" fill="#FFFFFF"/>
+          <circle cx="384" cy="80" r="9" fill="url(#ctya4aHc)"/>
+          <!-- right: old positions faint, new positions green -->
+          <circle cx="526" cy="90" r="9" stroke="#CFC4C1"/>
+          <circle cx="598" cy="75" r="9" stroke="#CFC4C1"/>
+          <circle cx="670" cy="110" r="9" stroke="#CFC4C1"/>
+          <circle cx="742" cy="95" r="9" stroke="#CFC4C1"/>
+          <circle cx="814" cy="80" r="9" stroke="#CFC4C1"/>
+          <path d="M526 101 L526 128" marker-end="url(#ctya4aAr)"/>
+          <path d="M598 86 L598 138" marker-end="url(#ctya4aAr)"/>
+          <path d="M670 121 L670 163" marker-end="url(#ctya4aAr)"/>
+          <path d="M742 106 L742 148" marker-end="url(#ctya4aAr)"/>
+          <path d="M814 91 L814 123" marker-end="url(#ctya4aAr)"/>
+          <circle cx="526" cy="140" r="9" fill="#8CC27A"/>
+          <circle cx="598" cy="150" r="9" fill="#8CC27A"/>
+          <circle cx="670" cy="175" r="9" fill="#8CC27A"/>
+          <circle cx="742" cy="160" r="9" fill="#8CC27A"/>
+          <circle cx="814" cy="135" r="9" fill="#8CC27A"/>
+          <!-- legend swatches -->
+          <circle cx="40" cy="262" r="8" fill="url(#ctya4aHc)"/>
+          <circle cx="470" cy="262" r="8" fill="#8CC27A"/>
+          <!-- doodle: a junction corner -->
+          <path d="M800 22 L860 22 M800 34 L860 34 M824 12 L824 46 M836 12 L836 46" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya4aS" x="40" y="190">city mean</text>
+        <text class="ctya4aS" x="470" y="210">same mean</text>
+        <text class="ctya4aL" x="56" y="266">picked as the worst five on the first count</text>
+        <text class="ctya4aL" x="486" y="266">the same five, counted again, no treatment</text>
+
+        <text class="ctya4aN" x="30" y="306">Constructed sketch, no data. The five were partly unlucky the first time, and that part does not repeat.</text>
+        <text class="ctya4aN" x="30" y="326">Signage added in between would take the credit for a drop that was coming anyway.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green dots moved towards the mean because they were picked for being extreme, not because anything was done.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the worst get better on their own<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Think of each junction's monthly delay as two parts: a lasting level (the road layout, the traffic it carries) and a month of noise (a burst main, a festival, a wet week). Rank all junctions by one month's count and the top five are the ones where both parts were high. Next month the level is the same and the noise is fresh, so on average the five come back down. A team that intervened in between sees a fall and, reasonably, credits the intervention.</p>
+        <p>Nothing in the memo is false. The count really fell. What the memo cannot show is how much of the fall would have happened anyway, because it has no junctions that were picked the same way and left alone.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Barnett, van der Pols and Dobson (2005), writing for epidemiologists, put it plainly: regression to the mean "can make natural variation in repeated data look like real change", and "should always be considered as a possible cause of an observed change." They add that the effect grows with measurement error and when follow-up is examined only on a sub-sample selected using a baseline value. Picking the five worst junctions is exactly that sub-sample.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>When the effect is biggest<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two conditions from the same paper turn regression to the mean from a footnote into the whole result. First, noisy counts: the more a single month swings, the more of the "worst" ranking is luck. Thin city data is noisy by nature; in our October 2024 taxi month, Staten Island's 20 zones recorded 231 pickups in total, and a handful of trips either way would reorder any ranking of them. Second, selection on the baseline: places chosen because they looked extreme, which is how pilots and hot-spot programmes are usually chosen.</p>
+        <p>So the questions for the roads team are not "did it fall" but "how were the five picked" and "what happened to the junctions you did not touch".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a better design looks like<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Barnett and colleagues say regression to the mean is dealt with by design and suitable methods. The plain versions a leader can ask for:</p>
+        <ul>
+          <li><strong>A comparison group.</strong> Rank the junctions, then treat some of the worst and leave comparable ones alone, chosen by a seeded random draw rather than by judgement. Both groups regress; only the difference is the effect.</li>
+          <li><strong>Select on one count, judge on another.</strong> Pick the places using an earlier period, then compare later periods, so the luck that got them picked is not in the before figure.</li>
+          <li><strong>More than one before reading.</strong> A year of counts shows the lasting level far better than one bad month.</li>
+        </ul>
+        <p>Estimating the effect properly, with difference-in-differences or a synthetic control, is not taught here. It is taught in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation, difference-in-differences</a> and <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">geo tests and synthetic control</a>. Practitioner session 6 frames the same before-after problem for the people who build the counts.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the denominator and contested claims</span>
+      <h2>An error of 0.0 percent, and the zones it left out</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">The sensor team's memo is the one that should worry a director most, because its number is correct. Wrenmouth placed 40 counters on the 40 busiest of New York City's 262 taxi zones, using real October 2024 counts. Each counter counts every pickup in its zone for the month. Checked against the true pickups of those 40 zones, the error is 0.0 percent, by construction. Checked against the whole city, the same count misses 11.1 percent of pickups. Nothing was measured badly; the city was quietly made smaller.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn strip of the 262 taxi zones of the five boroughs. The first part, 40 measured zones, is pale; the rest, highlighted in green, is 222 zones nobody measured holding 430,870 pickups. Below, two reports of the same count from the 40 busiest zones. Report A checks it against the truth of the 40 measured zones only and reports 0.0 percent error. Report B checks it against all 262 zones and finds a real error of minus 11.1 percent. Real New York City taxi counts, October 2024, constructed office.">
+        <defs>
+          <filter id="ctya4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya4bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya4bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya4bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya4bV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctya4bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya4bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya4bH" x="30" y="30">THE BREAK BUTTON: DROP THE UNSENSED ZONES FROM THE DENOMINATOR</text>
+        <text class="ctya4bA" x="60" y="62">the 262 zones of the five boroughs</text>
+
+        <g filter="url(#ctya4bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="60" y="72" width="116" height="38" rx="4" transform="rotate(-0.4 118 91)" fill="#FAF0EE"/>
+          <rect x="176" y="72" width="644" height="38" rx="4" transform="rotate(0.2 498 91)" fill="#8CC27A"/>
+          <path d="M118 114 L118 146" marker-end="url(#ctya4bAr)"/>
+          <path d="M600 114 L600 146" marker-end="url(#ctya4bAr)"/>
+          <rect x="60" y="150" width="360" height="96" rx="10" transform="rotate(-0.5 240 198)" fill="#FFFFFF"/>
+          <rect x="460" y="150" width="360" height="96" rx="10" transform="rotate(0.5 640 198)" fill="#FFFFFF"/>
+          <!-- doodle: a zone outline -->
+          <path d="M800 14 L846 10 L860 30 L838 46 L806 40 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya4bL" x="68" y="96">40 measured</text>
+        <text class="ctya4bL" x="190" y="96">222 zones nobody measured: 430,870 pickups dropped from the denominator</text>
+
+        <text class="ctya4bL" x="76" y="174">Report A: count from the 40 busiest zones,</text>
+        <text class="ctya4bL" x="76" y="192">checked against those 40 zones only</text>
+        <text class="ctya4bV" x="76" y="228">0.0%</text>
+        <text class="ctya4bS" x="136" y="227">reported error, true by construction</text>
+
+        <text class="ctya4bL" x="476" y="174">Report B: the same count,</text>
+        <text class="ctya4bL" x="476" y="192">checked against all 262 zones</text>
+        <text class="ctya4bV" x="476" y="228">-11.1%</text>
+        <text class="ctya4bS" x="548" y="227">real error against 3,876,702 pickups</text>
+
+        <text class="ctya4bN" x="30" y="278">Canon run of the bench: 40 of 262 zones, seed 1017. Real NYC counts, Wrenmouth constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green part of the strip is the city the 0.0 percent never looked at.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The 0.0 percent that is true and useless<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Any accuracy figure is a comparison: estimate against truth. The trick is in choosing which truth. Compare the counters only with the zones they sit in, and they cannot be wrong, because they are the truth for those zones. The bench in practitioner session 10 keeps this as a "break button": press it and the reported error falls to 0.0 percent while the real error against the city stays at -11.1 percent, because 222 zones and 430,870 pickups have left the denominator.</p>
+        <p>The tell is in the wording. "Error against measured locations", "accuracy where data is available", "for zones with coverage": each of these is a 0.0 percent waiting to happen. Ask for the error against the place the decision is about. In leader session 2 the same placement looked excellent on another number, 88.9 percent of trips covered, while 15.3 percent of zones were measured and three boroughs had no counter at all.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Congestion pricing: where serious people disagree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The council member's two evaluations are a different kind of problem. Evaluations of congestion pricing and road-use charges disagree about how large the effect is, how long it lasts and who bears the cost. Some of that disagreement is about design: a before-after comparison of a charged zone is exposed to regression to the mean, to seasons, and to everything else that changed in the same months. Some of it is about values: whose journeys count, and whether a faster core is worth a dearer trip for people who cannot avoid it.</p>
+        <p>No figure from any city's scheme appears on these pages, and none is needed to do the useful thing: run each evaluation through the same five questions, write down where they differ, and accept that a leader may have to decide while the question is still open. Treating the more recent or the more confident study as the winner is not reading; it is choosing.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The only fact these pages state about New York's own scheme is a schema change. The TLC's yellow taxi data dictionary (March 18, 2025) adds a column, <code>cbd_congestion_fee</code>, described as a "Per-trip charge for MTA's Congestion Relief Zone starting Jan. 5, 2025." Our October 2024 file predates it, so the column is absent. Any before-after study that spans that date is also comparing two different schemas.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How sure is "how sure"<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Even an honest claim with a range attached has a second claim inside it: that the range means what it says. On the bench, Wrenmouth's equity placement reports a nominal 90 percent interval for city pickups. Over 400 fresh placements that interval covers the truth 81.75 percent of the time, about 82 percent, because pickups are so skewed across zones. On the canon draw itself, the interval of 2,744,659 to 3,638,364 misses the true 3,876,702.</p>
+        <p>The question for any memo with a range is: "how often has a range built this way contained the truth?" Most memos cannot answer it. The ones that can are worth more. For how intervals are built, see <a href="https://phoebefu6.github.io/learn-statistics-with-phoebe/courses/b7-confidence-intervals.html">learn statistics, confidence intervals</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Five questions between a claim and a decision</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Take one claim you have seen in a memo, a press release or a briefing, about delays, footfall, complaints or air, and walk it through five gates in order. The figure walks Wrenmouth's signage claim (constructed) through the same gates. A claim that clears all five is a finding worth acting on; a claim that stalls at one goes back with that question attached.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn flow. On the left, Wrenmouth's constructed claim: signage at the five worst junctions cut delays. An arrow leads to a stack of five question gates: 1 compared with what, 2 how were the places chosen, 3 who is in the denominator, 4 what else changed at the same time, 5 how sure, and who goes dark. An arrow leads to a green box on the right: what you write back, a claim with its open questions named and the design that would settle them.">
+        <defs>
+          <filter id="ctya4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya4cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya4cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya4cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya4cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya4cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya4cH" x="30" y="30">FIVE QUESTIONS BETWEEN A CLAIM AND A DECISION</text>
+
+        <g filter="url(#ctya4cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="150" width="220" height="100" rx="10" transform="rotate(-1.5 140 200)" fill="url(#ctya4cHc)"/>
+          <path d="M254 200 L294 200" marker-end="url(#ctya4cAr)"/>
+          <rect x="300" y="50" width="300" height="46" rx="8" transform="rotate(-0.6 450 73)" fill="#FFFFFF"/>
+          <rect x="300" y="110" width="300" height="46" rx="8" transform="rotate(0.5 450 133)" fill="#FFFFFF"/>
+          <rect x="300" y="170" width="300" height="46" rx="8" transform="rotate(-0.4 450 193)" fill="#FFFFFF"/>
+          <rect x="300" y="230" width="300" height="46" rx="8" transform="rotate(0.6 450 253)" fill="#FFFFFF"/>
+          <rect x="300" y="290" width="300" height="46" rx="8" transform="rotate(-0.5 450 313)" fill="#FFFFFF"/>
+          <path d="M606 200 L644 200" marker-end="url(#ctya4cAr)"/>
+          <rect x="650" y="130" width="200" height="140" rx="10" transform="rotate(0.8 750 200)" fill="#8CC27A"/>
+          <!-- doodle: a lamp post -->
+          <path d="M836 110 L836 54 L852 54" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="852" cy="59" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctya4cA" x="30" y="140">the memo, constructed</text>
+        <text class="ctya4cL" x="44" y="186">Signage at the five</text>
+        <text class="ctya4cL" x="44" y="204">worst junctions</text>
+        <text class="ctya4cL" x="44" y="222">cut delays.</text>
+
+        <text class="ctya4cL" x="314" y="70">1 · Compared with what?</text>
+        <text class="ctya4cS" x="314" y="86">a comparison group, and two denominators</text>
+        <text class="ctya4cL" x="314" y="130">2 · How were the places chosen?</text>
+        <text class="ctya4cS" x="314" y="146">picked as the worst: expect regression</text>
+        <text class="ctya4cL" x="314" y="190">3 · Who is in the denominator?</text>
+        <text class="ctya4cS" x="314" y="206">dropped zones make any error 0.0%</text>
+        <text class="ctya4cL" x="314" y="250">4 · What else changed at the same time?</text>
+        <text class="ctya4cS" x="314" y="266">seasons, other policies, a new schema</text>
+        <text class="ctya4cL" x="314" y="310">5 · How sure, and who goes dark?</text>
+        <text class="ctya4cS" x="314" y="326">a tested range, and places with no row</text>
+
+        <text class="ctya4cH" x="664" y="158">What you write back</text>
+        <text class="ctya4cL" x="664" y="184">A claim with its open</text>
+        <text class="ctya4cL" x="664" y="202">questions named, and</text>
+        <text class="ctya4cL" x="664" y="220">the design that would</text>
+        <text class="ctya4cL" x="664" y="238">settle them.</text>
+
+        <text class="ctya4cN" x="30" y="370">Constructed claim. Every gate is a question the author should already have answered before asking for money.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green box is the output: not a yes or a no, but the claim with its open questions attached.</figcaption>
+    </figure>
+
+    <div class="wk" id="ctya4-check">
+      <div class="wk-head">
+        <b>Checklist</b>
+        <span class="wk-hint">Tick a gate only when the claim's author has answered it, not when you can guess the answer. Nothing is saved or sent.</span>
+      </div>
+      <div class="wk-body">
+        <label class="ctya4-row"><input type="checkbox"> <span><b>1 · Compared with what?</b> A comparison group treated the same way at the same time, and an error stated against a named denominator.</span></label>
+        <label class="ctya4-row"><input type="checkbox"> <span><b>2 · How were the places chosen?</b> If they were picked for being extreme, the before figure carries luck that will not repeat.</span></label>
+        <label class="ctya4-row"><input type="checkbox"> <span><b>3 · Who is in the denominator?</b> Every place the decision is about, including the ones with no sensor.</span></label>
+        <label class="ctya4-row"><input type="checkbox"> <span><b>4 · What else changed at the same time?</b> Season, other policies, fares, the data's own schema.</span></label>
+        <label class="ctya4-row"><input type="checkbox"> <span><b>5 · How sure, and who goes dark?</b> A range whose coverage has been checked, and a list of places the claim says nothing about.</span></label>
+        <p class="sql-note" id="ctya4-verdict">0 of 5 answered: still a claim.</p>
+      </div>
+      <div class="wk-foot">Static checklist. Your ticks stay in this tab only.</div>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the claim as one sentence</h4>
+        <p>Strip it to "X caused Y" or "X is accurate to Z". If you cannot, the memo is not making a claim yet; send it back for one.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask what it is compared with</h4>
+        <p>Look for places or periods that did not get the treatment. If the only comparison is the same places before, write "before-after only" next to the claim.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask how the places were picked</h4>
+        <p>Worst, busiest, most complained-about: any choice made on an extreme reading predicts improvement with no treatment. Note which it was.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the denominator</h4>
+        <p>For every share or error, write what it is divided by. If the answer is "the places we measured", ask for the number against the whole area. Wrenmouth's 0.0 percent becomes -11.1 percent.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>List what else changed</h4>
+        <p>Season, a new fare, a new fee, a road closure, a change in how the data is recorded. Each is a rival explanation the claim must rule out.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write back, do not rule</h4>
+        <p>Return the claim with the gates it has not cleared and the cheapest design that would clear them. For a formal audit of causal claims, use <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/courses/a2-the-claim-audit.html">learn causal inference, the claim audit</a>.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a city number arrives with a cause attached, do not ask whether you believe it. Ask compared with what, how the places were chosen, divided by what, what else changed, and how sure about whom. A claim that answers all five is a finding. A claim that cannot is a hypothesis with a budget request stapled to it.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Wrenmouth (constructed) picks the five junctions with the worst delays last month, adds signage, and next month delays at those five are lower. What is the right reading?</p>
+      <button class="qopt" type="button">A · The signage works and should be rolled out to every junction</button>
+      <button class="qopt" type="button">B · The counts must be wrong, because signage cannot change delays that fast</button>
+      <button class="qopt" type="button">C · Some fall was expected with no treatment, because the five were picked on an extreme first reading; the claim needs a comparison group</button>
+      <p class="qwhy">Junctions selected for an extreme baseline drift back towards the mean on their own (Barnett et al., 2005). The fall may be partly real, so A overclaims; nothing suggests the counts are wrong, so B dismisses the data for the wrong reason.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A memo says Wrenmouth's 40 counters measure taxi pickups with an error of 0.0 percent. What do you ask first?</p>
+      <button class="qopt" type="button">A · Error against what: if it is checked only against the 40 measured zones, it is 0.0 percent by construction, and against all 262 zones it is -11.1 percent</button>
+      <button class="qopt" type="button">B · Nothing: 0.0 percent means the counters are perfect</button>
+      <button class="qopt" type="button">C · Whether more counters would push the error below zero</button>
+      <p class="qwhy">The denominator decides the error. Dropping the 222 unsensed zones and their 430,870 pickups makes any count look exact. B accepts the number without its denominator; C misreads what an error of zero means.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Two evaluations of a congestion charge reach different conclusions about its effect. What is the sound next step?</p>
+      <button class="qopt" type="button">A · Trust the more recent one</button>
+      <button class="qopt" type="button">B · Run both through the same five questions, write down where their designs and assumptions differ, and treat the question as open</button>
+      <button class="qopt" type="button">C · Average their two effect sizes</button>
+      <p class="qwhy">Evaluations disagree on size, durability and who bears the cost, and before-after designs are exposed to regression to the mean, seasons and concurrent changes. Recency (A) is not a design, and averaging (C) blends a good design with a weak one.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one real claim and one of your own.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run one public city claim through the five gates</h4>
+        <p>Find a claim in a city press release or annual report: a pilot that cut something, a scheme that improved something. Write one line per gate and mark which gates the source answers. Do not decide whether it is true.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find one denominator in your own work</h4>
+        <p>Pick a share or error your team reports and write down exactly what it is divided by. If any place or group drops out of that denominator, write the sentence your report would need to say so.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Redesign one before-after</h4>
+        <p>Take a before-after you have seen and sketch, in three lines, the comparison group and the selection rule that would have made it a finding.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Regression to the mean</span><span class="note">Barnett, van der Pols and Dobson (2005), International Journal of Epidemiology 34(1):215-220. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The shrinking denominator</span><span class="note">Bench break button on October 2024 TLC records: 0.0 percent reported, -11.1 percent real, 222 zones and 430,870 pickups dropped. Derived, node and python agree.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A five-question claim checklist</span><span class="note">Compared with what, how chosen, which denominator, what else changed, how sure about whom.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The congestion fee column</span><span class="note">TLC yellow taxi data dictionary (March 18, 2025): <code>cbd_congestion_fee</code> from Jan. 5, 2025. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Congestion pricing effects</span><span class="note">Taught as a disagreement only; no figure from any city's scheme.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Whether an interval means what it says</span><span class="note">Named tonight: a nominal 90 percent interval covers about 82 percent on the bench. Practitioner session 10.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Causal identification and the claim audit</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/courses/a2-the-claim-audit.html">learn causal inference, the claim audit</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Difference-in-differences and synthetic control</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation b9</a> and <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">b8</a>.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> A claim is a question its author should already have answered.</div>
+      <div class="cheat-item"><strong>Five gates.</strong> Compared with what? How chosen? Divided by what? What else changed? How sure, about whom?</div>
+      <div class="cheat-item"><strong>Pick the worst.</strong> Places chosen on an extreme reading improve with no treatment.</div>
+      <div class="cheat-item"><strong>Barnett 2005.</strong> Regression to the mean "should always be considered as a possible cause of an observed change."</div>
+      <div class="cheat-item"><strong>The break button.</strong> Drop unsensed zones: 0.0 percent reported, -11.1 percent real.</div>
+      <div class="cheat-item"><strong>The tell.</strong> "Error where data is available" means the denominator moved.</div>
+      <div class="cheat-item"><strong>Contested.</strong> Congestion pricing effects: lay the designs side by side, never crown one.</div>
+      <div class="cheat-item"><strong>Write back.</strong> Not yes or no: the claim, its open gates, the design that would close them.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 4 of 6 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a3-residents-who-never-consented.html">← Leader session 3 · Residents who never consented</a>
+        <a href="a5-why-the-warehouse-playbook-breaks-here.html">Leader session 5 · Why the warehouse playbook breaks here →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  var box = document.getElementById("ctya4-check");
+  if (!box) return;
+  var ticks = box.querySelectorAll("input[type=checkbox]");
+  var verdict = document.getElementById("ctya4-verdict");
+  function render() {
+    var n = 0;
+    ticks.forEach(function (t) { if (t.checked) n++; });
+    verdict.textContent = n === 5
+      ? "5 of 5 answered: a finding worth acting on."
+      : n + " of 5 answered: still a claim. Send it back with the open " + (5 - n === 1 ? "gate" : "gates") + " attached.";
+  }
+  ticks.forEach(function (t) { t.addEventListener("change", render); });
+  render();
+})();
+</script>
+<style>
+  #ctya4-check .ctya4-row { display: flex; gap: .6rem; align-items: flex-start; padding: .45rem 0; border-bottom: 1px solid var(--hairline); font-size: .92rem; line-height: 1.45; cursor: pointer; }
+  #ctya4-check .ctya4-row input { margin-top: .25rem; accent-color: var(--indigo); }
+  #ctya4-check .sql-note { margin-top: .7rem; }
+</style>
+</body>
+</html>

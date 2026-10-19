@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 5 of 6. Five mechanisms where the warehouse playbook breaks on city data: the source, the identity, the ground truth, the feedback loop and the cost of being wrong. Real New York City taxi records, October 2024; Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Why the warehouse playbook breaks here - learn smart city with phoebe">
+<meta property="og:description" content="Leader session 5 of 6. A sale is the event; a pickup is supply meeting demand. Five mechanisms, each drawn warehouse row against city row.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/a5-why-the-warehouse-playbook-breaks-here.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why the warehouse playbook breaks here - learn smart city with phoebe">
+<meta name="twitter:description" content="Five mechanisms where warehouse instincts misfire on city data, drawn row against row.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 5 · Why the warehouse playbook breaks here - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Leader session 5 of 6</div>
+    <h1>Why the warehouse playbook <span class="accent">breaks here</span></h1>
+    <p class="sub">A good warehouse team brings habits that work: trust the row, key on the customer, count the sale, refresh the dashboard, fix the refund. Each habit rests on a mechanism, and on city data each mechanism changes. Wrenmouth, a constructed transport office in a fictional city, hired its analyst from a retail warehouse; the rows she works on are real New York City taxi records, October 2024, published by the city's Taxi and Limousine Commission. Tonight is five mechanisms, each drawn as a warehouse row against a city row.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders who fund or sign off city data work</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Source, identity, truth</span>
+      <span class="a3" style="flex:2">18-28 · Loop and cost</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's analyst, three weeks in</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed city transport office. Its analyst spent years building retail dashboards, and she is good at it. Three weeks in, she has a pickups-by-zone dashboard, a ranked list of the busiest zones and a draft plan to put counting sensors on them. Every step was correct by the warehouse playbook. Tonight walks through why the same steps, on city rows, quietly produce a plan that leaves three boroughs unmeasured, and which mechanism did it each time.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Five mechanisms, not slogans: the source (a row someone meant vs a row that exists where a cab happened to be), the identity (a customer who agreed vs a zone and an hour that can still single a person out), the ground truth (a sale is the event; a pickup is supply meeting demand), the feedback loop (a dashboard that refreshes vs sensors that make the counts they read), and the cost of being wrong (a refund vs a borough that goes dark). Each one drawn row against row, plus a five-line audit card to run on any plan before it reaches a budget.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The playbook is not wrong, its assumptions are local<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nothing in the warehouse playbook is a mistake. Joining on a customer key, treating a sale as the fact, refreshing a dashboard daily: each is right because of something true about retail data. A row is written on purpose, by a person the business knows, recording the event the business cares about, in a system whose readings do not change what happens next.</p>
+        <p>Take any one of those away and the habit built on it starts to mislead. City data takes away all five at once. The method is to name the mechanism under each habit, check whether it still holds, and keep the habit only where it does. Leader session 6 turns the result into a transfer map.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Writer.</strong> Whatever creates a row: a meter, a sensor, a resident, a clerk. A city row has a writer that happened to be somewhere.</li>
+          <li><strong>Censored demand.</strong> A pickup is recorded only where a cab was there to be hailed, so the record is supply meeting demand, never demand alone.</li>
+          <li><strong>Feedback loop.</strong> A measurement that decides where the next measurement goes, so the data starts describing its own placement.</li>
+          <li><strong>Dark borough.</strong> A borough with no sensor at all. Anything said about it is a guess.</li>
+          <li><strong>Constructed.</strong> Wrenmouth, its budget and its placement rules are invented. The trip counts are real and cited.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the source, the identity and the ground truth</span>
+      <h2>Who wrote the row, who it is about, and what it measures</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">The first three mechanisms live inside a single row. In a warehouse, the row was meant, it is about a known customer, and it is the event. In a city, the row exists because a writer was nearby, it is about someone who never signed anything, and it records only the part of the event that met a cab. Each figure below puts the two rows side by side.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of the source of a row. Left, a warehouse: a customer places an order on purpose, and the order row's author is the buyer, triggered by a decision to buy, one sale one row. Right, a city: five zones on one street, two where a cab was hailed and a trip row exists, three highlighted in green where there was need but no cab and no row. The trip row's author is a provider's meter, not the TLC, and its trigger is a cab present and hailed.">
+        <defs>
+          <filter id="ctya5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya5aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya5aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya5aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya5aH" x="30" y="32">A WAREHOUSE ROW</text>
+        <text class="ctya5aH" x="450" y="32">A CITY ROW</text>
+
+        <g filter="url(#ctya5aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="380" height="56" rx="8" transform="rotate(-0.5 220 78)" fill="#FFFFFF"/>
+          <path d="M220 108 L220 130" marker-end="url(#ctya5aAr)"/>
+          <rect x="30" y="136" width="380" height="104" rx="8" transform="rotate(0.4 220 188)" fill="#FAF0EE"/>
+          <rect x="450" y="50" width="72" height="56" rx="6" transform="rotate(-2 486 78)" fill="url(#ctya5aHc)"/>
+          <rect x="528" y="50" width="72" height="56" rx="6" transform="rotate(1.5 564 78)" fill="#8CC27A"/>
+          <rect x="606" y="50" width="72" height="56" rx="6" transform="rotate(-1 642 78)" fill="#8CC27A"/>
+          <rect x="684" y="50" width="72" height="56" rx="6" transform="rotate(2 720 78)" fill="url(#ctya5aHc)"/>
+          <rect x="762" y="50" width="72" height="56" rx="6" transform="rotate(-1.5 798 78)" fill="#8CC27A"/>
+          <!-- doodle: a kerb -->
+          <path d="M450 116 L834 116" stroke="#C98A82" stroke-width="2.5"/>
+          <path d="M720 120 L720 130" marker-end="url(#ctya5aAr)"/>
+          <rect x="450" y="136" width="400" height="104" rx="8" transform="rotate(-0.4 650 188)" fill="#FAF0EE"/>
+        </g>
+
+        <text class="ctya5aL" x="46" y="74">A customer places an order</text>
+        <text class="ctya5aS" x="46" y="94">on purpose, in a system the business runs</text>
+        <text class="ctya5aL" x="46" y="160">order row</text>
+        <text class="ctya5aK" x="46" y="182">author: the buyer, who meant it</text>
+        <text class="ctya5aK" x="46" y="202">trigger: a decision to buy</text>
+        <text class="ctya5aK" x="46" y="222">one sale, exactly one row</text>
+
+        <text class="ctya5aL" x="460" y="76">hailed</text>
+        <text class="ctya5aK" x="460" y="94">row</text>
+        <text class="ctya5aL" x="538" y="76">need</text>
+        <text class="ctya5aK" x="538" y="94">no cab</text>
+        <text class="ctya5aL" x="616" y="76">need</text>
+        <text class="ctya5aK" x="616" y="94">no cab</text>
+        <text class="ctya5aL" x="694" y="76">hailed</text>
+        <text class="ctya5aK" x="694" y="94">row</text>
+        <text class="ctya5aL" x="772" y="76">need</text>
+        <text class="ctya5aK" x="772" y="94">no cab</text>
+
+        <text class="ctya5aL" x="466" y="160">trip row</text>
+        <text class="ctya5aK" x="466" y="182">author: a provider's meter, not the TLC</text>
+        <text class="ctya5aK" x="466" y="202">trigger: a cab present and hailed</text>
+        <text class="ctya5aK" x="466" y="222">need with no cab nearby writes nothing</text>
+
+        <text class="ctya5aN" x="30" y="264">TLC Trip Record Data page: "The trip data was not created by the TLC, and TLC makes no</text>
+        <text class="ctya5aN" x="30" y="282">representations as to the accuracy of these data." Green cells: need that met no cab.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the warehouse row was meant; the city row exists only where a cab happened to be, and the green cells write nothing at all.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Mechanism 1 · the source<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Warehouse.</strong> The order row exists because a customer decided to buy, inside a system the business designed. If a row is wrong, there is an owner to ask and a process to fix.</p>
+        <p><strong>City.</strong> A taxi trip row exists because "the taximeter was engaged" in some zone, which needs a cab to be present and a passenger to hail it. The data was "collected and provided" to the TLC by technology providers. Nobody at the publisher meant the row, and the publisher says so. A street where cabs rarely cruise writes few rows, whatever its residents need; the TLC's own green cab rule, which bars green cabs "south of West 110th St and East 96th St", shapes where rows can be written at all.</p>
+        <p><strong>What breaks.</strong> The habit "trust the row, then check it" assumes the row's existence is not itself a finding. In a city it is: where rows exist tells you where writers were.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The TLC's page states that "the trip data was not created by the TLC, and TLC makes no representations as to the accuracy of these data." The October 2024 files bear it out: 47 rows carry a pickup time outside October 2024, the earliest stamped 2009-01-01. A monthly file from a writer you do not control is not a clean month. Practitioner session 1 opens those rows.</p>
+        </div>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of identity. Left, a warehouse key: customer_id, issued by the business, to a person who agreed to terms and whose orders and consent join to it. Right, a city key: pickup zone plus pickup hour, no name anywhere, a rider who never agreed, looking anonymous on every row until rows from one person line up. Four points drawn as dots in a zone outline. Green band: four spatio-temporal points are enough to uniquely identify 95 percent of individuals, de Montjoye et al. 2013.">
+        <defs>
+          <filter id="ctya5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="52" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya5bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya5bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya5bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya5bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya5bH" x="30" y="32">A WAREHOUSE KEY</text>
+        <text class="ctya5bH" x="450" y="32">A CITY KEY</text>
+
+        <g filter="url(#ctya5bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="380" height="120" rx="8" transform="rotate(-0.4 220 110)" fill="#FFFFFF"/>
+          <rect x="450" y="50" width="400" height="120" rx="8" transform="rotate(0.4 650 110)" fill="#FFFFFF"/>
+          <!-- doodle: a zone outline -->
+          <path d="M462 186 L740 182 L746 228 L466 230 Z" stroke="#C98A82" stroke-width="2"/>
+          <path d="M490 208 L570 198 L650 214 L720 202" stroke="#C98A82" stroke-dasharray="4 5"/>
+          <circle cx="490" cy="208" r="6" fill="#FAF0EE"/>
+          <circle cx="570" cy="198" r="6" fill="#FAF0EE"/>
+          <circle cx="650" cy="214" r="6" fill="#FAF0EE"/>
+          <circle cx="720" cy="202" r="6" fill="#FAF0EE"/>
+          <rect x="30" y="246" width="820" height="46" rx="10" transform="rotate(-0.3 440 269)" fill="#8CC27A"/>
+        </g>
+
+        <text class="ctya5bL" x="46" y="76">customer_id</text>
+        <text class="ctya5bK" x="46" y="98">a key the business issued</text>
+        <text class="ctya5bK" x="46" y="118">the person agreed to terms at sign-up</text>
+        <text class="ctya5bK" x="46" y="138">joins to their orders and their consent</text>
+        <text class="ctya5bS" x="46" y="158">identity is the point, and it is governed</text>
+
+        <text class="ctya5bL" x="466" y="76">pickup zone + pickup hour</text>
+        <text class="ctya5bK" x="466" y="98">a zone and a time, no name anywhere</text>
+        <text class="ctya5bK" x="466" y="118">the rider never agreed to anything</text>
+        <text class="ctya5bK" x="466" y="138">looks anonymous on every single row</text>
+        <text class="ctya5bS" x="466" y="158">until rows from one person line up</text>
+
+        <text class="ctya5bA" x="760" y="210">4 points</text>
+        <text class="ctya5bA" x="30" y="204">warehouse: who is the reason the row exists</text>
+        <text class="ctya5bA" x="30" y="222">city: who is what someone can work out</text>
+
+        <text class="ctya5bL" x="46" y="266">"four spatio-temporal points are enough to uniquely identify 95% of the individuals"</text>
+        <text class="ctya5bK" x="46" y="284">de Montjoye et al. (2013): 1.5 million people, 15 months; uniqueness decays only as the 1/10 power of resolution</text>
+
+        <text class="ctya5bN" x="30" y="312">Coarser places and hours help less than intuition says. Leader session 3 has the whole argument.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a warehouse key is a person who agreed; a city key is a place and an hour, and four of them are enough to find the person anyway.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Mechanism 2 · the identity<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Warehouse.</strong> The customer key is the centre of the model. The person behind it signed up, accepted terms, and can be asked. Governance is about using a known identity well.</p>
+        <p><strong>City.</strong> A taxi row carries a pickup zone and a time, not a name. That looks safer, and on any single row it is. The trouble is that people move in patterns. In de Montjoye and colleagues' study of fifteen months of location data for 1.5 million people, "four spatio-temporal points are enough to uniquely identify 95% of the individuals", and uniqueness fell only "approximately as the 1/10 power" of the resolution. Coarsening helps far less than it feels like it should.</p>
+        <p><strong>What breaks.</strong> The habit "no customer key, so no personal data" fails. The residents in a city table never agreed to be measured, yet a few of their rows together can single them out. Law exists for this, and it is not taught here: see <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/a1-scope.html">learn GDPR, scope</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/a1-why-pdpa-dnc.html">learn PDPA</a>.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of ground truth. Left, a warehouse: a customer decides to buy, and the order row is the event itself. Right, a city: three cases, need with no cab writes no row and is highlighted in green, a cab with no need writes no row, and need meeting a cab writes a pickup row. The table holds only the third case, so true demand is never observed.">
+        <defs>
+          <filter id="ctya5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya5cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya5cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya5cA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya5cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya5cH" x="30" y="32">A SALE</text>
+        <text class="ctya5cH" x="450" y="32">A PICKUP</text>
+
+        <g filter="url(#ctya5cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="380" height="56" rx="8" transform="rotate(-0.5 220 78)" fill="#FFFFFF"/>
+          <path d="M220 108 L220 130" marker-end="url(#ctya5cAr)"/>
+          <rect x="30" y="136" width="380" height="70" rx="8" transform="rotate(0.4 220 171)" fill="url(#ctya5cHc)"/>
+          <rect x="450" y="50" width="124" height="70" rx="8" transform="rotate(-1.5 512 85)" fill="#8CC27A"/>
+          <rect x="588" y="50" width="124" height="70" rx="8" transform="rotate(1 650 85)" fill="#FFFFFF"/>
+          <rect x="726" y="50" width="124" height="70" rx="8" transform="rotate(-1 788 85)" fill="url(#ctya5cHc)"/>
+          <!-- doodle: a kerb -->
+          <path d="M450 130 L712 130" stroke="#C98A82" stroke-width="2.5"/>
+          <path d="M788 124 L788 136" marker-end="url(#ctya5cAr)"/>
+          <rect x="450" y="140" width="400" height="66" rx="8" transform="rotate(-0.4 650 173)" fill="#FAF0EE"/>
+        </g>
+
+        <text class="ctya5cL" x="46" y="74">A customer decides to buy</text>
+        <text class="ctya5cS" x="46" y="94">the decision and the record are one act</text>
+        <text class="ctya5cL" x="46" y="162">order row = the event</text>
+        <text class="ctya5cK" x="46" y="184">what you count is what happened</text>
+
+        <text class="ctya5cL" x="460" y="80">need, no cab</text>
+        <text class="ctya5cK" x="460" y="100">no row</text>
+        <text class="ctya5cL" x="598" y="80">cab, no need</text>
+        <text class="ctya5cK" x="598" y="100">no row</text>
+        <text class="ctya5cL" x="736" y="80">need meets cab</text>
+        <text class="ctya5cK" x="736" y="100">a pickup row</text>
+
+        <text class="ctya5cL" x="466" y="166">the table holds only the right-hand box</text>
+        <text class="ctya5cK" x="466" y="188">the green box is invisible, not zero</text>
+
+        <text class="ctya5cA" x="30" y="232">warehouse: the row is the truth</text>
+        <text class="ctya5cA" x="450" y="232">city: true demand is never observed (censored)</text>
+
+        <text class="ctya5cN" x="30" y="262">October 2024: yellow cabs wrote 99.0% of Manhattan's pickups, 88.5% of Brooklyn's; green cabs 56,147 rows.</text>
+        <text class="ctya5cN" x="30" y="280">Green cabs may not work south of West 110th St and East 96th St. No number for true demand exists here.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a sale is the event; a pickup is only the corner of the event where need met a cab, and the green box never reaches the table.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Mechanism 3 · the ground truth<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Warehouse.</strong> A sale is the thing the business wants to count. Model it, forecast it, attribute it: the row and the outcome are the same object.</p>
+        <p><strong>City.</strong> The planning question is "where do people need transport?" A pickup answers a narrower one: "where did a person who wanted a ride meet a cab that was there?" Need with no cab nearby leaves no row. So recorded pickups are supply meeting demand, and true demand is never observed. That is what censored means here. Our data holds no number for true demand, and no honest page invents one.</p>
+        <p><strong>What breaks.</strong> The habit "rank by volume, fund the top" treats recorded volume as need. In a city it partly measures where supply already is. A zone with zero pickups in October 2024, of which Manhattan had 2 and Staten Island 2, may have had no need, no cab, or both.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The same mechanism in resident reports<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Complaint lines censor in a different way. A problem becomes a row only when someone reports it. Boxer, Hong, Kontokosta and Neill (2025) studied New York City's 311 heating and hot water complaints and found "some subpopulations reporting at lower rates than others"; their model separates the chance of a problem from the chance of reporting it. A study of another US city reports a similar pattern for street condition complaints (Kontokosta and Hong 2021, reported).</p>
+        <p>Same shape as the taxi case: the row is need meeting a writer, and the writer is unevenly spread.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the feedback loop and the cost of being wrong</span>
+      <h2>When the measurement moves the data, and nobody is there to complain</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">The last two mechanisms are about what happens after the analysis. A warehouse dashboard reads the business without changing it, and a wrong call shows up as a refund someone asks for. A sensor plan decides where the next counts can come from, and a wrong plan shows up as silence in the places it skipped.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of feedback. Left, a warehouse: sales happen, the dashboard refreshes, and the reading does not move the sales. Right, a city: a four step loop, first-week pickups, sensors on the busiest zones, they count trips there, the next plan reads those counts. Green band, constructed office with real counts: the busiest rule puts 88.9 percent of trips in measured zones while outer-borough sensors fall from 29 under the equity floor to 2, and the outer-borough error goes from plus 22.0 percent to plus 6,388.6 percent.">
+        <defs>
+          <filter id="ctya5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="54" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya5dH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5dL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5dS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya5dK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya5dA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya5dN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya5dH" x="30" y="32">A DASHBOARD</text>
+        <text class="ctya5dH" x="450" y="32">A SENSOR PLACEMENT</text>
+
+        <g filter="url(#ctya5dSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="170" height="50" rx="8" transform="rotate(-1 115 81)" fill="#FFFFFF"/>
+          <rect x="240" y="56" width="170" height="50" rx="8" transform="rotate(1 325 81)" fill="#FFFFFF"/>
+          <path d="M204 81 L234 81" marker-end="url(#ctya5dAr)"/>
+          <path d="M325 110 C325 146, 115 146, 115 114" marker-end="url(#ctya5dAr)"/>
+          <rect x="450" y="56" width="190" height="50" rx="8" transform="rotate(-1 545 81)" fill="url(#ctya5dHc)"/>
+          <rect x="660" y="56" width="190" height="50" rx="8" transform="rotate(1 755 81)" fill="#FFFFFF"/>
+          <rect x="660" y="146" width="190" height="50" rx="8" transform="rotate(-1 755 171)" fill="#FFFFFF"/>
+          <rect x="450" y="146" width="190" height="50" rx="8" transform="rotate(1 545 171)" fill="#FAF0EE"/>
+          <path d="M642 81 L656 81" marker-end="url(#ctya5dAr)"/>
+          <path d="M755 108 L755 142" marker-end="url(#ctya5dAr)"/>
+          <path d="M658 171 L644 171" marker-end="url(#ctya5dAr)"/>
+          <path d="M545 144 L545 110" marker-end="url(#ctya5dAr)"/>
+          <!-- doodle: a lamp post -->
+          <path d="M392 230 L392 196 L406 196" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="406" cy="201" r="4" fill="#FFFFFF"/>
+          <rect x="30" y="242" width="820" height="52" rx="10" transform="rotate(-0.3 440 268)" fill="#8CC27A"/>
+        </g>
+
+        <text class="ctya5dL" x="44" y="86">sales happen</text>
+        <text class="ctya5dL" x="254" y="86">dashboard refreshes</text>
+        <text class="ctya5dS" x="46" y="172">reading the numbers does not move the sales</text>
+
+        <text class="ctya5dL" x="462" y="86">1 first-week pickups</text>
+        <text class="ctya5dL" x="672" y="86">2 sensors on busiest</text>
+        <text class="ctya5dL" x="672" y="176">3 they count trips there</text>
+        <text class="ctya5dL" x="462" y="176">4 next plan reads them</text>
+
+        <text class="ctya5dA" x="30" y="214">warehouse: the reading does not move the readings</text>
+        <text class="ctya5dA" x="450" y="222">city: where you measured decides what you see next</text>
+
+        <text class="ctya5dL" x="46" y="264">Busiest rule, 40 sensors (constructed office, real counts): 88.9% of trips in measured zones</text>
+        <text class="ctya5dK" x="46" y="284">outer-borough sensors fall from 29 (equity floor) to 2; outer-borough error goes from +22.0% to +6,388.6%</text>
+
+        <text class="ctya5dN" x="30" y="316">The bench runs one turn of this loop. Steps 3 and 4 are the mechanism that makes the next turn worse.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a dashboard reads the business; a sensor plan writes the next year's data, and the green band is what one turn of the loop already costs.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Mechanism 4 · the feedback loop<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Warehouse.</strong> A dashboard refreshes every morning. Looking at it does not change where customers shop. So "follow the data" is safe: the data does not depend on where you looked.</p>
+        <p><strong>City.</strong> Wrenmouth (constructed) knows only the first week's recorded pickups when it places 40 sensors. The busiest rule puts them on the 40 busiest zones: 38 in Manhattan, 2 on the Queens airports. Those sensors count trips in those zones and nowhere else. Next year's plan, if it reads this year's sensor counts, sees the same zones busy again, because those are the only zones anyone counted. The placement has started to describe itself.</p>
+        <p>One turn of the loop is already expensive. Against the equity rule with a floor of 4 per borough, the busiest rule raises trip coverage by 68.5 points (88.9 percent against 20.4 percent) while outer-borough sensors fall from 29 to 2, and the outer-borough estimate goes from 22.0 percent too high to 6,388.6 percent too high. The bench in practitioner session 10 prints that comparison as "worse".</p>
+        <p><strong>What breaks.</strong> "Follow the data" becomes "follow your own previous placement". The fix is a placement rule chosen before looking at counts, with a floor for every area, which leader session 2 and practitioner session 5 build.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 304" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of the cost of being wrong. Left, a warehouse: a forecast misses, and the result is a refund, one customer, one amount, and the customer complains so you find out. Right, a city under the busiest rule with 40 sensors: Manhattan 38 sensors and an error of plus 66.8 percent, Queens 2 sensors on the airports and an error of plus 2,724.7 percent, and Brooklyn, the Bronx and Staten Island highlighted in green with no sensor, dark.">
+        <defs>
+          <filter id="ctya5eSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="55" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya5eHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya5eAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya5eH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5eL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5eS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya5eK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya5eA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya5eN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya5eH" x="30" y="32">A WRONG ORDER</text>
+        <text class="ctya5eH" x="450" y="32">A WRONG PLACEMENT, 40 SENSORS</text>
+
+        <g filter="url(#ctya5eSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="380" height="56" rx="8" transform="rotate(-0.5 220 78)" fill="#FFFFFF"/>
+          <path d="M220 108 L220 130" marker-end="url(#ctya5eAr)"/>
+          <rect x="30" y="136" width="380" height="84" rx="8" transform="rotate(0.4 220 178)" fill="#FAF0EE"/>
+          <!-- doodle: a kerb -->
+          <path d="M30 232 L200 232" stroke="#C98A82" stroke-width="2.5"/>
+          <rect x="450" y="50" width="400" height="30" rx="6" transform="rotate(-0.4 650 65)" fill="url(#ctya5eHc)"/>
+          <rect x="450" y="88" width="400" height="30" rx="6" transform="rotate(0.3 650 103)" fill="#FFFFFF"/>
+          <rect x="450" y="126" width="400" height="30" rx="6" transform="rotate(-0.3 650 141)" fill="#8CC27A"/>
+          <rect x="450" y="164" width="400" height="30" rx="6" transform="rotate(0.4 650 179)" fill="#8CC27A"/>
+          <rect x="450" y="202" width="400" height="30" rx="6" transform="rotate(-0.3 650 217)" fill="#8CC27A"/>
+        </g>
+
+        <text class="ctya5eL" x="46" y="74">A forecast misses</text>
+        <text class="ctya5eS" x="46" y="94">the customer gets the wrong thing</text>
+        <text class="ctya5eL" x="46" y="160">a refund</text>
+        <text class="ctya5eK" x="46" y="182">one customer, one amount, on a ledger</text>
+        <text class="ctya5eK" x="46" y="202">the customer complains, so you find out</text>
+
+        <text class="ctya5eL" x="466" y="70">Manhattan</text>
+        <text class="ctya5eK" x="600" y="70">38 sensors · error +66.8%</text>
+        <text class="ctya5eL" x="466" y="108">Queens</text>
+        <text class="ctya5eK" x="600" y="108">2 sensors, both airports · +2,724.7%</text>
+        <text class="ctya5eL" x="466" y="146">Brooklyn</text>
+        <text class="ctya5eK" x="600" y="146">no sensor · dark</text>
+        <text class="ctya5eL" x="466" y="184">Bronx</text>
+        <text class="ctya5eK" x="600" y="184">no sensor · dark</text>
+        <text class="ctya5eL" x="466" y="222">Staten Island</text>
+        <text class="ctya5eK" x="600" y="222">no sensor · dark</text>
+
+        <text class="ctya5eA" x="30" y="254">warehouse: the error announces itself</text>
+        <text class="ctya5eA" x="450" y="254">city: a dark borough cannot complain in the data</text>
+
+        <text class="ctya5eN" x="30" y="278">Busiest rule, city estimate +482.2%. Drop unsensed zones from the denominator and the error reads 0.0%;</text>
+        <text class="ctya5eN" x="30" y="296">the real error is -11.1%, with 222 zones and 430,870 pickups out of sight. Leader session 4 has the trick.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a wrong order comes back as a complaint; a wrong placement comes back as three green rows with nothing in them.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Mechanism 5 · the cost of being wrong<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Warehouse.</strong> A bad forecast costs a refund or a write-off. It is priced, it lands on a ledger, and the customer who got the wrong thing tells you. Errors surface on their own, so a team can afford to ship and correct.</p>
+        <p><strong>City.</strong> Under Wrenmouth's busiest rule (constructed office, real October 2024 counts), Brooklyn, the Bronx and Staten Island get no sensor. Their errors are not large; they are undefined. The city-wide estimate is 482.2 percent too high, Queens alone 2,724.7 percent, because two airport sensors stand in for a whole borough. And nobody in a dark borough files a correction, because nothing about them is in the table to correct.</p>
+        <p><strong>What breaks.</strong> "Ship, then fix what customers report" assumes the people hurt by an error can see it and say so. In a city, the people a placement skips are exactly the ones with no row. The error has to be looked for, by design, before the budget is spent.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Staten Island recorded 231 taxi pickups in the whole of October 2024, across its 20 zones. Any plan that ranks zones by recorded trips will place nothing there. Whether Staten Island residents need transport is a question the taxi table cannot answer, and a plan built on it will never be told it was wrong.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How the fairer rule compares, and what stays open<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Spreading sensors helps but does not finish the job. Over 400 seeded placements with the same 40 sensors, the worst-borough error averages 120.5 percent under a plain spread rule and 47.2 percent under the equity rule with a floor of 4. Even then, a nominal 90 percent interval covers the true city total about 82 percent of the time (0.8175), because pickups are so skewed. Practitioner session 10 shows every one of these numbers live.</p>
+        <p>What stays open is whether more city sensing is worth it at all. One side points to planning that rests on counts rather than anecdote; the other to measurement that grows past its first purpose and falls hardest on people with least say. Reasonable people hold both positions. Leader session 3 lays them side by side; no page here settles it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Audit one warehouse habit against the five mechanisms</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Pick one habit your team would carry into city work without thinking: a ranked top-N, a daily dashboard, a "fix it when someone complains" process. Run it through the audit card below, one row per mechanism. The left column is what the habit silently assumes; the right column is the question to ask instead.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn audit card with five rows. The source: warehouse assumes someone meant the row; ask who wrote it and where they were. The identity: warehouse assumes a customer who agreed; ask whether four points could single someone out. The ground truth: warehouse assumes the sale is the event; ask whether this is supply meeting demand. The feedback loop: warehouse assumes reading does not move the numbers; ask whether the placement made these counts. The cost of being wrong: warehouse assumes a refund someone reports; ask who goes dark and cannot complain. The ask column is highlighted in green.">
+        <defs>
+          <filter id="ctya5fSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="56" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya5fHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya5fAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya5fL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya5fS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya5fA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya5fN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya5fA" x="40" y="40">MECHANISM</text>
+        <text class="ctya5fA" x="218" y="40">THE WAREHOUSE ASSUMES</text>
+        <text class="ctya5fA" x="544" y="40">ASK IN THE CITY</text>
+
+        <g filter="url(#ctya5fSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="170" height="34" rx="6" transform="rotate(-0.6 115 69)" fill="#FAF0EE"/>
+          <rect x="206" y="52" width="320" height="34" rx="6" transform="rotate(0.3 366 69)" fill="#FFFFFF"/>
+          <rect x="532" y="52" width="318" height="34" rx="6" transform="rotate(-0.3 691 69)" fill="#8CC27A"/>
+          <rect x="30" y="94" width="170" height="34" rx="6" transform="rotate(0.5 115 111)" fill="#FAF0EE"/>
+          <rect x="206" y="94" width="320" height="34" rx="6" transform="rotate(-0.3 366 111)" fill="#FFFFFF"/>
+          <rect x="532" y="94" width="318" height="34" rx="6" transform="rotate(0.3 691 111)" fill="#8CC27A"/>
+          <rect x="30" y="136" width="170" height="34" rx="6" transform="rotate(-0.4 115 153)" fill="#FAF0EE"/>
+          <rect x="206" y="136" width="320" height="34" rx="6" transform="rotate(0.3 366 153)" fill="#FFFFFF"/>
+          <rect x="532" y="136" width="318" height="34" rx="6" transform="rotate(-0.3 691 153)" fill="#8CC27A"/>
+          <rect x="30" y="178" width="170" height="34" rx="6" transform="rotate(0.6 115 195)" fill="#FAF0EE"/>
+          <rect x="206" y="178" width="320" height="34" rx="6" transform="rotate(-0.3 366 195)" fill="#FFFFFF"/>
+          <rect x="532" y="178" width="318" height="34" rx="6" transform="rotate(0.3 691 195)" fill="#8CC27A"/>
+          <rect x="30" y="220" width="170" height="34" rx="6" transform="rotate(-0.5 115 237)" fill="#FAF0EE"/>
+          <rect x="206" y="220" width="320" height="34" rx="6" transform="rotate(0.3 366 237)" fill="#FFFFFF"/>
+          <rect x="532" y="220" width="318" height="34" rx="6" transform="rotate(-0.3 691 237)" fill="#8CC27A"/>
+          <!-- doodle: a kerb -->
+          <path d="M30 264 L200 264" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya5fL" x="42" y="74">1 The source</text>
+        <text class="ctya5fS" x="218" y="74">someone meant the row</text>
+        <text class="ctya5fL" x="544" y="74">who wrote it, and where were they?</text>
+        <text class="ctya5fL" x="42" y="116">2 The identity</text>
+        <text class="ctya5fS" x="218" y="116">a customer who agreed to terms</text>
+        <text class="ctya5fL" x="544" y="116">could four points single someone out?</text>
+        <text class="ctya5fL" x="42" y="158">3 The ground truth</text>
+        <text class="ctya5fS" x="218" y="158">the sale is the event</text>
+        <text class="ctya5fL" x="544" y="158">is this supply meeting demand?</text>
+        <text class="ctya5fL" x="42" y="200">4 The feedback loop</text>
+        <text class="ctya5fS" x="218" y="200">reading does not move the numbers</text>
+        <text class="ctya5fL" x="544" y="200">did our placement make these counts?</text>
+        <text class="ctya5fL" x="42" y="242">5 The cost of wrong</text>
+        <text class="ctya5fS" x="218" y="242">a refund someone reports</text>
+        <text class="ctya5fL" x="544" y="242">who goes dark and cannot complain?</text>
+
+        <text class="ctya5fN" x="30" y="282">Run any dashboard or plan through the green column before it reaches a budget decision.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the white column is the habit; the green column is the question that replaces it on city data.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the habit in one line</h4>
+        <p>For example: "fund the ten busiest zones", or "build a daily dashboard of pickups by zone". Write who on your team would propose it and why it worked for them before.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Rows 1 and 2: who wrote it, who is in it</h4>
+        <p>Name the writer of every row the habit uses, and the trigger. Then list what fields describe a place and a time. If four of them could line up for one resident, mark the habit as touching personal data even though there is no name in the table.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 3: what the count actually measures</h4>
+        <p>Rewrite the habit's key metric as "X meeting Y". Pickups are need meeting cabs; complaints are problems meeting someone who reports. Write one example of need the metric cannot see.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 4: does the habit feed itself?</h4>
+        <p>Ask whether the output decides where the next data comes from. A top-N that places sensors does; a dashboard that only reads does not. If it feeds itself, write the rule you would fix before looking at any counts, such as a floor per borough.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 5: who would never report the error</h4>
+        <p>List the places or groups that would have no row if the habit were wrong about them. Under Wrenmouth's busiest rule that list is three boroughs. If your list is empty, look again at row 3.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Keep, change or drop</h4>
+        <p>Mark the habit: keep it as is, keep it with a guard (name the guard), or drop it for city data. Bring the mark to leader session 6, where it goes onto the transfer map.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before you reuse a warehouse habit, say the mechanism it rests on out loud. If the mechanism is "someone meant the row", "a customer agreed", "the row is the event", "reading does not move it" or "errors report themselves", check it first. On city data, each of those is usually false.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Wrenmouth's analyst ranks zones by recorded pickups and proposes funding new services in the top ten. Which mechanism is she most likely missing?</p>
+      <button class="qopt" type="button">A · The identity: pickup rows contain customer names</button>
+      <button class="qopt" type="button">B · The cost of being wrong: refunds will be expensive</button>
+      <button class="qopt" type="button">C · The ground truth: a pickup is need meeting a cab, so the ranking partly measures where cabs already are</button>
+      <p class="qwhy">Recorded pickups are censored demand: need with no cab nearby writes no row. Ranking by them rewards existing supply. A is false, the rows carry a zone and a time, not a name; B borrows the warehouse cost model the session warns against.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why is a sensor placement plan a feedback loop when a sales dashboard is not?</p>
+      <button class="qopt" type="button">A · Sensors only count where they are placed, so next year's counts reflect this year's placement, and a plan that reads them sees its own choices</button>
+      <button class="qopt" type="button">B · Sensors refresh more often than dashboards</button>
+      <button class="qopt" type="button">C · Sensor data is less accurate than sales data</button>
+      <p class="qwhy">The loop is about where data can come from, not speed or accuracy. Under the busiest rule (constructed office, real counts) outer-borough sensors fall from 29 to 2 and the outer-borough error rises from +22.0 percent to +6,388.6 percent, and any plan built on those counts inherits the gap.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A city publishes trip counts by zone and hour with no names. A colleague says "no customer key, so no personal data risk." What is the best reply?</p>
+      <button class="qopt" type="button">A · Correct, without a name nobody can be identified</button>
+      <button class="qopt" type="button">B · Not safe by default: in one study four points in place and time identified 95 percent of people, and coarser data helped less than expected</button>
+      <button class="qopt" type="button">C · The data must never be published in any form</button>
+      <p class="qwhy">de Montjoye and colleagues (2013) found four spatio-temporal points identify 95 percent of individuals, with uniqueness decaying only as the 1/10 power of resolution. C overreaches: publishing with care is possible, and practitioner sessions 7 and 8 show how.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty five minutes, on habits you already have.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Audit three habits</h4>
+        <p>Run the five-row audit card on three habits from your own team: one about data sources, one about metrics, one about how errors get noticed. Mark each keep, guard or drop.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find one feedback loop you already run</h4>
+        <p>In any work, not only city data, find one place where a measurement decides where the next measurement is taken. Write what it can no longer see.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name one dark area</h4>
+        <p>Pick a place or group your organisation's data never reaches. Write how you would know if a decision about them were wrong. If the answer is "we would not", you have found mechanism 5.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The source</span><span class="note">TLC Trip Record Data page: providers collect, TLC "makes no representations as to the accuracy"; 47 out-of-month rows; TLC Green Cab page. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The identity</span><span class="note">de Montjoye et al. (2013): four points identify 95 percent; 1/10 power decay. Read at source (abstract).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The ground truth</span><span class="note">Censored demand as a mechanism; yellow share 99.0 percent Manhattan vs 88.5 percent Brooklyn. Counted from October 2024 records.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The feedback loop</span><span class="note">Busiest vs equity rule: 88.9 vs 20.4 percent of trips, outer sensors 29 to 2, outer error +22.0 to +6,388.6 percent. Constructed office, real counts.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The cost of being wrong</span><span class="note">Three boroughs dark under the busiest rule; city estimate +482.2 percent; reported 0.0 vs real -11.1 percent.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Unequal reporting</span><span class="note">Boxer et al. (2025), read at source (abstract); Kontokosta and Hong (2021), reported. Leader session 2, practitioner session 4.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Consent and surveillance trade-offs</span><span class="note">Named tonight. Leader session 3, practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The transfer map</span><span class="note">Tonight's keep, guard or drop marks feed leader session 6.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensor drift and missing readings</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Auditing a causal claim</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/courses/a2-the-claim-audit.html">learn causal inference, the claim audit</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Vendors, products and named programmes</span><span class="note">Out of scope by design. Wrenmouth is constructed.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Every warehouse habit rests on a mechanism; check the mechanism before reusing the habit.</div>
+      <div class="cheat-item"><strong>1 Source.</strong> A city row exists where a writer happened to be. TLC: "not created by the TLC".</div>
+      <div class="cheat-item"><strong>2 Identity.</strong> No name is not no person. Four points identify 95 percent.</div>
+      <div class="cheat-item"><strong>3 Ground truth.</strong> A sale is the event; a pickup is need meeting a cab. True demand is never observed.</div>
+      <div class="cheat-item"><strong>4 Feedback loop.</strong> Sensors count where they are; the next plan reads its own placement.</div>
+      <div class="cheat-item"><strong>5 Cost of wrong.</strong> Busiest rule: three boroughs dark, city estimate +482.2 percent, nobody complains.</div>
+      <div class="cheat-item"><strong>The denominator trick.</strong> Drop unsensed zones: error reads 0.0 percent, really -11.1 percent.</div>
+      <div class="cheat-item"><strong>The audit card.</strong> Who wrote it? Who is in it? What meets what? Does it feed itself? Who goes dark?</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 5 of 6 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a4-reading-a-smart-city-claim.html">← Leader session 4 · Reading a smart-city claim</a>
+        <a href="a6-from-warehouse-to-city.html">Leader session 6 · From warehouse to city: the transfer map →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

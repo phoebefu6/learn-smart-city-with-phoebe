@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 6 of 6. What a data team already has that is worth more in a city, what is new, and what is actively dangerous, drawn as three columns. Closes with a 90-day self-study ladder on free sources, each marked official or not. Real New York City taxi records, October 2024; Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="From warehouse to city: the transfer map - learn smart city with phoebe">
+<meta property="og:description" content="Leader session 6 of 6. Carries over, must learn, must unlearn, and a 90-day ladder on official and free sources.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/a6-from-warehouse-to-city.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="From warehouse to city: the transfer map - learn smart city with phoebe">
+<meta name="twitter:description" content="Three columns for anyone arriving from a data team, and a 90-day ladder of free, official sources.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 6 · From warehouse to city: the transfer map - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Leader session 6 of 6</div>
+    <h1>From warehouse to city: <span class="accent">the transfer map</span></h1>
+    <p class="sub">Five sessions showed where the warehouse playbook breaks. Tonight is the practical half: what a data analyst, engineer or scientist already has that is worth more in a city, what is genuinely new, and which habits are actively dangerous. Wrenmouth, a constructed city transport office in a fictional city, is still the decision-maker; every number comes from real New York City taxi records, October 2024, or from Wrenmouth's constructed sensor bench run on them. It closes with a 90-day self-study ladder on free sources, each one marked official or not.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders who fund or sign off city data work</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Carries over, must learn</span>
+      <span class="a3" style="flex:2">18-28 · Must unlearn</span>
+      <span class="a4" style="flex:4">28-45 · Your 90-day ladder</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth's analyst, six weeks in</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed city transport office, and its analyst came from a retail warehouse. Six weeks in, she has stopped asking whether her old skills count. Some count for more than they did: her habit of keeping a ledger of dropped rows caught 47 taxi records stamped outside the month. Some are missing: nobody taught her that a recorded pickup is demand that met a cab. And some are quietly harmful: her first sensor plan covered 88.9 percent of trips and left three boroughs dark. Tonight she writes all three down, and plans the next 90 days.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A transfer map in three columns, carries over, must learn, must unlearn, with four concrete rows each: a skill, a method, a tool class and a reading. The four warehouse instincts that produce a confident wrong number in a city, each with the number it hides: 88.9 percent of trips against 15.3 percent of zones, an error of 0.0 percent reported against -11.1 percent real. And your own 90-day self-study ladder, built only on free sources, every one marked official or not.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a transfer map and not a reading list<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A reading list assumes you start from nothing. Someone arriving from a data team starts from a lot, and the risk is not ignorance, it is confidence in the wrong place. A transfer map sorts what you already know into three piles, so you spend the 90 days on the second and third piles and stop re-learning the first.</p>
+        <p>The same three columns sit on the landing page under "If you come from a data team". This session is the full version: every item tied to the session that teaches it and to one source you can read for free.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The yellow taxi data dictionary writes the airport column as <code>airport_fee</code>. The October 2024 file's column is <code>Airport_fee</code>, with a capital A. A warehouse habit, read the schema, not the PDF, catches it in a minute. That is what "carries over" means: a skill that was good practice before and is load-bearing now.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How to read the three columns<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Carries over.</strong> Worth more here than in a warehouse, because city data has no author you can ask. Keep doing it, harder.</li>
+          <li><strong>Must learn.</strong> Ideas a business data team rarely needs: who writes a row, demand you cannot see, placement under a budget, and people who never agreed to be measured.</li>
+          <li><strong>Must unlearn.</strong> Habits that are correct in a warehouse and produce a confident wrong answer in a city. These are the dangerous column, because they feel like competence.</li>
+          <li><strong>The four rows.</strong> Reading a row, joining and counting, estimating, publishing. Each column says what that step looks like for you.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers carries over and must learn</span>
+      <h2>What you bring, and what is new</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Draw the map once and every later decision gets easier. The left column is your warehouse toolkit, sharpened. The middle column is the city's own grammar, which leader sessions 1 to 3 and practitioner sessions 3, 5, 7 and 10 teach. The right column, green because it is the one that bites, is Part 2.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn transfer map in three columns of four items. Carries over: profile before you aggregate and keep a ledger of dropped rows; join on the lookup table and treat unknown ids as missing; rates with a stated denominator; reproducible pipelines with a reference that agrees. Must learn: who writes a city row; censored demand; stratified placement and estimation with intervals checked for coverage; re-identification risk and small-cell suppression. Must unlearn, highlighted in green: no rows means no demand; measure where the activity is, 88.9 percent of trips with three boroughs dark; error only where you measured, 0.0 percent reported and -11.1 percent real; aggregated means anonymous, four location points identify 95 percent of people.">
+        <defs>
+          <filter id="ctya6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya6aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya6aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya6aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya6aK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya6aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya6aH" x="30" y="32">THE TRANSFER MAP: FROM A DATA TEAM TO A CITY DATA TEAM</text>
+
+        <g filter="url(#ctya6aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="48" width="260" height="44" rx="8" transform="rotate(-0.4 160 70)" fill="#FFFFFF"/>
+          <rect x="310" y="48" width="260" height="44" rx="8" transform="rotate(0.4 440 70)" fill="#FAF0EE"/>
+          <rect x="590" y="48" width="260" height="44" rx="8" transform="rotate(-0.4 720 70)" fill="#8CC27A"/>
+          <rect x="30" y="102" width="260" height="64" rx="8" transform="rotate(0.3 160 134)" fill="#FFFFFF"/>
+          <rect x="30" y="176" width="260" height="64" rx="8" transform="rotate(-0.3 160 208)" fill="#FFFFFF"/>
+          <rect x="30" y="250" width="260" height="64" rx="8" transform="rotate(0.3 160 282)" fill="#FFFFFF"/>
+          <rect x="30" y="324" width="260" height="64" rx="8" transform="rotate(-0.3 160 356)" fill="#FFFFFF"/>
+          <rect x="310" y="102" width="260" height="64" rx="8" transform="rotate(-0.3 440 134)" fill="#FFFFFF"/>
+          <rect x="310" y="176" width="260" height="64" rx="8" transform="rotate(0.3 440 208)" fill="#FFFFFF"/>
+          <rect x="310" y="250" width="260" height="64" rx="8" transform="rotate(-0.3 440 282)" fill="#FFFFFF"/>
+          <rect x="310" y="324" width="260" height="64" rx="8" transform="rotate(0.3 440 356)" fill="#FFFFFF"/>
+          <rect x="590" y="102" width="260" height="64" rx="8" transform="rotate(0.3 720 134)" fill="#FFFFFF"/>
+          <rect x="590" y="176" width="260" height="64" rx="8" transform="rotate(-0.3 720 208)" fill="#FFFFFF"/>
+          <rect x="590" y="250" width="260" height="64" rx="8" transform="rotate(0.3 720 282)" fill="#FFFFFF"/>
+          <rect x="590" y="324" width="260" height="64" rx="8" transform="rotate(-0.3 720 356)" fill="#FFFFFF"/>
+          <!-- doodle: a zone outline -->
+          <path d="M790 14 L828 10 L850 24 L842 40 L806 42 L792 30 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya6aH" x="44" y="67">CARRIES OVER</text>
+        <text class="ctya6aS" x="44" y="84">worth more here than before</text>
+        <text class="ctya6aH" x="324" y="67">MUST LEARN</text>
+        <text class="ctya6aS" x="324" y="84">new to most data teams</text>
+        <text class="ctya6aH" x="604" y="67">MUST UNLEARN</text>
+        <text class="ctya6aK" x="604" y="84">right in a warehouse, wrong here</text>
+
+        <text class="ctya6aL" x="44" y="122">Profile before you aggregate</text>
+        <text class="ctya6aS" x="44" y="139">keep a ledger of every dropped row</text>
+        <text class="ctya6aS" x="44" y="155">47 out-of-month rows, 13,169 outside</text>
+        <text class="ctya6aL" x="44" y="196">Join on the lookup table</text>
+        <text class="ctya6aS" x="44" y="213">treat an id meaning unknown</text>
+        <text class="ctya6aS" x="44" y="229">as missing: 265 rows, 262 kept</text>
+        <text class="ctya6aL" x="44" y="270">Rates with a stated denominator</text>
+        <text class="ctya6aS" x="44" y="287">always ask: coverage of what?</text>
+        <text class="ctya6aS" x="44" y="303">trips and places are two answers</text>
+        <text class="ctya6aL" x="44" y="344">Reproducible pipelines</text>
+        <text class="ctya6aS" x="44" y="361">seeds, plus a reference that agrees</text>
+        <text class="ctya6aS" x="44" y="377">3,486 values, 0 disagreements</text>
+
+        <text class="ctya6aL" x="324" y="122">Who writes a city row</text>
+        <text class="ctya6aS" x="324" y="139">a meter, a sensor, a resident</text>
+        <text class="ctya6aS" x="324" y="155">each with its own blind spot</text>
+        <text class="ctya6aL" x="324" y="196">Censored demand</text>
+        <text class="ctya6aS" x="324" y="213">a recorded pickup is demand</text>
+        <text class="ctya6aS" x="324" y="229">that met supply, never demand alone</text>
+        <text class="ctya6aL" x="324" y="270">Stratified placement</text>
+        <text class="ctya6aS" x="324" y="287">and estimation, with intervals</text>
+        <text class="ctya6aS" x="324" y="303">checked for coverage over draws</text>
+        <text class="ctya6aL" x="324" y="344">Re-identification risk</text>
+        <text class="ctya6aS" x="324" y="361">and small-cell suppression</text>
+        <text class="ctya6aS" x="324" y="377">on published counts</text>
+
+        <text class="ctya6aL" x="604" y="122">No rows means no demand</text>
+        <text class="ctya6aS" x="604" y="139">it can mean no cab, no sensor</text>
+        <text class="ctya6aS" x="604" y="155">or no report</text>
+        <text class="ctya6aL" x="604" y="196">Measure where the activity is</text>
+        <text class="ctya6aS" x="604" y="213">88.9% of trips covered,</text>
+        <text class="ctya6aS" x="604" y="229">three boroughs dark</text>
+        <text class="ctya6aL" x="604" y="270">Error only where you measured</text>
+        <text class="ctya6aS" x="604" y="287">0.0% reported against measured,</text>
+        <text class="ctya6aS" x="604" y="303">-11.1% against the city</text>
+        <text class="ctya6aL" x="604" y="344">Aggregated means anonymous</text>
+        <text class="ctya6aS" x="604" y="361">four location points identify</text>
+        <text class="ctya6aS" x="604" y="377">95% of people</text>
+
+        <text class="ctya6aN" x="30" y="410">Rows, top to bottom: reading a row, joining and counting, estimating, publishing. Real NYC counts.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - read across a row to see one step of the job three ways; the green column is the one that feels like competence.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Carries over: the four habits that matter more here<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Skill: profile before you aggregate.</strong> A monthly file is not a clean month. The October 2024 yellow and green files hold 3,889,918 rows; 47 carry a pickup time outside October, one as early as 2009, and 13,169 pick up outside the five boroughs. A ledger of every dropped row and its reason is what lets anyone trust the 3,876,702 that remain. Practitioner session 1 builds that ledger.</p>
+        <p><strong>Method: join on the lookup table, and treat "unknown" as missing.</strong> The official zone lookup has 265 rows, but two of them mean "Unknown" and "Outside of NYC", and one is Newark airport. Keeping 262 is a decision you write down, not a default. Practitioner session 2.</p>
+        <p><strong>Denominator: rates that say "of what".</strong> The same 40 sensors cover 88.9 percent of trips and 15.3 percent of zones. Both are true. A warehouse analyst who always names the denominator already has the instinct; in a city it decides who gets measured.</p>
+        <p><strong>Tool class: a reproducible, seeded pipeline with a reference implementation.</strong> No product needed: a dataframe library, a fixed random seed, and a second implementation that must agree. Wrenmouth's bench compares the browser engine with a python reference on 3,486 values and finds 0 disagreements. When a budget decision rests on a number, that agreement is the evidence.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Must learn: the city's own grammar<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Skill: name who writes the row.</strong> A meter engaged where a cab was hailed, a sensor where it was bolted, a resident who chose to report. A 2025 study of New York City's 311 heating and hot water complaints found "some subpopulations reporting at lower rates than others" (Boxer, Hong, Kontokosta and Neill). Leader session 1.</p>
+        <p><strong>Idea: censored demand.</strong> A pickup is recorded only where a cab was present to be hailed, so the records measure supply meeting demand. Green cabs may not operate south of West 110th St and East 96th St, by the TLC's own rule. No number for "true demand" exists in the data, and none should be invented. Practitioner session 3.</p>
+        <p><strong>Method: stratified placement and estimation.</strong> Spread a sensor budget across boroughs, estimate per stratum, and report an interval whose coverage you have checked. On Wrenmouth's constructed bench a nominal 90 percent interval covered the city truth about 82 percent of the time over 400 placements, because pickups are so skewed. The honest rung says so. Practitioner sessions 5 and 10.</p>
+        <p><strong>Tool class: re-identification risk and small-cell suppression.</strong> Withhold any published count below k. At k 5 on zone x hour, that withholds 41.3 percent of cells but 0.7 percent of trips, and 100 percent of Staten Island's cells. Leader session 3, practitioner session 7.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The map as a table, with one reading per column<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="tablescroll">
+        <table class="clean">
+          <thead><tr><th>Row</th><th>Carries over</th><th>Must learn</th><th>Must unlearn</th></tr></thead>
+          <tbody>
+            <tr><td>Reading a row</td><td>Skill: profiling, with a ledger of every dropped row (p1)</td><td>Skill: who writes a city row, and its blind spot (a1)</td><td>"No rows means no demand" (a1, p3)</td></tr>
+            <tr><td>Joining and counting</td><td>Method: lookup joins; unknown ids as missing (p2)</td><td>Idea: censored demand, a pickup is demand that met supply (p3)</td><td>"Measure where the activity is" (a2)</td></tr>
+            <tr><td>Estimating</td><td>Denominator: rates that state "of what" (a1, a2)</td><td>Method: stratified placement, intervals checked for coverage (p5, p10)</td><td>Error computed only where you measured (a4)</td></tr>
+            <tr><td>Publishing</td><td>Tool class: seeded pipelines and a reference that agrees (p10)</td><td>Tool class: small-cell suppression on counts (p7)</td><td>"Aggregated means anonymous" (a3)</td></tr>
+            <tr><td>Reading</td><td>TLC yellow taxi data dictionary (official)</td><td>de Montjoye et al. 2013; Boxer et al. 2025 (papers)</td><td>Barnett et al. 2005; Sweeney 2002 (papers)</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers must unlearn</span>
+      <h2>Four instincts, and the number each one hides</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">The unlearn column is short because each item is a whole habit. Every one of them is correct in a warehouse, where the table is the business. In a city the table is only where the writers were, so each instinct produces a clean, confident number that hides another one.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 368" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn four rows. Each row: a warehouse instinct, what it reports, and what is true, the last highlighted in green. No rows means no demand reports an empty zone; the truth is no cab, no sensor or no report, and the table cannot say which. Measuring where the activity is reports 88.9 percent of trips; the truth is 15.3 percent of zones and three boroughs dark. Error measured only where you measured reports 0.0 percent; the real city error is -11.1 percent with 222 zones dropped. Aggregated means anonymous reports safe to publish; four location points made 95 percent of people unique in a 2013 study.">
+        <defs>
+          <filter id="ctya6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya6bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya6bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya6bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya6bK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya6bV { font: 800 18px Inter, sans-serif; fill: #6E2F29; }
+          .ctya6bW { font: 800 18px Inter, sans-serif; fill: #241A18; }
+          .ctya6bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya6bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya6bH" x="30" y="28">FOUR WAREHOUSE INSTINCTS, AND THE NUMBER EACH ONE HIDES</text>
+        <text class="ctya6bA" x="30" y="54">THE INSTINCT</text>
+        <text class="ctya6bA" x="320" y="54">WHAT IT REPORTS</text>
+        <text class="ctya6bA" x="600" y="54">WHAT IS TRUE</text>
+
+        <g filter="url(#ctya6bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="64" width="260" height="56" rx="8" transform="rotate(-0.3 160 92)" fill="#FFFFFF"/>
+          <rect x="320" y="64" width="240" height="56" rx="8" transform="rotate(0.3 440 92)" fill="url(#ctya6bHc)"/>
+          <rect x="600" y="64" width="250" height="56" rx="8" transform="rotate(-0.3 725 92)" fill="#8CC27A"/>
+          <path d="M292 92 L316 92" marker-end="url(#ctya6bAr)"/>
+          <path d="M562 92 L596 92" marker-end="url(#ctya6bAr)"/>
+
+          <rect x="30" y="134" width="260" height="56" rx="8" transform="rotate(0.3 160 162)" fill="#FFFFFF"/>
+          <rect x="320" y="134" width="240" height="56" rx="8" transform="rotate(-0.3 440 162)" fill="#FAF0EE"/>
+          <rect x="600" y="134" width="250" height="56" rx="8" transform="rotate(0.3 725 162)" fill="#8CC27A"/>
+          <path d="M292 162 L316 162" marker-end="url(#ctya6bAr)"/>
+          <path d="M562 162 L596 162" marker-end="url(#ctya6bAr)"/>
+
+          <rect x="30" y="204" width="260" height="56" rx="8" transform="rotate(-0.3 160 232)" fill="#FFFFFF"/>
+          <rect x="320" y="204" width="240" height="56" rx="8" transform="rotate(0.3 440 232)" fill="#FAF0EE"/>
+          <rect x="600" y="204" width="250" height="56" rx="8" transform="rotate(-0.3 725 232)" fill="#8CC27A"/>
+          <path d="M292 232 L316 232" marker-end="url(#ctya6bAr)"/>
+          <path d="M562 232 L596 232" marker-end="url(#ctya6bAr)"/>
+
+          <rect x="30" y="274" width="260" height="56" rx="8" transform="rotate(0.3 160 302)" fill="#FFFFFF"/>
+          <rect x="320" y="274" width="240" height="56" rx="8" transform="rotate(-0.3 440 302)" fill="#FAF0EE"/>
+          <rect x="600" y="274" width="250" height="56" rx="8" transform="rotate(0.3 725 302)" fill="#8CC27A"/>
+          <path d="M292 302 L316 302" marker-end="url(#ctya6bAr)"/>
+          <path d="M562 302 L596 302" marker-end="url(#ctya6bAr)"/>
+          <!-- doodle: a lamp post -->
+          <path d="M836 44 L836 12 L852 12" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="852" cy="17" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctya6bL" x="44" y="88">No rows means no demand</text>
+        <text class="ctya6bS" x="44" y="106">a quiet zone is a quiet place</text>
+        <text class="ctya6bL" x="334" y="88">The zone looks empty</text>
+        <text class="ctya6bS" x="334" y="106">few pickups, few complaints</text>
+        <text class="ctya6bL" x="614" y="88">No cab, no sensor or no report</text>
+        <text class="ctya6bK" x="614" y="106">the table cannot say which</text>
+
+        <text class="ctya6bL" x="44" y="158">Measure where the activity is</text>
+        <text class="ctya6bS" x="44" y="176">40 sensors on the 40 busiest zones</text>
+        <text class="ctya6bV" x="334" y="168">88.9%</text>
+        <text class="ctya6bS" x="400" y="167">of trips measured</text>
+        <text class="ctya6bW" x="614" y="168">15.3%</text>
+        <text class="ctya6bK" x="680" y="167">of zones; 3 boroughs dark</text>
+
+        <text class="ctya6bL" x="44" y="228">Error only where you measured</text>
+        <text class="ctya6bS" x="44" y="246">score against the measured zones</text>
+        <text class="ctya6bV" x="334" y="238">0.0%</text>
+        <text class="ctya6bS" x="400" y="237">error, by construction</text>
+        <text class="ctya6bW" x="614" y="238">-11.1%</text>
+        <text class="ctya6bK" x="690" y="237">real; 222 zones dropped</text>
+
+        <text class="ctya6bL" x="44" y="298">Aggregated means anonymous</text>
+        <text class="ctya6bS" x="44" y="316">it is only counts by zone and hour</text>
+        <text class="ctya6bL" x="334" y="298">Safe to publish</text>
+        <text class="ctya6bS" x="334" y="316">no names in the file</text>
+        <text class="ctya6bW" x="614" y="308">95%</text>
+        <text class="ctya6bK" x="666" y="307">unique from 4 points (2013)</text>
+
+        <text class="ctya6bN" x="30" y="356">Real NYC counts, October 2024, with Wrenmouth's constructed placement; the 95% comes from phone location traces.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - each middle box is a clean number; the green box is the one it hides.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why each instinct fails in a city<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>"No rows means no demand."</strong> In a warehouse, no order means no sale. In a city, no pickup can mean no one wanted a cab, or no cab was there, or nobody recorded it. Staten Island wrote 231 pickups in the whole month across 20 zones. That is a fact about the records; what it says about residents is open.</p>
+        <p><strong>"Measure where the activity is."</strong> Wrenmouth's first plan put 40 sensors on the 40 busiest zones: 38 in Manhattan and 2 on the Queens airports. It sees 88.9 percent of trips, and Brooklyn, the Bronx and Staten Island go dark. Its outer-borough estimate is off by +6,388.6 percent. Leader session 2.</p>
+        <p><strong>"Score the model where you have labels."</strong> Compare the busiest plan's estimate only with the zones it measured and the error is 0.0 percent, by construction. Against the whole city it is -11.1 percent, because 222 zones and 430,870 pickups left the denominator. Leader session 4 calls this the break button.</p>
+        <p><strong>"Aggregated means anonymous."</strong> In a 2013 study of fifteen months of phone location data for 1.5 million people, de Montjoye and colleagues found that "four spatio-temporal points are enough to uniquely identify 95% of the individuals." Taxi counts by zone and hour are not phone traces, but a published cell holding one or two trips is far closer to a trace than a city-wide total. That is why practitioner session 7 suppresses small cells.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>New York City's Open Data Law says public data sets "shall be made available without any registration requirement, license requirement or restrictions on their use." The city lets anyone take the rows. The duty to ask who is in them, and what a small cell reveals, travels with the person who publishes the next table.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Whether k-anonymity style suppression is enough is contested. Sweeney's 2002 paper defines k-anonymity and also examines re-identification attacks on releases that meet it "unless accompanying policies are respected". Some practitioners treat suppression on published counts as adequate for low-detail tables; others argue for stronger formal protection such as differential privacy. Both positions are held by careful people; this page does not settle it.</p>
+        <p>The same goes for whether more city sensing is good governance or more surveillance. Leader session 3 lays both sides out. What the transfer map adds is narrower: whichever side you take, the warehouse habit of assuming a count is harmless does not carry over.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Your 90-day self-study ladder</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Build a ladder of three 30-day rungs: the rows, the people, the claims. Every source on it is free to reach, and every one is marked official, meaning published by a New York City government source, or not official, meaning a paper or a free sibling session. Where only an abstract is free, the ladder says so.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn staircase of three rungs. Days 1 to 30, the rows: TLC Trip Record Data page, yellow data dictionary, zone lookup and shapefile, and the Open Data Law sections 23-501 and 23-502, all marked official in green. Days 31 to 60, the people: Sweeney 2002, de Montjoye et al. 2013 and Boxer et al. 2025 as papers, and learn IoT data leader session 2 as a sibling session. Days 61 to 90, the claims: Barnett et al. 2005 as a paper, learn experimentation b8 and b9 as sibling sessions, Openshaw 1984 as a reported reading, and practitioner session 10 as a sibling session.">
+        <defs>
+          <filter id="ctya6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya6cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya6cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya6cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya6cK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya6cT { font: 700 11px Inter, sans-serif; fill: #241A18; }
+          .ctya6cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya6cH" x="30" y="28">A 90-DAY LADDER ON FREE SOURCES</text>
+        <text class="ctya6cS" x="56" y="55">official: a New York City government source</text>
+        <text class="ctya6cS" x="336" y="55">not official: a paper, a sibling session, a reported reading</text>
+
+        <g filter="url(#ctya6cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="44" width="18" height="14" rx="3" fill="#8CC27A"/>
+          <rect x="310" y="44" width="18" height="14" rx="3" fill="#FFFFFF"/>
+          <rect x="30" y="210" width="260" height="146" rx="10" transform="rotate(-0.4 160 283)" fill="#FAF0EE"/>
+          <rect x="310" y="150" width="260" height="206" rx="10" transform="rotate(0.4 440 253)" fill="#FAF0EE"/>
+          <rect x="590" y="90" width="260" height="266" rx="10" transform="rotate(-0.4 720 223)" fill="#FAF0EE"/>
+          <rect x="40" y="263" width="64" height="17" rx="4" fill="#8CC27A"/>
+          <rect x="40" y="285" width="64" height="17" rx="4" fill="#8CC27A"/>
+          <rect x="40" y="307" width="64" height="17" rx="4" fill="#8CC27A"/>
+          <rect x="40" y="329" width="64" height="17" rx="4" fill="#8CC27A"/>
+          <rect x="320" y="203" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="320" y="225" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="320" y="247" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="320" y="269" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="600" y="143" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="600" y="165" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="600" y="187" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <rect x="600" y="209" width="64" height="17" rx="4" fill="#FFFFFF"/>
+          <!-- doodle: a street grid corner -->
+          <path d="M760 22 L850 22 M760 22 L760 62 M790 22 L790 62 M820 22 L820 62" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya6cL" x="44" y="232">Days 1-30 · the rows</text>
+        <text class="ctya6cS" x="44" y="250">profile one month, keep a ledger</text>
+        <text class="ctya6cT" x="47" y="276">official</text>
+        <text class="ctya6cK" x="114" y="276">TLC Trip Record Data page</text>
+        <text class="ctya6cT" x="47" y="298">official</text>
+        <text class="ctya6cK" x="114" y="298">Yellow data dictionary</text>
+        <text class="ctya6cT" x="47" y="320">official</text>
+        <text class="ctya6cK" x="114" y="320">Zone lookup and shapefile</text>
+        <text class="ctya6cT" x="47" y="342">official</text>
+        <text class="ctya6cK" x="114" y="342">Open Data Law 23-501/502</text>
+
+        <text class="ctya6cL" x="324" y="172">Days 31-60 · the people</text>
+        <text class="ctya6cS" x="324" y="190">who is in the rows, who is not</text>
+        <text class="ctya6cT" x="327" y="216">paper</text>
+        <text class="ctya6cK" x="394" y="216">Sweeney 2002, abstract free</text>
+        <text class="ctya6cT" x="327" y="238">paper</text>
+        <text class="ctya6cK" x="394" y="238">de Montjoye 2013, open</text>
+        <text class="ctya6cT" x="327" y="260">paper</text>
+        <text class="ctya6cK" x="394" y="260">Boxer et al. 2025, abstract</text>
+        <text class="ctya6cT" x="327" y="282">sibling</text>
+        <text class="ctya6cK" x="394" y="282">IoT data, leader session 2</text>
+
+        <text class="ctya6cL" x="604" y="112">Days 61-90 · the claims</text>
+        <text class="ctya6cS" x="604" y="130">read a before-after, run the bench</text>
+        <text class="ctya6cT" x="607" y="156">paper</text>
+        <text class="ctya6cK" x="674" y="156">Barnett et al. 2005, RTM</text>
+        <text class="ctya6cT" x="607" y="178">sibling</text>
+        <text class="ctya6cK" x="674" y="178">Experimentation b8, b9</text>
+        <text class="ctya6cT" x="607" y="200">reported</text>
+        <text class="ctya6cK" x="674" y="200">Openshaw 1984, MAUP</text>
+        <text class="ctya6cT" x="607" y="222">sibling</text>
+        <text class="ctya6cK" x="674" y="222">Practitioner session 10</text>
+
+        <text class="ctya6cN" x="30" y="382">Each rung starts with what you can read in full. Reported means we have not opened it; treat it as a pointer.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the first rung is all official and free; the climb adds people and claims on top of the rows.</figcaption>
+    </figure>
+
+    <div class="tablescroll">
+    <table class="clean">
+      <thead><tr><th>Rung</th><th>Source</th><th>Official?</th><th>Free?</th></tr></thead>
+      <tbody>
+        <tr><td>Days 1-30</td><td>NYC Taxi &amp; Limousine Commission, TLC Trip Record Data (web page)</td><td>Official</td><td>Free</td></tr>
+        <tr><td>Days 1-30</td><td>NYC Taxi &amp; Limousine Commission, Data Dictionary - Yellow Taxi Trip Records (March 18, 2025)</td><td>Official</td><td>Free</td></tr>
+        <tr><td>Days 1-30</td><td>NYC Taxi &amp; Limousine Commission, Taxi Zone Lookup Table and Taxi Zones shapefile</td><td>Official</td><td>Free</td></tr>
+        <tr><td>Days 1-30</td><td>New York City Administrative Code, Title 23, Chapter 5, sections 23-501 and 23-502 (Open Data Law)</td><td>Official</td><td>Free to read</td></tr>
+        <tr><td>Days 31-60</td><td>Sweeney, L. (2002). k-anonymity: a model for protecting privacy. International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems 10(5):557-570. doi:10.1142/S0218488502001648</td><td>Not official: paper</td><td>Publisher abstract free</td></tr>
+        <tr><td>Days 31-60</td><td>de Montjoye, Y.-A., Hidalgo, C. A., Verleysen, M. and Blondel, V. D. (2013). Unique in the Crowd: The privacy bounds of human mobility. Scientific Reports 3:1376. doi:10.1038/srep01376</td><td>Not official: paper</td><td>Open access</td></tr>
+        <tr><td>Days 31-60</td><td>Boxer, K., Hong, B., Kontokosta, C. E. and Neill, D. B. (2025). Estimating reporting bias in 311 complaint data. The Annals of Applied Statistics 19:1691-1713. doi:10.1214/24-AOAS2003</td><td>Not official: paper</td><td>Abstract free</td></tr>
+        <tr><td>Days 31-60</td><td><a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2: missing is never random</a></td><td>Not official: sibling session</td><td>Free</td></tr>
+        <tr><td>Days 61-90</td><td>Barnett, A. G., van der Pols, J. C. and Dobson, A. J. (2005). Regression to the mean: what it is and how to deal with it. International Journal of Epidemiology 34(1):215-220. doi:10.1093/ije/dyh299</td><td>Not official: paper</td><td>Abstract free</td></tr>
+        <tr><td>Days 61-90</td><td><a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">learn experimentation b8: geo tests and synthetic control</a> and <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">b9: difference-in-differences</a></td><td>Not official: sibling sessions</td><td>Free</td></tr>
+        <tr><td>Days 61-90</td><td>Openshaw, S. (1984). The Modifiable Areal Unit Problem. Concepts and Techniques in Modern Geography 38. Geo Books, Norwich. Reported</td><td>Not official: book</td><td>Not checked; reported reading only</td></tr>
+        <tr><td>Days 61-90</td><td><a href="p10-the-sensor-placement-bench.html">Practitioner session 10: the sensor-placement bench</a></td><td>Not official: sibling session</td><td>Free</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write your own three columns</h4>
+        <p>Copy the transfer map and rewrite each cell in your own words, for your own background. An engineer's "carries over" will lead with pipelines; an analyst's with denominators. Cross out anything you already do daily.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick one unlearn item to watch for</h4>
+        <p>Choose the instinct you are most likely to fall back on under deadline. Write the number it would hide in your own work, the way 88.9 percent hides 15.3 percent.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Book the first rung</h4>
+        <p>Put days 1-30 in your calendar: read the TLC Trip Record Data page and the data dictionary, then profile one month and write a ledger of every dropped row. Practitioner sessions 1 and 2 are the guided version.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Mark every source</h4>
+        <p>For each item you add beyond this ladder, write official or not, and free, abstract only, or paid. If you cannot tell, it is not official.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Commit to a check at day 90</h4>
+        <p>Write one question you will be able to answer then and cannot answer now. For example: on Wrenmouth's bench, why does a nominal 90 percent interval cover the truth only about 82 percent of the time?</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a city problem lands, sort your first instinct before you act on it: is this something that carries over, something I must learn, or something I must unlearn? The unlearn column is the one that feels most like experience.</p>
+    </div>
+
+    <div class="callout next">
+      <span class="nx-pill">Up next</span>
+      <p><strong>That is the leader track.</strong> To put your hands on the rows, start the practitioner track with <a href="p1-anatomy-of-a-trip-record.html">practitioner session 1: anatomy of a trip record</a>, where the 47 out-of-month rows and the cash-tip blind spot are found in a real file.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">An analyst arrives from a retail team. Which of her habits belongs in the "carries over" column?</p>
+      <button class="qopt" type="button">A · Treating a zone with no rows as a zone with no demand</button>
+      <button class="qopt" type="button">B · Placing measurement where most activity already is</button>
+      <button class="qopt" type="button">C · Profiling before aggregating, with a ledger of every dropped row and its reason</button>
+      <p class="qwhy">The ledger is what caught 47 out-of-month rows and 13,169 outside-borough pickups in the October 2024 files. A and B are both in the unlearn column: an empty zone can mean no cab, and the busiest plan leaves three boroughs dark.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Wrenmouth (constructed) scores its busiest-zones estimate against the zones it measured and reports 0.0 percent error. What should a leader say?</p>
+      <button class="qopt" type="button">A · The error is zero by construction; against the whole city it is -11.1 percent, because 222 zones left the denominator</button>
+      <button class="qopt" type="button">B · Zero error means the placement is right and should be rolled out</button>
+      <button class="qopt" type="button">C · The number is wrong and the sensors are faulty</button>
+      <p class="qwhy">Computing error only where you measured is a warehouse habit that hides the unmeasured. The sensors are fine; the denominator shrank. Leader session 4 calls it the break button.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Which source on the 90-day ladder is official?</p>
+      <button class="qopt" type="button">A · de Montjoye et al. 2013, because it is open access</button>
+      <button class="qopt" type="button">B · The TLC yellow taxi data dictionary, published by the city's Taxi and Limousine Commission</button>
+      <button class="qopt" type="button">C · Openshaw 1984, because it is the classic reference</button>
+      <p class="qwhy">Official means published by a New York City government source. Open access is about cost, not authority, so A is a free paper, not official. Openshaw is a reported reading: we have not opened it.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the leader track</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on your map and your first rung.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Finish your transfer map</h4>
+        <p>Three columns, four rows, in your own words. Add one reading per column from the ladder, and mark each official or not.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the TLC Trip Record Data page</h4>
+        <p>Find the sentence that says who did not create the data, and the note about the release delay. Write one line on what each means for a dashboard that refreshes monthly.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Show one unlearn item to a colleague</h4>
+        <p>Pick a number your team reports and ask: coverage of what, and measured against what? If the answer is "the places we measure", you have found your own 0.0 percent.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The transfer map</span><span class="note">Carries over, must learn, must unlearn; four rows each, matching the landing page block.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Four warehouse instincts</span><span class="note">88.9 percent of trips vs 15.3 percent of zones; 0.0 percent reported vs -11.1 percent real. Constructed placement on real counts.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">TLC sources</span><span class="note">Trip Record Data page, data dictionary, zone lookup and shapefile. Official, read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Open Data Law</span><span class="note">NYC Administrative Code 23-501 and 23-502. Official, read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The 90-day ladder</span><span class="note">Free sources only, each marked official or not; Openshaw 1984 marked reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Stratified placement and intervals</span><span class="note">Named tonight. Practitioner sessions 5 and 10.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Re-identification and suppression</span><span class="note">Named tonight. Leader session 3, practitioner session 7.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Difference-in-differences and synthetic control</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b9-difference-in-differences.html">learn experimentation b9</a> and <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/courses/b8-geo-and-synthetic-control.html">b8</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Products, vendors and named programmes</span><span class="note">Out of scope by design. Tool classes only; Wrenmouth is constructed.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Three columns.</strong> Carries over, must learn, must unlearn. The third feels like experience.</div>
+      <div class="cheat-item"><strong>Carries over.</strong> Profiling with a ledger, lookup joins, stated denominators, seeded pipelines.</div>
+      <div class="cheat-item"><strong>Must learn.</strong> Who writes a row, censored demand, stratified placement, small-cell suppression.</div>
+      <div class="cheat-item"><strong>Must unlearn.</strong> No rows means no demand; measure the busy places; error where measured; counts are anonymous.</div>
+      <div class="cheat-item"><strong>The hidden numbers.</strong> 88.9 percent of trips hides 15.3 percent of zones. 0.0 percent hides -11.1.</div>
+      <div class="cheat-item"><strong>Days 1-30.</strong> The rows: TLC page, data dictionary, zone lookup, Open Data Law. All official.</div>
+      <div class="cheat-item"><strong>Days 31-90.</strong> The people, then the claims: Sweeney, de Montjoye, Boxer, Barnett, sibling sessions.</div>
+      <div class="cheat-item"><strong>Mark every source.</strong> Official or not; free, abstract only or reported. If unsure, not official.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 6 of 6 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a5-why-the-warehouse-playbook-breaks-here.html">← Leader session 5 · Why the warehouse playbook breaks here</a>
+        <a href="../index.html">All sessions →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

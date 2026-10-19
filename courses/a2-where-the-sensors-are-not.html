@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 2 of 6. Coverage of trips is not coverage of the city. Forty sensors on the busiest zones see 88.9 percent of real New York City taxi pickups, October 2024, on 15.3 percent of the zones, and three boroughs go dark. Wrenmouth is a constructed transport office.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Where the sensors are not - learn smart city with phoebe">
+<meta property="og:description" content="Leader session 2 of 6. Two denominators for one sensor plan: 88.9 percent of trips, 15.3 percent of zones, and an outer-borough estimate off by +6,388.6 percent.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/courses/a2-where-the-sensors-are-not.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Where the sensors are not - learn smart city with phoebe">
+<meta name="twitter:description" content="Sensors placed where trips are already recorded see most trips and little of the city. Real taxi records, a constructed transport office.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-smart-city-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 2 · Where the sensors are not - learn smart city with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-smart-city-with-phoebe</a> / Leader session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Smart City Data with Phoebe · Leader session 2 of 6</div>
+    <h1>Where the sensors <span class="accent">are not</span></h1>
+    <p class="sub">A sensor plan is judged by a coverage number, and every coverage number hides a choice of denominator. Wrenmouth, a constructed city transport office, has 40 counting sensors to place across 262 zones. The counts it places them on are real New York City taxi records for October 2024, published by the city's Taxi and Limousine Commission. Tonight is what the obvious plan sees, what it cannot see, and why resident complaint data goes dark in the same way.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Leaders who fund or sign off city data work</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Two denominators</span>
+      <span class="a3" style="flex:3">18-28 · Who goes dark</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Wrenmouth, the week the sensor budget is approved</h2>
+    </div>
+    <p class="lede">Wrenmouth is a constructed city transport office. The director has signed for 40 counting sensors, each able to count every pickup in one zone for a month. The planning team has one week of taxi records to decide where they go, and a slide that already says "maximise coverage". Nobody has asked: coverage of what? By the end of tonight you will ask it first, every time.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The difference between coverage of events and coverage of places, on real numbers: 40 sensors on the 40 busiest zones see 88.9 percent of the month's pickups and measure 15.3 percent of the zones. What that plan does to the boroughs it skips: Brooklyn, the Bronx and Staten Island get no sensor at all, and the estimate for the four boroughs outside Manhattan is off by +6,388.6 percent. Why resident reports, such as 311 complaints, go dark by the same mechanism. And a four-row coverage card to hold against any sensing plan before you sign it.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "maximise coverage" is half a sentence<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In a warehouse, coverage usually means one thing: the share of transactions a table captures. If the table holds 89 percent of orders, it describes 89 percent of the business, because every order is the business.</p>
+        <p>A city is not its trips. A trip is one event in one place, and the places differ wildly in how many events they produce. So a sensor plan has two coverage numbers, and they can point in opposite directions. Share of events seen rewards putting sensors where events already pile up. Share of places measured rewards spreading them out. A plan that maximises the first can leave most of the city with nothing.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that matter tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Busiest rule.</strong> Put the K sensors on the K zones with the most first-week pickups. Wrenmouth's first idea; constructed.</li>
+          <li><strong>Equity floor.</strong> Give every borough at least 4 sensors, then share the rest by how many zones each borough has. Constructed.</li>
+          <li><strong>Outer boroughs.</strong> The four boroughs other than Manhattan: 193 of the 262 zones and 465,316 of the 3,876,702 pickups.</li>
+          <li><strong>Dark borough.</strong> A borough with no sensor. Anything said about it is a guess carried over from somewhere else.</li>
+          <li><strong>Expansion estimate.</strong> Average what the measured zones counted, then multiply by the number of zones the estimate is for. Simple, and only as good as how typical the measured zones are.</li>
+          <li><strong>Reporting bias.</strong> When the chance that a problem gets recorded differs between groups, so the record shows who reports as much as what happened.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers coverage of trips vs coverage of zones</span>
+      <h2>Two denominators for the same 40 sensors</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Sort New York City's 262 taxi zones by first-week pickups, busiest first, and walk along the list adding sensors. The share of the month's trips you see climbs steeply, then flattens: most trips sit in a few dozen zones. The share of the city you measure climbs one zone at a time. Those are the two denominators, and the busiest rule spends the whole budget on the steep part of the first curve.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn curve of the share of October 2024 New York City taxi pickups seen as sensors go on the busiest zones first, by first-week pickups. 20 zones see 61.7 percent of pickups, 40 zones see 88.9 percent, 80 zones see 97.9 percent, all 262 zones see 100 percent. Under the axis, highlighted in green, the 40 measured zones are 15.3 percent of 262; 222 zones have no sensor.">
+        <defs>
+          <filter id="ctya2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya2aH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2aL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2aS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya2aB { font: 800 11px Inter, sans-serif; fill: #2D5A22; }
+          .ctya2aV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctya2aA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya2aN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya2aH" x="30" y="30">TWO DENOMINATORS FOR ONE PLAN: BUSIEST ZONES FIRST</text>
+        <text class="ctya2aA" x="96" y="56">share of the month's pickups in measured zones</text>
+
+        <g filter="url(#ctya2aSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M90 70 L90 300 L820 300"/>
+          <path d="M90 300 L146 158 L202 96 L313 75 L820 70" stroke="#A8564E" stroke-width="2.5"/>
+          <circle cx="146" cy="158" r="5" fill="#FFFFFF"/>
+          <circle cx="202" cy="96" r="6" fill="#FFFFFF"/>
+          <circle cx="313" cy="75" r="5" fill="#FFFFFF"/>
+          <circle cx="820" cy="70" r="5" fill="#FFFFFF"/>
+          <rect x="90" y="308" width="111" height="16" rx="3" transform="rotate(-0.4 145 316)" fill="#8CC27A"/>
+          <rect x="205" y="308" width="615" height="16" rx="3" transform="rotate(0.2 512 316)" fill="#FAF0EE"/>
+          <!-- doodle: a zone outline -->
+          <path d="M836 92 L864 86 L870 110 L846 118 Z" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya2aS" x="82" y="74" text-anchor="end">100%</text>
+        <text class="ctya2aS" x="82" y="304" text-anchor="end">0%</text>
+        <text class="ctya2aS" x="820" y="56" text-anchor="end">all 262 zones: 100%</text>
+        <text class="ctya2aS" x="156" y="178">20 zones: 61.7%</text>
+        <text class="ctya2aV" x="212" y="120">88.9%</text>
+        <text class="ctya2aL" x="212" y="138">of trips seen with 40 sensors</text>
+        <text class="ctya2aS" x="324" y="96">80 zones: 97.9%</text>
+
+        <text class="ctya2aB" x="90" y="344">40 of 262 zones measured: 15.3%</text>
+        <text class="ctya2aS" x="322" y="344">222 zones with no sensor</text>
+        <text class="ctya2aA" x="820" y="344" text-anchor="end">zones, busiest first by first-week pickups</text>
+
+        <text class="ctya2aN" x="30" y="374">Real NYC pickups, October 2024; constructed placement. Dots are computed; the line joins them.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the curve is the number on the slide; the green strip is how much of the city the same 40 sensors measure.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the two numbers come apart<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Pickups are not spread evenly. In October 2024, Manhattan's 69 zones held 88.0 percent of the 3,876,702 pickups in the five boroughs. JFK Airport alone recorded 194,145; Staten Island's 20 zones recorded 231 between them. The 40 busiest zones hold 88.9 percent of all pickups.</p>
+        <p>So any plan that ranks zones by recorded trips will show a superb trip coverage almost at once: 61.7 percent with 20 sensors, 88.9 percent with 40, 97.9 percent with 80. Meanwhile it measures 15.3 percent of the zones at 40 sensors. Both numbers are true. Only one of them answers "how much of the city do we know about?"</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The skew is in the published records themselves. The TLC's trip files for October 2024, yellow and green cabs together, put 88.0 percent of the five boroughs' pickups on 69 of 262 zones. Any sensor plan trained on those counts inherits that shape before anyone makes a decision.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="wk" id="ctya2-cov">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Computed in this page from real TLC pickups (October 2024, 262 zones). Constructed: Wrenmouth, the budget and the three placement rules; the spread and equity rules draw zones within a borough by a seeded random draw (seed 1017). Switch the rule and watch the two coverage numbers part.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="ctya2-rule">Placement rule</label>
+        <select class="sql-code" id="ctya2-rule">
+          <option value="0" selected>Busiest zones by first-week pickups</option>
+          <option value="1">Spread across boroughs by zone count</option>
+          <option value="2">Equity floor of 4 per borough</option>
+        </select>
+        <label class="sql-label" for="ctya2-k">Sensor budget</label>
+        <select class="sql-code" id="ctya2-k">
+          <option value="20">20 sensors</option>
+          <option value="40" selected>40 sensors, the canon</option>
+          <option value="80">80 sensors</option>
+        </select>
+        <div id="ctya2-out"></div>
+        <p class="sql-note" id="ctya2-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="ctya2-self">...</div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The estimate the busiest rule hands you<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Sensors exist to estimate what is not measured. The simplest estimate takes the average count of the measured zones and multiplies by the number of zones you want to describe. Under the busiest rule, the measured zones are the busiest zones, so the average is enormous and the estimate inherits it. Wrenmouth's city-wide estimate comes out at 22,570,200 pickups against a true 3,876,702: an error of +482.2 percent.</p>
+        <p>Outside Manhattan it is worse. The busiest rule puts 38 sensors in Manhattan and 2 in Queens, and those 2 sit on JFK and LaGuardia, the two airport zones. The average of two airports, multiplied across 193 outer zones, gives an outer-borough estimate off by +6,388.6 percent. Nothing is wrong with the sensors; every count they record is right. The placement decided the answer.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What spreading the sensors costs, and buys<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Spread the same 40 sensors by how many zones each borough has (11 Manhattan, 9 Brooklyn, 11 Queens, 6 Bronx, 3 Staten Island) and the trip coverage falls to 11.8 percent. The slide gets worse. The estimates get better: -25.6 percent for the city, -67.8 percent for the outer boroughs, and no borough is dark.</p>
+        <p>Add a floor of 4 per borough and split each borough into busier and quieter zones before drawing (11, 9, 10, 6, 4). Trip coverage is 20.4 percent; the city estimate is off by -17.7 percent and the outer boroughs by +22.0 percent. Neither is perfect on one draw. Over 400 fresh draws the equity rule misses the city by 11.4 percent on average against 21.3 percent for plain spreading. Practitioner session 5 builds the allocation; practitioner session 10 runs the whole bench.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers dark boroughs and resident reports</span>
+      <h2>Who goes dark, and why the dark stays dark</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">A zone with no sensor is not described as "unknown" on a dashboard. It is described by a number borrowed from somewhere else, or it is left blank and read as quiet. Under the busiest rule three whole boroughs have no sensor at all. And the next budget, built on the counts this one produced, has every reason to put sensors in the same place again.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 364" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bars of where Wrenmouth's 40 sensors go under two rules, on real October 2024 New York City pickups. Busiest rule: Manhattan 38, Brooklyn none, Queens 2 both on airports, Bronx none, Staten Island none, with the three dark boroughs highlighted in green. Equity floor of 4: Manhattan 11, Brooklyn 9, Queens 10, Bronx 6, Staten Island 4. Busiest sees 88.9 percent of trips and misses the outer boroughs by +6,388.6 percent; equity sees 20.4 percent and misses them by +22.0 percent.">
+        <defs>
+          <filter id="ctya2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya2bH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2bL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2bS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya2bV { font: 800 11px Inter, sans-serif; fill: #6E2F29; }
+          .ctya2bA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya2bN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya2bH" x="30" y="30">SAME 40 SENSORS, TWO RULES</text>
+        <text class="ctya2bH" x="180" y="58">Busiest zones by first week</text>
+        <text class="ctya2bH" x="520" y="58">Equity floor of 4 per borough</text>
+
+        <g filter="url(#ctya2bSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="180" y="72" width="266" height="18" rx="3" transform="rotate(-0.3 313 81)" fill="url(#ctya2bHc)"/>
+          <rect x="180" y="112" width="60" height="18" rx="3" transform="rotate(0.4 210 121)" fill="#8CC27A"/>
+          <rect x="180" y="152" width="14" height="18" rx="2" fill="url(#ctya2bHc)"/>
+          <rect x="180" y="192" width="60" height="18" rx="3" transform="rotate(-0.4 210 201)" fill="#8CC27A"/>
+          <rect x="180" y="232" width="60" height="18" rx="3" transform="rotate(0.3 210 241)" fill="#8CC27A"/>
+          <rect x="520" y="72" width="77" height="18" rx="3" transform="rotate(0.3 558 81)" fill="#FAF0EE"/>
+          <rect x="520" y="112" width="63" height="18" rx="3" transform="rotate(-0.3 551 121)" fill="#FAF0EE"/>
+          <rect x="520" y="152" width="70" height="18" rx="3" transform="rotate(0.3 555 161)" fill="#FAF0EE"/>
+          <rect x="520" y="192" width="42" height="18" rx="3" transform="rotate(-0.4 541 201)" fill="#FAF0EE"/>
+          <rect x="520" y="232" width="28" height="18" rx="3" transform="rotate(0.4 534 241)" fill="#FAF0EE"/>
+          <path d="M180 268 L850 268" stroke="#CFC4C1"/>
+          <!-- doodle: a lamp post -->
+          <path d="M836 120 L836 74 L852 74" stroke="#C98A82" stroke-width="2.5"/>
+          <circle cx="852" cy="79" r="4" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ctya2bL" x="170" y="85" text-anchor="end">Manhattan</text>
+        <text class="ctya2bS" x="170" y="100" text-anchor="end">69 zones</text>
+        <text class="ctya2bL" x="170" y="125" text-anchor="end">Brooklyn</text>
+        <text class="ctya2bS" x="170" y="140" text-anchor="end">61 zones</text>
+        <text class="ctya2bL" x="170" y="165" text-anchor="end">Queens</text>
+        <text class="ctya2bS" x="170" y="180" text-anchor="end">69 zones</text>
+        <text class="ctya2bL" x="170" y="205" text-anchor="end">Bronx</text>
+        <text class="ctya2bS" x="170" y="220" text-anchor="end">43 zones</text>
+        <text class="ctya2bL" x="170" y="245" text-anchor="end">Staten Island</text>
+        <text class="ctya2bS" x="170" y="260" text-anchor="end">20 zones</text>
+
+        <text class="ctya2bV" x="456" y="86">38</text>
+        <text class="ctya2bL" x="192" y="126">dark</text>
+        <text class="ctya2bV" x="204" y="166">2, both airports</text>
+        <text class="ctya2bL" x="192" y="206">dark</text>
+        <text class="ctya2bL" x="192" y="246">dark</text>
+
+        <text class="ctya2bV" x="607" y="86">11</text>
+        <text class="ctya2bV" x="593" y="126">9</text>
+        <text class="ctya2bV" x="600" y="166">10</text>
+        <text class="ctya2bV" x="572" y="206">6</text>
+        <text class="ctya2bV" x="558" y="246">4</text>
+
+        <text class="ctya2bA" x="170" y="294" text-anchor="end">result</text>
+        <text class="ctya2bL" x="180" y="294">88.9% of trips seen</text>
+        <text class="ctya2bV" x="180" y="314">outer boroughs: +6,388.6%</text>
+        <text class="ctya2bL" x="520" y="294">20.4% of trips seen</text>
+        <text class="ctya2bV" x="520" y="314">outer boroughs: +22.0%</text>
+
+        <text class="ctya2bN" x="30" y="346">Constructed office, real NYC October 2024 pickups. Outer boroughs = the four outside Manhattan.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green boxes are the boroughs the busiest plan says nothing true about; spreading the same budget lights all five.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The trade, said out loud<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Move from the equity floor to the busiest rule and trip coverage rises by 68.5 points, from 20.4 to 88.9 percent. In the same move, sensors outside Manhattan fall from 29 to 2, and the outer-borough estimate goes from +22.0 percent to +6,388.6 percent. On the slide that reads as progress. For a planner deciding where buses or kerb space go next, it is worse on every borough but one.</p>
+        <p>The trap has a loop in it. Sensors placed where trips are recorded produce precise counts there and none elsewhere. The next budget, asked to follow the evidence, follows those counts. A borough that was dark in year one has no data to argue for a sensor in year two.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 366" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pair of loops. Left, sensors in constructed Wrenmouth: sensors go where trips are recorded, those zones report precise counts, the next budget follows the counts, and back to the start. Right, 311 reports in New York City: some residents report more readily, complaints pile up where they live, crews and budgets follow complaints, and back. Below, highlighted in green, what is never in either pile: zones with no sensor and need that was never reported.">
+        <defs>
+          <filter id="ctya2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya2cH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2cL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2cS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya2cN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya2cH" x="40" y="40">SENSORS (WRENMOUTH, CONSTRUCTED)</text>
+        <text class="ctya2cH" x="480" y="40">311 REPORTS (NEW YORK CITY)</text>
+
+        <g filter="url(#ctya2cSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="60" width="320" height="48" rx="8" transform="rotate(-0.5 200 84)" fill="#FFFFFF"/>
+          <rect x="40" y="130" width="320" height="48" rx="8" transform="rotate(0.5 200 154)" fill="url(#ctya2cHc)"/>
+          <rect x="40" y="200" width="320" height="48" rx="8" transform="rotate(-0.4 200 224)" fill="#FFFFFF"/>
+          <path d="M200 110 L200 126" marker-end="url(#ctya2cAr)"/>
+          <path d="M200 180 L200 196" marker-end="url(#ctya2cAr)"/>
+          <path d="M38 224 C12 224 12 84 36 84" marker-end="url(#ctya2cAr)"/>
+          <rect x="480" y="60" width="320" height="48" rx="8" transform="rotate(0.5 640 84)" fill="#FFFFFF"/>
+          <rect x="480" y="130" width="320" height="48" rx="8" transform="rotate(-0.5 640 154)" fill="url(#ctya2cHc)"/>
+          <rect x="480" y="200" width="320" height="48" rx="8" transform="rotate(0.4 640 224)" fill="#FFFFFF"/>
+          <path d="M640 110 L640 126" marker-end="url(#ctya2cAr)"/>
+          <path d="M640 180 L640 196" marker-end="url(#ctya2cAr)"/>
+          <path d="M802 224 C840 224 840 84 806 84" marker-end="url(#ctya2cAr)"/>
+          <rect x="40" y="272" width="760" height="50" rx="10" transform="rotate(-0.3 420 297)" fill="#8CC27A"/>
+          <!-- doodle: a street grid corner -->
+          <path d="M392 136 L448 136 M392 136 L392 176 M410 136 L410 176 M428 136 L428 176" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya2cL" x="56" y="82">Sensors go where trips are recorded</text>
+        <text class="ctya2cS" x="56" y="99">first-week counts pick the zones</text>
+        <text class="ctya2cL" x="56" y="152">Those zones report precise counts</text>
+        <text class="ctya2cS" x="56" y="169">unsensed zones report nothing</text>
+        <text class="ctya2cL" x="56" y="222">Next budget follows the counts</text>
+        <text class="ctya2cS" x="56" y="239">the dark stays dark</text>
+
+        <text class="ctya2cL" x="496" y="82">Some residents report more readily</text>
+        <text class="ctya2cS" x="496" y="99">reporting rates differ by group</text>
+        <text class="ctya2cL" x="496" y="152">Complaints pile up where they live</text>
+        <text class="ctya2cS" x="496" y="169">a map of who complains</text>
+        <text class="ctya2cL" x="496" y="222">Crews and budgets follow complaints</text>
+        <text class="ctya2cS" x="496" y="239">low-reporting areas wait</text>
+
+        <text class="ctya2cL" x="56" y="293">Never in either pile:</text>
+        <text class="ctya2cL" x="56" y="311">zones with no sensor, and need that was never reported</text>
+
+        <text class="ctya2cN" x="40" y="348">Boxer et al. (2025): some subpopulations report at lower rates. The loops show the mechanism, not a size.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - two different writers, one loop: where the record already is decides where the next record comes from.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Resident reports go dark the same way<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A complaint line is a sensor that residents carry. It records a problem only where someone noticed it, knew the line existed, trusted it and had time to call. Boxer, Hong, Kontokosta and Neill (2025) studied New York City's 311 complaints about heating and hot water and found "some subpopulations reporting at lower rates than others". Their model separates the chance that a problem exists from the chance that it is reported.</p>
+        <p>A study of one US city reports that lower-income and minority neighbourhoods were less likely to report street condition or nuisance issues despite greater need (Kontokosta and Hong, 2021; reported, we could not open the full paper). Neither study gives a number we repeat here. The mechanism is enough: a map of complaints, like a map of sensor counts, is partly a map of where the recorder was.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The 2025 study did not ask whether 311 data is useful. It asked how to read it honestly, by modelling the reporting step as its own probability. That is the move for any city record: name the step that decides whether a row exists, then ask who that step leaves out.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where missingness becomes a statistics problem<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Tonight is about where sensors are placed and who that leaves unmeasured. What happens inside a placed sensor, readings that drop out, drift, gaps that are not random, belongs to a sibling: <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2, missing is never random</a>. The two meet at one idea: a gap in the record is caused by something, and the cause is usually related to the thing you wanted to measure.</p>
+        <p>Practitioner session 4 counts the thin places in our month: zones under 100 pickups number 6 in Manhattan, 2 in Brooklyn, 11 in Queens, 8 in the Bronx and all 20 in Staten Island.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>A coverage card for any sensing plan</h2>
+      <span class="tag demo">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Take one sensing plan you have seen or will be asked to fund: traffic counters, air monitors, footfall cameras, a complaint line, a survey. Fill in four rows. The figure shows the card filled for Wrenmouth's two rules; your column starts empty.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 312" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn four-row coverage card. Rows: share of events seen, 88.9 percent busiest, 20.4 percent equity floor; share of places measured, 15.3 percent for both; who goes dark, 3 boroughs busiest, none equity, highlighted in green; error where it matters, outer-borough estimate +6,388.6 percent busiest, +22.0 percent equity. A fourth column, your dataset, is left to fill in.">
+        <defs>
+          <filter id="ctya2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ctya2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#A8564E" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ctya2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241A18" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ctya2dH { font: 800 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2dL { font: 600 12px Inter, sans-serif; fill: #241A18; }
+          .ctya2dS { font: 400 11px Inter, sans-serif; fill: #5E5250; }
+          .ctya2dK { font: 400 11px Inter, sans-serif; fill: #241A18; }
+          .ctya2dV { font: 800 16px Inter, sans-serif; fill: #6E2F29; }
+          .ctya2dA { font: 700 11px Inter, sans-serif; fill: #A8564E; }
+          .ctya2dN { font: 400 12px Inter, sans-serif; fill: #5E5250; }
+        </style>
+
+        <text class="ctya2dH" x="30" y="30">A COVERAGE CARD, FILLED FOR WRENMOUTH</text>
+        <text class="ctya2dA" x="40" y="66">Question to ask</text>
+        <text class="ctya2dA" x="350" y="66">Busiest rule</text>
+        <text class="ctya2dA" x="520" y="66">Equity floor</text>
+        <text class="ctya2dA" x="690" y="66">Your dataset</text>
+
+        <g filter="url(#ctya2dSk)" fill="none" stroke="#241A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="76" width="300" height="42" rx="6" transform="rotate(-0.3 180 97)" fill="#FFFFFF"/>
+          <rect x="340" y="76" width="160" height="42" rx="6" transform="rotate(0.4 420 97)" fill="url(#ctya2dHc)"/>
+          <rect x="510" y="76" width="160" height="42" rx="6" transform="rotate(-0.4 590 97)" fill="#FAF0EE"/>
+          <rect x="680" y="76" width="170" height="42" rx="6" transform="rotate(0.3 765 97)" fill="#FFFFFF"/>
+          <rect x="30" y="126" width="300" height="42" rx="6" transform="rotate(0.3 180 147)" fill="#FFFFFF"/>
+          <rect x="340" y="126" width="160" height="42" rx="6" transform="rotate(-0.4 420 147)" fill="url(#ctya2dHc)"/>
+          <rect x="510" y="126" width="160" height="42" rx="6" transform="rotate(0.4 590 147)" fill="#FAF0EE"/>
+          <rect x="680" y="126" width="170" height="42" rx="6" transform="rotate(-0.3 765 147)" fill="#FFFFFF"/>
+          <rect x="30" y="176" width="300" height="42" rx="6" transform="rotate(-0.3 180 197)" fill="#8CC27A"/>
+          <rect x="340" y="176" width="160" height="42" rx="6" transform="rotate(0.4 420 197)" fill="url(#ctya2dHc)"/>
+          <rect x="510" y="176" width="160" height="42" rx="6" transform="rotate(-0.4 590 197)" fill="#FAF0EE"/>
+          <rect x="680" y="176" width="170" height="42" rx="6" transform="rotate(0.3 765 197)" fill="#FFFFFF"/>
+          <rect x="30" y="226" width="300" height="42" rx="6" transform="rotate(0.3 180 247)" fill="#FFFFFF"/>
+          <rect x="340" y="226" width="160" height="42" rx="6" transform="rotate(-0.4 420 247)" fill="url(#ctya2dHc)"/>
+          <rect x="510" y="226" width="160" height="42" rx="6" transform="rotate(0.4 590 247)" fill="#FAF0EE"/>
+          <rect x="680" y="226" width="170" height="42" rx="6" transform="rotate(-0.3 765 247)" fill="#FFFFFF"/>
+          <!-- doodle: a kerb -->
+          <path d="M800 22 L830 22 L830 44 L866 44" stroke="#C98A82" stroke-width="2.5"/>
+        </g>
+
+        <text class="ctya2dL" x="44" y="94">Share of events seen</text>
+        <text class="ctya2dS" x="44" y="110">trips in measured zones</text>
+        <text class="ctya2dL" x="44" y="144">Share of places measured</text>
+        <text class="ctya2dS" x="44" y="160">zones with a sensor</text>
+        <text class="ctya2dL" x="44" y="194">Who goes dark</text>
+        <text class="ctya2dK" x="44" y="210">units with no sensor at all</text>
+        <text class="ctya2dL" x="44" y="244">Error where it matters</text>
+        <text class="ctya2dS" x="44" y="260">outer-borough estimate</text>
+
+        <text class="ctya2dV" x="354" y="103">88.9%</text>
+        <text class="ctya2dV" x="354" y="153">15.3%</text>
+        <text class="ctya2dV" x="354" y="203">3 boroughs</text>
+        <text class="ctya2dV" x="354" y="253">+6,388.6%</text>
+        <text class="ctya2dV" x="524" y="103">20.4%</text>
+        <text class="ctya2dV" x="524" y="153">15.3%</text>
+        <text class="ctya2dV" x="524" y="203">none</text>
+        <text class="ctya2dV" x="524" y="253">+22.0%</text>
+        <text class="ctya2dS" x="694" y="102">fill in</text>
+        <text class="ctya2dS" x="694" y="152">fill in</text>
+        <text class="ctya2dS" x="694" y="202">fill in</text>
+        <text class="ctya2dS" x="694" y="252">fill in</text>
+
+        <text class="ctya2dN" x="30" y="296">Constructed office, canon run on real NYC pickups: 40 sensors of 262 zones, seed 1017.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the green row is the one a coverage slide never has: who has no sensor at all.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name the event and the place</h4>
+        <p>What does one row count (a trip, a reading, a complaint), and what is the unit of place (a zone, a street segment, a ward)? Write both. Without a unit of place there is no second denominator, which is usually why the slide has only one.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Fill row one: share of events seen</h4>
+        <p>This is the number the plan's champion already has. Copy it as given, and note how it was ranked: if sensors went to the places with the most past events, the number is high by construction, as Wrenmouth's 88.9 percent is.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Fill row two: share of places measured</h4>
+        <p>Count the units with a sensor and divide by all units. If nobody can tell you the count of all units, write that down: it is a finding. Wrenmouth's answer is 40 of 262, 15.3 percent, whichever rule it uses.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Fill row three: who goes dark</h4>
+        <p>List every district, group or time of day with no sensor at all. For a complaint line, list the groups known to report less. For Wrenmouth's busiest rule it is Brooklyn, the Bronx and Staten Island.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Fill row four: error where it matters</h4>
+        <p>Ask which decision the data will feed, and how wrong the estimate is for the places that decision is about. Often nobody knows; write "unknown" and treat it as the biggest risk on the card. Wrenmouth knows only because the bench compares against a month of real counts.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Decide one change</h4>
+        <p>With the card filled, write one change you would ask for before signing: a floor per district, a sensor moved from the busiest place to a dark one, or a second data source for the groups that report less.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a plan reports coverage, ask "coverage of what?" and ask for the other denominator. Then ask who has no sensor at all. A plan that sees most of the events and little of the place is measuring where the activity already is, and will keep measuring it there.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Wrenmouth (constructed) moves from the equity floor to the busiest rule. Trip coverage rises from 20.4 to 88.9 percent. What happened to its knowledge of the outer boroughs?</p>
+      <button class="qopt" type="button">A · It improved, because more trips are now measured</button>
+      <button class="qopt" type="button">B · It stayed about the same, because the share of zones measured is still 15.3 percent</button>
+      <button class="qopt" type="button">C · It collapsed: sensors outside Manhattan fell from 29 to 2, three boroughs went dark, and the outer-borough estimate went from +22.0 to +6,388.6 percent</button>
+      <p class="qwhy">Both rules measure 40 of 262 zones, so B looks reasonable, but which zones matters. The busiest rule moves almost every sensor into Manhattan; the two left in Queens sit on the airports. A mistakes trip coverage for city coverage.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why is the busiest rule's outer-borough estimate so far off, when every count its sensors record is correct?</p>
+      <button class="qopt" type="button">A · Its only two outer sensors are on JFK and LaGuardia, so averaging them and multiplying across 193 outer zones carries airport traffic into every zone</button>
+      <button class="qopt" type="button">B · Taxi meters at airports over-count pickups</button>
+      <button class="qopt" type="button">C · The month of October 2024 was unusual</button>
+      <p class="qwhy">The error is made by the placement and the estimate, not by the sensors. Nothing in the records suggests airport meters over-count (B), and a single month changes nothing about which zones were picked (C).</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A city's 311 complaints about a problem are highest in one district. What does reporting-bias research suggest you check before sending crews there first?</p>
+      <button class="qopt" type="button">A · Nothing: complaints are residents speaking for themselves, so they measure need</button>
+      <button class="qopt" type="button">B · Whether reporting rates differ between groups, since a 2025 study of New York City's 311 data found some subpopulations report at lower rates, so complaint counts mix need with willingness to report</button>
+      <button class="qopt" type="button">C · Whether the 311 system is accurate, since complaint data is unreliable and should be set aside</button>
+      <p class="qwhy">Boxer et al. (2025) separate the chance a problem exists from the chance it is reported. A treats the report as the problem; C throws away useful data instead of reading it honestly.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 3</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one plan and one dark place.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Fill a coverage card for one real plan</h4>
+        <p>Use any sensing plan or dataset you work near. Fill the four rows from its documentation alone, and mark every row the documentation cannot answer. The empty rows are the questions to take to its owner.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the loop for one dark place</h4>
+        <p>Pick one place from your homework list after session 1. In three lines, write how it could stay unmeasured: what it lacks now, what the next budget will be based on, and what would break the loop.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the widget at 20 and 80 sensors</h4>
+        <p>Before session 3, switch the budget in Part 1 and note which boroughs go dark under the busiest rule at each. Your numbers will differ from tonight's 40-sensor figures; write down what changes and what does not.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Coverage of trips vs coverage of zones</span><span class="note">Busiest 40 zones: 88.9 percent of pickups, 15.3 percent of zones. Canon run, python and browser agree.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where one city's records are</span><span class="note">TLC yellow and green trip records, October 2024: Manhattan 88.0 percent of 3,876,702 pickups on 69 of 262 zones. Counted.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dark boroughs and the outer-borough estimate</span><span class="note">Busiest rule: Brooklyn, the Bronx and Staten Island dark; outer boroughs +6,388.6 percent vs +22.0 percent under the equity floor. Constructed rules, real counts.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Reporting bias in resident data</span><span class="note">Boxer, Hong, Kontokosta and Neill (2025), Annals of Applied Statistics. Read at source (abstract). Kontokosta and Hong (2021): reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Placement rules and allocation</span><span class="note">Named tonight (11/9/11/6/3 and 11/9/10/6/4). Built in practitioner session 5; the full ladder in practitioner session 10.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Thin zones</span><span class="note">Zones under 100 pickups named. Practitioner session 4.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Missingness and drift inside a sensor</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/courses/a2-missing-is-never-random.html">learn IoT data, leader session 2</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">True demand where no cab was</span><span class="note">Not measured in any data here; practitioner session 3 teaches why.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Coverage of events is not coverage of places.</div>
+      <div class="cheat-item"><strong>Two denominators.</strong> Busiest 40 zones: 88.9 percent of trips, 15.3 percent of zones.</div>
+      <div class="cheat-item"><strong>The skew.</strong> October 2024: 88.0 percent of pickups on Manhattan's 69 of 262 zones.</div>
+      <div class="cheat-item"><strong>Who goes dark.</strong> Busiest rule: Brooklyn, the Bronx and Staten Island get no sensor.</div>
+      <div class="cheat-item"><strong>The cost.</strong> Outer-borough estimate +6,388.6 percent busiest, +22.0 percent equity floor.</div>
+      <div class="cheat-item"><strong>The loop.</strong> Sensors where trips are recorded; next budget follows those counts.</div>
+      <div class="cheat-item"><strong>Same in 311.</strong> Some groups report at lower rates; complaints mix need with reporting.</div>
+      <div class="cheat-item"><strong>Coverage card.</strong> Events seen? Places measured? Who goes dark? Error where it matters?</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 2 of 6 · learn-smart-city-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a1-the-city-as-a-data-source.html">← Leader session 1 · The city as a data source</a>
+        <a href="a3-residents-who-never-consented.html">Leader session 3 · Residents who never consented →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/cty-data.js?v=1"></script>
+<script src="../assets/cty-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof CTY === "undefined") return;
+  var rSel = document.getElementById("ctya2-rule");
+  var kSel = document.getElementById("ctya2-k");
+  var out = document.getElementById("ctya2-out");
+  var verdict = document.getElementById("ctya2-verdict");
+  var self = document.getElementById("ctya2-self");
+  function fmt(x, d) { return x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function pc(x) { return x === null ? "none" : (x > 0 ? "+" : "") + fmt(x * 100, 1) + "%"; }
+  function render() {
+    var K = Number(kSel.value), ri = Number(rSel.value);
+    var L = CTY.ladder({ K: K, reps: 0 });
+    var s = L.rungs[ri].s;
+    var html = '<table class="sql-table"><thead><tr><th>Borough</th><th>Zones</th><th>Sensors</th><th>Estimate error</th></tr></thead><tbody>';
+    CTY.BOROS.forEach(function (b, k) {
+      var e = s.est["b" + k];
+      var dark = e.sensors === 0;
+      html += "<tr" + (dark ? ' class="ctya2-dark"' : "") + "><td>" + b + "</td><td>" + e.zones + "</td><td>" + e.sensors + "</td><td>" + (dark ? "<b>dark: no estimate</b>" : pc(e.err)) + "</td></tr>";
+    });
+    html += "</tbody></table>";
+    html += '<div class="ctya2-pair"><div><span>Share of trips seen</span><b>' + fmt(s.tripsShare * 100, 1) + '%</b></div><div><span>Share of zones measured</span><b>' + fmt(s.zonesShare * 100, 1) + '%</b></div><div><span>Outer-borough error</span><b>' + pc(s.est.outer.err) + "</b></div></div>";
+    out.innerHTML = html;
+    var canon = K === 40;
+    verdict.textContent = "Wrenmouth (constructed), " + K + " sensors, " + rSel.options[rSel.selectedIndex].text.toLowerCase() + ": " +
+      fmt(s.tripsShare * 100, 1) + "% of the month's pickups are in measured zones, " + fmt(s.zonesShare * 100, 1) + "% of zones are measured, " +
+      (s.dark.length ? s.dark.length + " of 5 boroughs are dark (" + s.dark.join(", ") + ")" : "no borough is dark") +
+      ", and the city estimate is off by " + pc(s.est.city.err) + ". " +
+      (canon ? "The canon budget: these match the figures in the prose." : "Not the canon budget: your numbers will differ from the 40-sensor figures in the prose.");
+  }
+  rSel.addEventListener("change", render);
+  kSel.addEventListener("change", render);
+  render();
+  var st = CTY.selfTestResult || CTY.selfTest();
+  self.textContent = st.pass
+    ? "Real counts: TLC trip records, October 2024 (NYC public data set; aggregated, out-of-month and non-borough rows dropped). Constructed: Wrenmouth, the budget, the rules. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #ctya2-cov .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #ctya2-cov table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #ctya2-cov tr.ctya2-dark td { background: var(--amber-50); }
+  #ctya2-cov .ctya2-pair { display: flex; flex-wrap: wrap; gap: .6rem; margin: .6rem 0 .2rem; }
+  #ctya2-cov .ctya2-pair div { flex: 1 1 9rem; border: 1px solid var(--hairline); border-radius: 10px; padding: .5rem .7rem; background: #FFFFFF; }
+  #ctya2-cov .ctya2-pair span { display: block; font-size: .78rem; color: var(--muted); }
+  #ctya2-cov .ctya2-pair b { font-size: 1.15rem; color: var(--indigo-deep); }
+</style>
+</body>
+</html>
